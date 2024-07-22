@@ -1,0 +1,37 @@
+.bg-black{
+    background-color: black !important;
+}
+
+.padding-nav-side{
+    padding-left: 3.8rem !important;
+}
+
+.dropdown-container {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out;
+    background-color: #262626;
+    padding-left: 8px;
+}
+
+.dropdown-container a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 16px;
+    color: white;
+    display: block;
+}
+
+.dropdown-container a:hover {
+    background-color: #575757;
+}
+
+.dropdown-container.open {
+    max-height: 300px; /* Adjust this value depending on the content height */
+    transition: max-height 0.5s ease-in;
+}
+
+
+.navbar-nav.drop-item {
+    display: none;
+}
