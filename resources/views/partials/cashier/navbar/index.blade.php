@@ -33,6 +33,14 @@
                                 <span class="d-sm-inline d-none m-2">logout</span>
                             </a>
                         </li>
+                        <li>
+                            <a class="dropdown-item" href="{{route('index.logout')}}">
+                                <svg width="20" height="20" viewBox="0 0 30 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7.25878 6.42528C4.75307 8.08228 2.84939 10.4992 1.82958 13.3184C0.809766 16.1375 0.728019 19.2089 1.59644 22.0779C2.46487 24.9469 4.2373 27.461 6.65134 29.248C9.06539 31.0351 11.9927 32 15 32C18.0073 32 20.9346 31.0351 23.3487 29.248C25.7627 27.461 27.5351 24.9469 28.4036 22.0779C29.272 19.2089 29.1902 16.1375 28.1704 13.3184C27.1506 10.4992 25.2469 8.08228 22.7412 6.42528M15.0008 1V13.4006" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span class="d-sm-inline d-none m-2">Pending Transaction</span>
+                            </a>
+                        </li>
                     </ul>
                     </li>
                 </div>

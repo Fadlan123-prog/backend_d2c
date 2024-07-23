@@ -13,9 +13,7 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->varchar('plate_number');
-            $table->number('phone_number');
-
+            $table->char('plate_number');
             $table->timestamps();
         });
     }

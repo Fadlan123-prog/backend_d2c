@@ -3,12 +3,21 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-body">
-
-                </div>
-            </div>
+        <div class="col-lg-4 col-md-4 col-sm-4">
+                    <form class="mt-4" method="POST">
+                        {{ csrf_field() }}
+                        <div class="form-outline form-white">
+                            <div class="input-group">
+                                <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon" for="customer">
+                                  <option selected>Choose...</option>
+                                  <option value="1">One</option>
+                                  <option value="2">Two</option>
+                                  <option value="3">Three</option>
+                                </select>
+                                <button class="btn btn-outline-secondary" type="button">Submit</button>
+                              </div>
+                        </div>
+                    </form>
         </div>
     </div>
 </div>
@@ -73,7 +82,7 @@
                                                         placeholder="Input Nominal" />
                                                       <label class="form-label" for="nominal">Input Nominal</label>
                                                     </div>
-                                                  </form>
+                                                </form>
                                                   <div class="row mb-3">
                                                     <div class="col-12">
                                                         <div class="btn-group" role="group">
