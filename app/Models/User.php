@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -44,5 +45,16 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function getLifetimeAttribute()
+    {
+        $createdAt = new Carbon($this->created_at);
+        $now = Carbon::now();
+        return $createdAt->diffForHumans($now, [
+            'parts' => 2,
+            'short' => true,
+            'syntax' => Carbon::DIFF_RELATIVE_TO_NOW,
+        ]);
     }
 }

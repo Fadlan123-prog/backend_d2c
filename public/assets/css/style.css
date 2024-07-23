@@ -35,3 +35,21 @@
 .navbar-nav.drop-item {
     display: none;
 }
+
+.btn{
+    margin-bottom: 0 !important;
+}
+
+.btn-padding-y{
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+}
+
+.btn-padding-x{
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+}
+
+.font-button{
+    font-size: 0.55rem !important;
+}

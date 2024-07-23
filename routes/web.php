@@ -38,6 +38,7 @@ Route::group(['middleware' => ['role:superadmin']], function(){
 
 Route::group(['middleware' => ['role:cashier']], function(){
     Route::get('cashier', [CashierController::class, 'index'])->name('cashier.index');
+    Route::get('/items/{category}', [CashierController::class, 'getItemsByCategory']);
 });
 
 Route::get('logout', [LoginController::class, 'logout'])->name('index.logout');
