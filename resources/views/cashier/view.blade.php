@@ -1,23 +1,22 @@
 @extends('cashier.index')
 
 @section('content')
+
 <div class="container">
     <div class="row">
         <div class="col-lg-4 col-md-4 col-sm-4">
-                    <form class="mt-4" method="POST">
-                        {{ csrf_field() }}
-                        <div class="form-outline form-white">
-                            <div class="input-group">
-                                <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon" for="customer">
-                                  <option selected>Choose...</option>
-                                  <option value="1">One</option>
-                                  <option value="2">Two</option>
-                                  <option value="3">Three</option>
-                                </select>
-                                <button class="btn btn-outline-secondary" type="button">Submit</button>
-                              </div>
-                        </div>
-                    </form>
+            <form id="addCustomerForm" method="POST">
+                {{ csrf_field() }}
+                <div class="form-group">
+                    <label for="exampleSelect2">Pilih Customer atau Masukkan Baru</label>
+                    <select class="form-control" id="exampleSelect2" name="plate_number" style="width: 100%;">
+                        @foreach($customers as $data)
+                            <option value="{{ $data->plate_number }}">{{ $data->plate_number }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
         </div>
     </div>
 </div>
@@ -69,45 +68,60 @@
                                     <div class="col-lg-5">
                                         <div class="card bg-black text-white rounded-3">
                                             <div class="card-body">
-                                                <div id="selected-items">
-                                                    <!-- Selected items will be appended here -->
-                                                </div>
-                                                <div class="d-flex justify-content-between">
-                                                    <p class="mb-2">Subtotal</p>
-                                                    <p class="mb-2" id="subtotal" data-subtotal="0">Rp 0</p>
-                                                </div>
-                                                <form class="mt-4">
-                                                    <div class="form-outline form-white mb-4">
-                                                      <input type="text" id="nominal" class="form-control form-control-lg" size="17"
-                                                        placeholder="Input Nominal" />
-                                                      <label class="form-label" for="nominal">Input Nominal</label>
-                                                    </div>
-                                                </form>
-                                                  <div class="row mb-3">
-                                                    <div class="col-12">
-                                                        <div class="btn-group" role="group">
-                                                            <button type="button" class="btn btn-info btn-md" id="btn-transfer" data-value="">Transfer</button>
-                                                            <button type="button" class="btn btn-info btn-md" id="btn-tokopedia" data-value="">Tokopedia</button>
-                                                        </div>
-                                                    </div>
-                                                  </div>
-                                                  <div class="row mb-3">
-                                                    <div class="col-12">
-                                                        <div class="btn-group" role="group">
-                                                            <button type="button" class="btn btn-info btn-md" data-value="10000">10000</button>
-                                                            <button type="button" class="btn btn-info btn-md" data-value="50000">50000</button>
-                                                            <button type="button" class="btn btn-info btn-md" data-value="100000">100000</button>
-                                                        </div>
-                                                    </div>
-                                                  </div>
+                                                <form id="transactionForm" class="mt-4" method="POST" action="{{ route('sales.store') }}">
+                                                    {{ csrf_field() }}
 
-                                                  <hr class="my-3">
+                                                    <input type="hidden" name="plate_number" id="plate_number">
+                                                    <input type="hidden" name="subtotal" id="subtotal_hidden">
+                                                    <input type="hidden" name="payment_type" id="payment_type_hidden">
+                                                    <input type="hidden" name="items" id="items_hidden"> <!-- This will be populated dynamically -->
 
-                                                  <button type="button" class="btn btn-info btn-block btn-lg" onclick="printReceipt()">
+                                                    <div id="selected-items">
+                                                        <!-- Selected items will be appended here -->
+                                                    </div>
+
                                                     <div class="d-flex justify-content-between">
-                                                        <span>Checkout</span>
+                                                        <p class="mb-2">Subtotal</p>
+                                                        <p class="mb-2" id="subtotal" data-subtotal="0">Rp 0</p>
                                                     </div>
-                                                </button>
+
+                                                    <div class="form-outline form-white mb-4">
+                                                        <input type="text" id="nominal" class="form-control form-control-lg" size="17" placeholder="Input Nominal" />
+                                                        <label class="form-label" for="nominal">Input Nominal</label>
+                                                    </div>
+
+                                                    <div class="row mb-3">
+                                                        <div class="col-12">
+                                                            <div class="btn-group" role="group">
+                                                                <button type="button" class="btn btn-info btn-md" id="btn-transfer" data-value="Transfer">Transfer</button>
+                                                                <button type="button" class="btn btn-info btn-md" id="btn-tokopedia" data-value="Tokopedia">Tokopedia</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row mb-3">
+                                                        <div class="col-12">
+                                                            <div class="btn-group" role="group">
+                                                                <button type="button" class="btn btn-info btn-md" data-value="10000">10000</button>
+                                                                <button type="button" class="btn btn-info btn-md" data-value="50000">50000</button>
+                                                                <button type="button" class="btn btn-info btn-md" data-value="100000">100000</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <hr class="my-3">
+
+                                                    <button type="submit" class="btn btn-info btn-block btn-lg" onclick="setFormAction('checkout')">
+                                                        <div class="d-flex justify-content-between">
+                                                            <span>Checkout</span>
+                                                        </div>
+                                                    </button>
+                                                    <button type="submit" class="btn btn-success btn-block btn-lg" onclick="setFormAction('pending')">
+                                                        <div class="d-flex justify-content-between">
+                                                            <span>Pending</span>
+                                                        </div>
+                                                    </button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -160,7 +174,7 @@
 
       // Make AJAX request to fetch items for the selected category
       $.ajax({
-        url: '/items/' + categoryId,
+        url: 'cashier/items/' + categoryId,
         method: 'GET',
         success: function(data) {
           // Clear previous items
@@ -235,6 +249,50 @@
       var value = $(this).val().replace(/\D/g, ''); // Remove non-numeric characters
       $(this).val(formatRupiah(value));
     });
+
+    // Handle form submission via AJAX
+    $('#addCustomerForm').on('submit', function(event) {
+      event.preventDefault(); // Prevent the form from submitting normally
+
+      var selectElement = document.getElementById('exampleSelect2');
+      selectElement.value = selectElement.value.toUpperCase();
+
+      var isAlreadyAdded = false;
+      // Append the selected plate number to the selected-items section
+      var plateNumber = selectElement.value;
+      $('#selected-items .d-flex').each(function() {
+        var existingPlateNumber = $(this).find('p.mb-0').eq(1).text();
+        if (existingPlateNumber === plateNumber) {
+            isAlreadyAdded = true;
+            return false; // Break out of the each loop
+        }
+    });
+
+      if(!isAlreadyAdded){
+          $('#selected-items').append(
+              '<div class="d-flex justify-content-between mb-2">' +
+                  '<p class="mb-0">Plate Number</p>' +
+                  '<p class="mb-0" >' + plateNumber + '</p>' +
+              '</div>'
+          );
+      }else {
+        alert('This plate number has already been added.');
+    }
+
+      // Make AJAX request to submit the form data
+      $.ajax({
+        url: '{{ route("cashier.addcustomer") }}',
+        method: 'POST',
+        data: $(this).serialize(),
+        success: function(response) {
+          console.log('Form submitted successfully:','succesfull');
+          // Optionally, handle the response if needed
+        },
+        error: function(error) {
+          console.log('Error submitting form:', error);
+        }
+      });
+    });
   });
 
   // Function to format number as Rupiah
@@ -242,6 +300,83 @@
     if (!amount) return '';
     return 'Rp ' + amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   }
+
+  $(document).ready(function() {
+  var itemsArray = []; // Array to store selected items
+
+  // Handle item card click
+  $('#items-container').on('click', '.item-card', function() {
+    // Check if item has already been clicked
+    if ($(this).hasClass('selected')) {
+      return;
+    }
+
+    var itemName = $(this).data('item-name');
+    var itemPrice = parseFloat($(this).data('item-price'));
+
+    // Add the selected item to the itemsArray
+    itemsArray.push({ name: itemName, price: itemPrice });
+
+    // Append the selected item to the selected-items section
+    $('#selected-items').append(
+      '<div class="d-flex justify-content-between mb-2 item" data-item-name="' + itemName + '" data-item-price="' + itemPrice + '">' +
+        '<p class="mb-0">' + itemName + '</p>' +
+        '<p class="mb-0">' + formatRupiah(itemPrice) + '</p>' +
+      '</div>'
+    );
+
+    // Update the subtotal
+    var currentSubtotal = parseFloat($('#subtotal').data('subtotal')) || 0;
+    var newSubtotal = currentSubtotal + itemPrice;
+    $('#subtotal').data('subtotal', newSubtotal);
+    $('#subtotal').text(formatRupiah(newSubtotal));
+
+    // Update button values
+    $('#btn-transfer').attr('data-value', newSubtotal);
+    $('#btn-tokopedia').attr('data-value', newSubtotal);
+
+    // Mark the item as selected
+    $(this).addClass('selected');
+  });
+
+  // Handle form submission
+  $('#transactionForm').on('submit', function(event) {
+    event.preventDefault(); // Prevent the form from submitting normally
+
+    // Update hidden inputs
+    setFormAction('checkout'); // or 'pending' based on button clicked
+
+    // Log the form data for debugging
+    console.log('Form Data Before Submit:', $(this).serialize());
+
+    // Optionally submit the form programmatically if needed
+    this.submit(); // Uncomment this line if you want to submit the form
+  });
+
+  // Function to set form action and populate hidden inputs
+  function setFormAction(status) {
+    var actionUrl = status === 'checkout'
+        ? '{{ route("sales.store") }}'
+        : '{{ route("pending.transaction.store") }}';
+
+    $('#transactionForm').attr('action', actionUrl);
+
+    // Set the hidden fields
+    $('#plate_number').val($('#exampleSelect2').val());
+    $('#subtotal_hidden').val($('#subtotal').data('subtotal'));
+    $('#payment_type_hidden').val($('#btn-transfer').hasClass('active') ? 'Transfer' : 'Tokopedia');
+
+    // Prepare selected items data
+    $('#items_hidden').val(JSON.stringify(itemsArray)); // Serialize the itemsArray to JSON
+
+    // Log hidden field values for debugging
+    console.log('Form Action URL:', actionUrl);
+    console.log('Plate Number:', $('#plate_number').val());
+    console.log('Subtotal Hidden:', $('#subtotal_hidden').val());
+    console.log('Payment Type Hidden:', $('#payment_type_hidden').val());
+    console.log('Items Hidden:', $('#items_hidden').val());
+  }
+});
 
   function printReceipt() {
     var printContents = document.getElementById('selected-items').innerHTML;
@@ -254,5 +389,19 @@
     document.body.innerHTML = originalContents;
     location.reload();
   }
+
+  $(document).ready(function() {
+    $('#exampleSelect2').select2({
+        tags: true,
+        placeholder: "Pilih atau masukkan teks",
+        allowClear: true
+    });
+  });
+
+  function convertToUpper() {
+    var selectElement = document.getElementById('exampleSelect2');
+    selectElement.value = selectElement.value.toUpperCase();
+  }
 </script>
+
 @endsection

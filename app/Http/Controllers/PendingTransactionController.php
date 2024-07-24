@@ -1,39 +1,41 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Categories;
+use App\Models\Customer;
+use Carbon\Carbon;
+use App\Models\PendingTransaction;
 
 use Illuminate\Http\Request;
-use App\Models\Sales;
 
-class SalesController extends Controller
+class PendingTransactionController extends Controller
 {
+    public function index(){
+        $categories = Categories::all();
+        $customers = Customer::all();
+
+        $dateTime = Carbon::now()->setTimezone('Asia/Jakarta');
+        return view('page.pending_transaction.index', compact('categories', 'customers', 'dateTime'));
+    }
+
     public function store(Request $request){
-        // Validate the request
         $validated = $request->validate([
             'plate_number' => 'required|string',
-            'date' => 'required|date',
-            'hour' => 'required|date_format:H:i',
-            'user_name' => 'required|string',
             'subtotal' => 'required|numeric|min:0',
-            'payment_type' => 'required|string',
             'items' => 'required|array', // Array of item IDs
             'items.*' => 'exists:items,id' // Ensure each item ID exists in the items table
         ]);
 
         // Create a new transaction record
-        $transaction = new Sales();
+        $transaction = new PendingTransaction();
         $transaction->plate_number = $validated['plate_number'];
-        $transaction->date = $validated['date'];
-        $transaction->hour = $validated['hour'];
-        $transaction->user_name = $validated['user_name'];
         $transaction->subtotal = $validated['subtotal'];
-        $transaction->payment_type = $validated['payment_type'];
+        $transaction->status = 'pending'; // Status for "Pending"
         $transaction->save();
 
         // Associate items with the transaction
         $transaction->items()->sync($validated['items']); // Adjust based on your relationship
 
-        return response()->json(['message' => 'Transaction completed successfully.'], 200);
+        return response()->json(['message' => 'Transaction is pending.'], 200);
     }
-
 }

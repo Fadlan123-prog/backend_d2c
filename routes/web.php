@@ -7,6 +7,9 @@ use App\Http\Controllers\CashierController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\PendingTransactionController;
+use App\Http\Controllers\TransactionController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -38,8 +41,12 @@ Route::group(['middleware' => ['role:superadmin']], function(){
 
 Route::group(['middleware' => ['role:cashier']], function(){
     Route::get('cashier', [CashierController::class, 'index'])->name('cashier.index');
-    Route::get('customer', [CashierController::class, 'index'])->name('cashier.customer');
-    Route::get('/items/{category}', [CashierController::class, 'getItemsByCategory']);
+    Route::post('cashier/add-customer', [CashierController::class, 'addCustomer'])->name('cashier.addcustomer');
+    Route::get('cashier/items/{category}', [CashierController::class, 'getItemsByCategory']);
+    Route::post('cashier/sales', [SalesController::class, 'store'])->name('sales.store');
+    Route::get('cashier/pending-transaction', [PendingTransactionController::class, 'index'])->name('pending.transaction.index');
+    Route::post('cashier/pending-transaction', [PendingTransactionController::class, 'store'])->name('pending.transaction.store');
+
 });
 
 Route::get('logout', [LoginController::class, 'logout'])->name('index.logout');
