@@ -13,29 +13,26 @@ class PendingTransactionController extends Controller
     public function index(){
         $categories = Categories::all();
         $customers = Customer::all();
+        $pending_transaction = PendingTransaction::all();
 
         $dateTime = Carbon::now()->setTimezone('Asia/Jakarta');
-        return view('page.pending_transaction.index', compact('categories', 'customers', 'dateTime'));
+        return view('page.pending_transaction.index', compact('categories', 'customers', 'dateTime', 'pending_transaction'));
     }
 
     public function store(Request $request){
-        $validated = $request->validate([
-            'plate_number' => 'required|string',
-            'subtotal' => 'required|numeric|min:0',
-            'items' => 'required|array', // Array of item IDs
-            'items.*' => 'exists:items,id' // Ensure each item ID exists in the items table
-        ]);
-
-        // Create a new transaction record
-        $transaction = new PendingTransaction();
-        $transaction->plate_number = $validated['plate_number'];
-        $transaction->subtotal = $validated['subtotal'];
-        $transaction->status = 'pending'; // Status for "Pending"
-        $transaction->save();
+        $sales = new Sales();
+        $sales->plate_number = $request->plate_number;
+        $sales->date = Carbon::now()->format('Y-m-d');
+        $sales->time = Carbon::now()->format('H:i:s');
+        $sales->cashier_name = auth()->user()->name; // Asumsikan user sudah login
+        $sales->item_name = json_encode($request->items);
+        $sales->total_price = $request->subtotal;
+        $sales->payment_method = $request->payment_type;
+        $sales->save();
 
         // Associate items with the transaction
         $transaction->items()->sync($validated['items']); // Adjust based on your relationship
 
-        return response()->json(['message' => 'Transaction is pending.'], 200);
+        return redirect()->back()->with('success', 'Transaction stored successfully');
     }
 }

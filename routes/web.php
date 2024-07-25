@@ -43,6 +43,7 @@ Route::group(['middleware' => ['role:cashier']], function(){
     Route::get('cashier', [CashierController::class, 'index'])->name('cashier.index');
     Route::post('cashier/add-customer', [CashierController::class, 'addCustomer'])->name('cashier.addcustomer');
     Route::get('cashier/items/{category}', [CashierController::class, 'getItemsByCategory']);
+    Route::get('cashier/sales', [SalesController::class, 'index'])->name('sales.index');
     Route::post('cashier/sales', [SalesController::class, 'store'])->name('sales.store');
     Route::get('cashier/pending-transaction', [PendingTransactionController::class, 'index'])->name('pending.transaction.index');
     Route::post('cashier/pending-transaction', [PendingTransactionController::class, 'store'])->name('pending.transaction.store');
