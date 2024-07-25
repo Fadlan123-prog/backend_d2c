@@ -47,6 +47,7 @@ Route::group(['middleware' => ['role:cashier']], function(){
     Route::post('cashier/sales', [SalesController::class, 'store'])->name('sales.store');
     Route::get('cashier/pending-transaction', [PendingTransactionController::class, 'index'])->name('pending.transaction.index');
     Route::post('cashier/pending-transaction', [PendingTransactionController::class, 'store'])->name('pending.transaction.store');
+    Route::get('/cashier/pending-transaction/{id}', [PendingTransactionController::class, 'show'])->name('pending.transaction.show');
     Route::delete('cashier/pending-transaction/{id}', [PendingTransactionController::class, 'destroy'])->name('pending.transaction.delete');
 
 });

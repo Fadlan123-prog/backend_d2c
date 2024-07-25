@@ -33,7 +33,25 @@ class PendingTransactionController extends Controller
         // Associate items with the transaction
         // $transaction->items()->sync($validated['items']); // Adjust based on your relationship
 
-        return redirect()->route('pending.transaction.index')->with('success', 'pending berhasil disimpan!');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Pending berhasil disimpan!',
+            'redirect_url' => route('pending.transaction.index')
+        ]);
+    }
+
+    public function show($id)
+    {
+        $transaction = PendingTransaction::findOrFail($id);
+
+        return response()->json([
+            'plate_number' => $transaction->plate_number,
+            'item_name' => $transaction->item_name,
+            'total_price' => $transaction->total_price,
+            'payment_method' => $transaction->payment_method,
+
+            // Add more fields as needed
+        ]);
     }
 
     public function destroy($id){

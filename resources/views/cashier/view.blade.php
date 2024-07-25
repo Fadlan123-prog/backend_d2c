@@ -88,6 +88,8 @@
                                                             <!-- Selected items will be appended here -->
                                                         </div>
 
+                                                        <div id="transaction-details"></div>
+
                                                         <hr class="my-2">
 
                                                         <div class="d-flex justify-content-between">
@@ -366,6 +368,10 @@
             success: function(response) {
                 console.log('Form submitted successfully:', response);
 
+                if (formAction === '{{ route("pending.transaction.store") }}') {
+                    window.location.href = '{{ route("pending.transaction.index") }}';
+                }
+
                 if (formAction === '{{ route("sales.store") }}') {
                     // Call printReceipt function only for checkout
                     printReceipt();
@@ -382,6 +388,40 @@
         var formAction = $(this).data('form-action');
         $('#transactionForm').data('form-action', formAction);
     });
+});
+
+$(document).ready(function() {
+    // Handle the button click
+    $('.fetch-pending-transaction').click(function() {
+        var transactionId = $(this).data('id');
+
+        $.ajax({
+            url: '/cashier/pending-transaction/' + transactionId,
+            method: 'GET',
+            success: function(data) {
+                console.log('Transaction data:', data);
+                // Update the view with the fetched data
+                updateViewWithTransactionData(data);
+            },
+            error: function(error) {
+                console.log('Error fetching transaction:', error);
+                alert('Failed to fetch transaction data.');
+            }
+        });
+    });
+
+    function updateViewWithTransactionData(data) {
+        // Assuming you have an element to display the transaction details
+        $('#transaction-details').html(`
+            <p>Plate Number: ${data.plate_number}</p>
+            <p>Date: ${data.date}</p>
+            <p>Time: ${data.time}</p>
+            <p>Cashier: ${data.cashier_name}</p>
+            <p>Items: ${data.item_name}</p>
+            <p>Total Price: ${data.total_price}</p>
+            <p>Payment Method: ${data.payment_method}</p>
+        `);
+    }
 });
 
 // Function to format number as Rupiah
