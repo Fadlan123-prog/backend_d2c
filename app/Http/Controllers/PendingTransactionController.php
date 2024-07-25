@@ -20,7 +20,7 @@ class PendingTransactionController extends Controller
     }
 
     public function store(Request $request){
-        $sales = new Sales();
+        $sales = new PendingTransaction();
         $sales->plate_number = $request->plate_number;
         $sales->date = Carbon::now()->format('Y-m-d');
         $sales->time = Carbon::now()->format('H:i:s');
@@ -31,8 +31,18 @@ class PendingTransactionController extends Controller
         $sales->save();
 
         // Associate items with the transaction
-        $transaction->items()->sync($validated['items']); // Adjust based on your relationship
+        // $transaction->items()->sync($validated['items']); // Adjust based on your relationship
 
-        return redirect()->back()->with('success', 'Transaction stored successfully');
+        return redirect()->route('pending.transaction.index')->with('success', 'pending berhasil disimpan!');
+    }
+
+    public function destroy($id){
+        $pending = PendingTransaction::find($id);
+        if($pending){
+            $pending->delete();
+            return redirect()->route('pending.transaction.index')->with('success', 'Data Deleted successfully');
+        }
+
+        return redirect()->route('pending.transaction.index')->with('error', 'Data not found');
     }
 }
