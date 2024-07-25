@@ -40,7 +40,7 @@
                                     <td>
                                         <div class="d-flex px-2 py-1">
                                             <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 text-xs">{{ $pending->harga }}</h6>
+                                                <h6 class="mb-0 text-xs">{{ $pending->total_price }}</h6>
                                             </div>
                                         </div>
                                     </td>
@@ -76,7 +76,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <form method="POST" action="{{ route('items.destroy', $pending->id) }}">
+                                                        <form method="POST" action="{{ route('pending.transaction.delete', $pending->id) }}">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-white">Ok, Got it</button>
