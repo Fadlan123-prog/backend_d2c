@@ -7,15 +7,21 @@
         <div class="col-lg-4 col-md-4 col-sm-4">
             <form id="addCustomerForm" method="POST" action="{{ route('cashier.addcustomer') }}">
                 {{ csrf_field() }}
-                <div class="form-group">
-                    <label for="exampleSelect2">Pilih Customer atau Masukkan Baru</label>
-                    <select class="form-control" id="exampleSelect2" name="plate_number" style="width: 100%;">
-                        @foreach($customers as $data)
-                            <option value="{{ $data->plate_number }}">{{ $data->plate_number }}</option>
-                        @endforeach
-                    </select>
+                <label for="exampleSelect2">Pilih Customer atau Masukkan Baru</label>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="form-group">
+                            <select class="form-control" id="exampleSelect2" name="plate_number" style="width: 100%;">
+                                @foreach($customers as $data)
+                                    <option value="{{ $data->plate_number }}">{{ $data->plate_number }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
     </div>
@@ -76,15 +82,24 @@
                                                     <input type="hidden" name="payment_type" id="payment_type_hidden">
                                                     <input type="hidden" name="items" id="items_hidden"> <!-- This will be populated dynamically -->
 
-                                                    <div id="selected-items">
-                                                        <!-- Selected items will be appended here -->
-                                                    </div>
+                                                    <div id="receipt">
 
-                                                    <div class="d-flex justify-content-between">
-                                                        <p class="mb-2">Subtotal</p>
-                                                        <p class="mb-2" id="subtotal" data-subtotal="0">Rp 0</p>
-                                                    </div>
+                                                        <div id="selected-items">
+                                                            <!-- Selected items will be appended here -->
+                                                        </div>
 
+                                                        <hr class="my-2">
+
+                                                        <div class="d-flex justify-content-between">
+                                                            <p class="mb-2">Subtotal</p>
+                                                            <p class="mb-2" id="subtotal" data-subtotal="0">Rp 0</p>
+                                                        </div>
+
+                                                        <div id="change">
+
+                                                        </div>
+                                                    </div>
+                                                    <hr class="my-2">
                                                     <div class="form-outline form-white mb-4">
                                                         <input type="text" id="nominal" class="form-control form-control-lg" size="17" placeholder="Input Nominal" />
                                                         <label class="form-label" for="nominal">Input Nominal</label>
@@ -255,7 +270,7 @@
         var nominalValue = parseFloat(value);
         var subtotal = parseFloat($('#subtotal').data('subtotal'));
 
-        if (nominalValue > 0) {
+        if (nominalValue >= 0) {
             $('#payment_type_hidden').val('Cash'); // Set payment type to Cash if nominal is filled
         }
 
@@ -309,6 +324,9 @@
             success: function(response) {
                 console.log('Customer added successfully:', response);
                 // Optionally, handle the response if needed
+                var newOption = new Option(selectElement.value, selectElement.value, true, true);
+                $('#exampleSelect2').append(newOption).trigger('change');
+
             },
             error: function(error) {
                 console.log('Error adding customer:', error);
@@ -373,7 +391,7 @@ function formatRupiah(amount) {
 }
 
 function printReceipt() {
-    var printContents = document.getElementById('selected-items').innerHTML;
+    var printContents = document.getElementById('receipt').innerHTML;
     var originalContents = document.body.innerHTML;
 
     document.body.innerHTML = '<html><head><title>Receipt</title></head><body>' + printContents + '</body></html>';

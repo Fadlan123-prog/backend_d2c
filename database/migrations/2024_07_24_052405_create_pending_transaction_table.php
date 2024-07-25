@@ -14,8 +14,12 @@ return new class extends Migration
         Schema::create('pending_transaction', function (Blueprint $table) {
             $table->id();
             $table->char('plate_number', 10);
+            $table->date('date');
+            $table->time('time');
+            $table->string('cashier_name', 100);
             $table->string('item_name', 100);
-            $table->integer('harga');
+            $table->integer('total_price');
+            $table->string('payment_method', 100);
             $table->timestamps();
         });
     }
