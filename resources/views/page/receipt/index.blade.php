@@ -6,23 +6,58 @@
     <title>Payment Receipt</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        .dashed-hr {
+            border: none;
+            border-top: 1px dashed #000;
+            margin: 20px 0;
+        }
         .receipt {
-            max-width: 800px;
+            max-width: 207px;
             margin: auto;
-            padding: 20px;
+            padding: 20px 10px;
             border: 1px solid #eee;
             border-radius: 10px;
         }
         .receipt-header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
+        .receipt-header img {
+            max-width: 100%;
+            width: 150px;
+        }
+
+        .receipt-header h2{
+            font-size: 18px;
+        }
+
+        .receipt-header p{
+            font-size: 10px;
+        }
+
         .receipt-details {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+        }
+
+        .receipt-details p{
+            margin-bottom: 0px;
+            font-size: 10px
+        }
+
+        .receipt-details h5{
+            font-size: 14px;
+        }
+        .receipt-items span{
+            font-size: 10px;
         }
         .receipt-footer {
             text-align: center;
             margin-top: 20px;
+            font-size: 10px;
+        }
+
+        .receipt-total span{
+            font-size: 10px;
         }
         .table th, .table td {
             vertical-align: middle;
@@ -33,64 +68,96 @@
 
 <div class="receipt">
     <div class="receipt-header">
-        <h2>Company Name</h2>
-        <p>1234 Street Address, City, State 56789</p>
-        <p>Phone: (123) 456-7890</p>
-        <p>Email: info@company.com</p>
+        <img src="{{asset('assets/img/content/logo-receipt.png')}}" alt="logo">
+        <h2>Dirty 2 Clean Tanjung Barat</h2>
+        <p>jl. Tanjung Baran No, 2B, Lenteng Agung, Jagakarsa, RT.5/RW.1, Jakarta Selatan</p>
+        <p>08521713106</p>
     </div>
 
     <div class="receipt-details">
         <div class="row">
-            <div class="col-md-6">
-                <h5>Customer Details</h5>
-                <p><strong>Plate Number:</strong> {{ $customer->plate_number }}</p>
-                <p><strong>Email:</strong> {{ $customer->email }}</p>
-                <p><strong>Phone:</strong> {{ $customer->phone }}</p>
-                <p><strong>Address:</strong> {{ $customer->address }}</p>
+            <div class="col-md-12">
+                <p>Tanggal : {{ $sale->date }}</p>
+                <p>Jam : {{ $sale->time }}</p>
+                <p>Nomor Plat : {{ $sale->plate_number }}</p>
+                <p>Kasir : {{ $sale->cashier_name }}</p>
             </div>
-            <div class="col-md-6 text-right">
+            {{-- <div class="col-md-6 text-right">
                 <h5>Receipt</h5>
                 <p><strong>Receipt No:</strong> {{ $receipt->id }}</p>
                 <p><strong>Date:</strong> {{ $receipt->date }}</p>
                 <p><strong>Payment Method:</strong> {{ $receipt->payment_method }}</p>
-            </div>
+            </div> --}}
         </div>
     </div>
 
+    <hr class="dashed-hr">
+
     <div class="receipt-items">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Item</th>
-                    <th>Quantity</th>
-                    <th>Unit Price</th>
-                    <th>Total Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($receipt->items as $item)
-                    <tr>
-                        <td>{{ $item->name }}</td>
-                        <td>{{ $item->quantity }}</td>
-                        <td>{{ number_format($item->unit_price, 2) }}</td>
-                        <td>{{ number_format($item->total_price, 2) }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+        <div class="row">
+            <div class="col-md-12">
+                <div id="selected-item"></div>
+            </div>
+            <!-- Items will be injected here by JavaScript -->
+        </div>
     </div>
 
-    <div class="receipt-total text-right">
-        <h5><strong>Total Payment: ${{ number_format($receipt->total_payment, 2) }}</strong></h5>
+    <hr class="dashed-hr">
+
+    <div class="receipt-total">
+        <div class="d-flex justify-content-between">
+            <span>Total :</span>
+            <span>{{ formatRupiah($sale->total_price) }}</span>
+        </div>
     </div>
+
+    <hr class="dashed-hr">
 
     <div class="receipt-footer">
-        <p>Thank you for your business!</p>
+        <p>Powered by Dirty 2 Clean</p>
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Get item names and prices from Blade variables and process them
+        var itemNamesString = "{{ $sale->item_name }}";
+        var itemPricesString = "{{ $sale->item_price }}";
+
+        // Handle escaping manually if needed
+        var itemNames = itemNamesString.split(',')
+            .map(function(item) { return item.replace(/^\s*"\s*|\s*"\s*$/g, '').trim(); });
+        var itemPrices = itemPricesString.split(',')
+            .map(function(price) { return price.replace(/^\s*"\s*|\s*"\s*$/g, '').trim(); });
+
+        var $transactionDetails = $('#selected-item');
+        if ($transactionDetails.length) {
+            var itemsListHtml = '';
+            if (itemNames.length > 0) {
+                $.each(itemNames, function(index, name) {
+                    var price = itemPrices[index] || '';
+                    itemsListHtml += `
+                        <div class="d-flex justify-content-between mb-0">
+                            <span class="items-name mb-0">${name}</span>
+                            <span class="items-price mb-0">${price}</span>
+                        </div>
+                    `;
+                });
+            } else {
+                itemsListHtml = '<p>No items found.</p>';
+            }
+            $transactionDetails.html(itemsListHtml);
+        }
+    });
+</script>
+<script>
+    window.onload = function() {
+        window.print();
+    };
+</script>
 </body>
 </html>
