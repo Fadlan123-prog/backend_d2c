@@ -44,29 +44,27 @@ class SalesController extends Controller
 
     public function void(Request $request)
 {
-    $request->validate([
-        'name' => 'required|string',
-        'password' => 'required|string',
-    ]);
-
-    // Find the user by name
-    $user = User::where('name', $request->name)->first();
-
-    if ($user && $user->hasRole('admin') && Hash::check($request->password, $user->password)) {
-        // Proceed with voiding the sale
-        $saleId = $request->input('sale_id');
-        $sale = Sales::find($saleId);
-
-        if ($sale) {
-            $sale->status = 'voided';
-            $sale->save();
-
-            return redirect()->route('sales.index')->with('success', 'Sale voided successfully.');
-        } else {
-            return redirect()->route('sales.index')->with('error', 'Sale not found.');
-        }
-    } else {
-        return redirect()->route('sales.index')->with('error', 'Unauthorized access or incorrect credentials.');
+    // Validate the admin credentials
+    $admin = User::role('admin')->where('name', $request->admin_name)->first();
+    if (!$admin || !Hash::check($request->admin_password, $admin->password)) {
+        return redirect()->back()->with('error', 'Invalid admin credentials.');
     }
+
+    // Find the sale
+    $sale = Sale::find($request->sale_id);
+    if (!$sale || $sale->status == 'void') {
+        return redirect()->back()->with('error', 'Sale not found or already voided.');
+    }
+
+    // Duplicate the sale and mark as void
+    $voidSale = $sale->replicate();
+    $voidSale->status = 'void';
+    $voidSale->save();
+
+    // Update the original sale to void
+    $sale->status = 'void';
+    $sale->save();
+
+    return redirect()->back()->with('success', 'Sale voided successfully.');
 }
 }

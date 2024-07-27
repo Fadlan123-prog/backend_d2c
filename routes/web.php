@@ -10,6 +10,7 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PendingTransactionController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\ReceiptController;
 use Carbon\Carbon;
 use App\Models\Categories;
 use App\Models\Customer;
@@ -58,6 +59,7 @@ Route::group(['middleware' => ['role:cashier']], function(){
         return view('cashier.show', compact('dateTime','categories', 'customers')); // Adjust the path if necessary
     })->name('pending.transaction.show');
 
+    Route::get('/receipt/{id}', [ReceiptController::class, 'showReceipt'])->name('receipt.show');
     Route::post('/sales/void', [SalesController::class, 'void'])->name('sales.void');
     Route::delete('cashier/pending-transaction/{id}', [PendingTransactionController::class, 'destroy'])->name('pending.transaction.delete');
 

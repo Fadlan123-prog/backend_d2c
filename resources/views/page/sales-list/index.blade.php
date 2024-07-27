@@ -1,7 +1,6 @@
 @extends('cashier.index')
 
 @section('content')
-
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -29,7 +28,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="table align-items center mb-0">
                                 <thead>
                                     <tr>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Plate Number</th>
@@ -44,22 +43,44 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($sales as $sale)
-                                        <tr>
-                                            <td>{{ $sale->plate_number }}</td>
-                                            <td>{{ $sale->date }}</td>
-                                            <td>{{ $sale->time }}</td>
-                                            <td>{{ $sale->cashier_name }}</td>
-                                            <td>{{ $sale->item_name }}</td>
-                                            <td>{{ $sale->total_price }}</td>
-                                            <td>{{ $sale->payment_method }}</td>
+                                        <tr class="{{ $sale->status == 'voided' ? 'bg-danger text-white' : '' }}">
                                             <td>
-                                                <form action="{{ route('sales.void') }}" method="POST">
-                                                    @csrf
-                                                    <input type="hidden" name="sale_id" value="{{ $sale->id }}">
-                                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#voidSaleModal{{ $sale->id }}">
-                                                        Void
-                                                    </button>
-                                                </form>
+                                                <p class="text-xs font-weight-bold mb-0">{{ $sale->plate_number }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="text-xs font-weight-bold mb-0">{{ $sale->date }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="text-xs font-weight-bold mb-0">{{ $sale->time }}</p>
+
+                                            </td>
+                                            <td>
+                                                <p class="text-xs font-weight-bold mb-0">{{ $sale->cashier_name }}</p>
+
+                                            </td>
+                                            <td>
+                                                <p class="text-xs font-weight-bold mb-0">{{ $sale->item_name }}</p>
+
+                                            </td>
+                                            <td>
+                                                <p class="text-xs font-weight-bold mb-0">{{ $sale->total_price }}</p>
+
+                                            </td>
+                                            <td>
+                                                <p class="text-xs font-weight-bold mb-0">{{ $sale->payment_method }}</p>
+
+                                            </td>
+                                            <td>
+                                                @if ($sale->status != 'voided')
+                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#voidSaleModal{{ $sale->id }}">
+                                                    Void
+                                                </button>
+                                                @else
+                                                <button type="button" class="btn btn-secondary" disabled>
+                                                    Voided
+                                                </button>
+                                                @endif
+                                                <a href="{{ route('receipt.show', $sale->id) }}" target="_blank" class="btn btn-success">Print Receipt</a>
 
                                                 <!-- Void Sale Modal -->
                                                 <div class="modal fade" id="voidSaleModal{{ $sale->id }}" tabindex="-1" aria-labelledby="voidSaleModalLabel" aria-hidden="true">
