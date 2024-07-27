@@ -17,7 +17,8 @@ return new class extends Migration
             $table->date('date');
             $table->time('time');
             $table->string('cashier_name', 100);
-            $table->string('item_name', 100);
+            $table->json('item_name');
+            $table->json('item_price');
             $table->integer('total_price');
             $table->string('payment_method', 100);
             $table->timestamps();

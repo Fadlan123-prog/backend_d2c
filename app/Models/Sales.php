@@ -17,7 +17,9 @@ class Sales extends Model
         'time',
         'cashier_name',
         'item_name',
+        'item_price',
         'total_price',
+        'status',
         'payment_method',
     ];
 }

@@ -72,6 +72,31 @@
       });
     });
   </script>
+  <script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.fetch-pending-transaction').forEach(function (button) {
+        button.addEventListener('click', function () {
+            var transactionId = this.getAttribute('data-id');
+
+            fetch(`/cashier/pending-transaction/${transactionId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Fetched data:', data); // Log data to ensure it's fetched
+                    localStorage.setItem('pendingTransaction', JSON.stringify(data));
+                    window.location.href = '/cashier/show-pending-transaction'; // Redirect to the correct page
+                })
+                .catch(error => {
+                    console.error('Error fetching transaction details:', error);
+                });
+        });
+    });
+});
+</script>
 </body>
 
 </html>

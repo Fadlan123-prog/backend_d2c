@@ -26,6 +26,7 @@ class PendingTransactionController extends Controller
         $sales->time = Carbon::now()->format('H:i:s');
         $sales->cashier_name = auth()->user()->name; // Asumsikan user sudah login
         $sales->item_name = json_encode($request->items);
+        $sales->item_price = json_encode($request->prices);
         $sales->total_price = $request->subtotal;
         $sales->payment_method = $request->payment_type;
         $sales->save();
@@ -40,18 +41,19 @@ class PendingTransactionController extends Controller
         ]);
     }
 
-    public function show($id)
+    public function getPendingTransaction($id)
     {
-        $transaction = PendingTransaction::findOrFail($id);
+        try {
+            $pendingTransaction = PendingTransaction::find($id);
 
-        return response()->json([
-            'plate_number' => $transaction->plate_number,
-            'item_name' => $transaction->item_name,
-            'total_price' => $transaction->total_price,
-            'payment_method' => $transaction->payment_method,
+            if (!$pendingTransaction) {
+                return response()->json(['error' => 'Transaction not found'], 404);
+            }
 
-            // Add more fields as needed
-        ]);
+            return response()->json($pendingTransaction);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function destroy($id){

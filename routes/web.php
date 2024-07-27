@@ -10,6 +10,9 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PendingTransactionController;
 use App\Http\Controllers\TransactionController;
+use Carbon\Carbon;
+use App\Models\Categories;
+use App\Models\Customer;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -47,7 +50,15 @@ Route::group(['middleware' => ['role:cashier']], function(){
     Route::post('cashier/sales', [SalesController::class, 'store'])->name('sales.store');
     Route::get('cashier/pending-transaction', [PendingTransactionController::class, 'index'])->name('pending.transaction.index');
     Route::post('cashier/pending-transaction', [PendingTransactionController::class, 'store'])->name('pending.transaction.store');
-    Route::get('/cashier/pending-transaction/{id}', [PendingTransactionController::class, 'show'])->name('pending.transaction.show');
+    Route::get('/cashier/pending-transaction/{id}', [PendingTransactionController::class, 'getPendingTransaction']);
+    Route::get('/cashier/show-pending-transaction', function () {
+        $categories = Categories::all();
+        $customers = Customer::all();
+        $dateTime = Carbon::now()->setTimezone('Asia/Jakarta');
+        return view('cashier.show', compact('dateTime','categories', 'customers')); // Adjust the path if necessary
+    })->name('pending.transaction.show');
+
+    Route::post('/sales/void', [SalesController::class, 'void'])->name('sales.void');
     Route::delete('cashier/pending-transaction/{id}', [PendingTransactionController::class, 'destroy'])->name('pending.transaction.delete');
 
 });

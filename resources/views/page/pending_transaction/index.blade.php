@@ -111,29 +111,5 @@
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.fetch-pending-transaction').forEach(function (button) {
-            button.addEventListener('click', function () {
-                var transactionId = this.getAttribute('data-id');
 
-                fetch(`/cashier/pending-transaction/${transactionId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        // Update the #transaction-details with the fetched data
-                        document.querySelector('#transaction-details').innerHTML = `
-                            <h5>Transaction Details</h5>
-                            <p>Plate Number: ${data.plate_number}</p>
-                            <p>Item Name: ${data.item_name}</p>
-                            <p>Total Price: ${data.total_price}</p>
-                            <!-- Add more fields as needed -->
-                        `;
-                    })
-                    .catch(error => {
-                        console.error('Error fetching transaction details:', error);
-                    });
-            });
-        });
-    });
-    </script>
 @endsection

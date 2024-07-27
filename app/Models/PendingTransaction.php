@@ -14,6 +14,16 @@ class PendingTransaction extends Model
     protected $fillable = [
         'plate_number',
         'item_name',
-        'harga',
+        'item_price',
+        'total_price',
+        'payment_method',
+        'date',
+        'time',
+        'cashier_name',
     ];
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
 }
