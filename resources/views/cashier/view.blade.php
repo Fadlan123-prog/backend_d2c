@@ -185,36 +185,53 @@
 
             // Make AJAX request to fetch items for the selected category
             $.ajax({
-                url: 'cashier/items/' + categoryId,
-                method: 'GET',
-                success: function(data) {
-                    // Clear previous items
-                    $('#items-container').empty();
+    url: 'cashier/items/' + categoryId,
+    method: 'GET',
+    success: function(data) {
+        // Clear previous items
+        $('#items-container').empty();
 
-                    // Check if there are items to display
-                    if (data.length > 0) {
-                        $('#items-section').show();
-                        // Append items to the container
-                        $.each(data, function(index, item) {
-                            $('#items-container').append(
-                                '<div class="col-md-4 col-lg-6 item-card" data-item-name="' + item.items_name + '" data-item-price="' + item.harga_item + '">' +
-                                    '<div class="card mb-3 mb-lg-0">' +
-                                        '<div class="card-body">' +
-                                            '<span class="card-title">' + item.items_name + '</span>' +
-                                            '<p class="mb-0">' + formatRupiah(item.harga_item) + '</p>' +
-                                        '</div>' +
+        // Check if there are items to display
+        if (data.length > 0) {
+            $('#items-section').show();
+            // Append items to the container
+            $.each(data, function(index, item) {
+                // Check if item has sizes
+                if (item.sizes && item.sizes.length > 0) {
+                    $.each(item.sizes, function(sizeIndex, size) {
+                        $('#items-container').append(
+                            '<div class="col-md-4 col-lg-6 item-card" data-item-name="' + item.items_name + '" data-item-price="' + size.pivot.price + '">' +
+                                '<div class="card mb-3 mb-lg-0">' +
+                                    '<div class="card-body">' +
+                                        '<span class="card-title">' + item.items_name + ' (' + size.size + ')</span>' +
+                                        '<p class="mb-0">' + formatRupiah(size.pivot.price) + '</p>' +
                                     '</div>' +
-                                '</div>'
-                            );
-                        });
-                    } else {
-                        $('#items-container').append('<p>No items found for this category.</p>');
-                    }
-                },
-                error: function(error) {
-                    console.log('Error fetching items:', error);
+                                '</div>' +
+                            '</div>'
+                        );
+                    });
+                } else {
+                    // Default case if no sizes are available
+                    $('#items-container').append(
+                        '<div class="col-md-4 col-lg-6 item-card" data-item-name="' + item.items_name + '" data-item-price="' + item.harga_item + '">' +
+                            '<div class="card mb-3 mb-lg-0">' +
+                                '<div class="card-body">' +
+                                    '<span class="card-title">' + item.items_name + '</span>' +
+                                    '<p class="mb-0">' + formatRupiah(item.harga_item) + '</p>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>'
+                    );
                 }
             });
+        } else {
+            $('#items-container').append('<p>No items found for this category.</p>');
+        }
+    },
+    error: function(error) {
+        console.log('Error fetching items:', error);
+    }
+});
         });
 
     // Handle item card click

@@ -11,6 +11,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PendingTransactionController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ReceiptController;
+use App\Http\Controllers\ExpendsController;
 use Carbon\Carbon;
 use App\Models\Categories;
 use App\Models\Customer;
@@ -52,6 +53,10 @@ Route::group(['middleware' => ['role:cashier']], function(){
     Route::get('cashier/pending-transaction', [PendingTransactionController::class, 'index'])->name('pending.transaction.index');
     Route::post('cashier/pending-transaction', [PendingTransactionController::class, 'store'])->name('pending.transaction.store');
     Route::get('/cashier/pending-transaction/{id}', [PendingTransactionController::class, 'getPendingTransaction']);
+    Route::get('cashier/expends', [ExpendsController::class, 'index'])->name('expends.index');
+    Route::get('cashier/expends/add-expends', [ExpendsController::class, 'create'])->name('expends.create');
+    Route::post('cashier/expends/add-expends', [ExpendsController::class, 'store'])->name('expends.store');
+    Route::get('/cashier/expends/{expends}/edit', [ExpendsController::class, 'edit'])->name('expends.edit');
     Route::get('/cashier/show-pending-transaction', function () {
         $categories = Categories::all();
         $customers = Customer::all();

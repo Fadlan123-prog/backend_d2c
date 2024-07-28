@@ -11,6 +11,7 @@
         "vite": "^5.0"
     },
     "dependencies": {
+        "escpos": "^3.0.0-alpha.6",
         "owl.carousel": "^2.3.4"
     }
 }

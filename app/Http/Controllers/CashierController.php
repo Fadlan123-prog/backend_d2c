@@ -38,7 +38,7 @@ class CashierController extends Controller
     public function getItemsByCategory($categoryId)
     {
         // Fetch items based on category ID
-        $items = Item::where('category_id', $categoryId)->get();
+        $items = Item::where('category_id', $categoryId)->with('sizes')->get();
 
         // Return items as JSON response
         return response()->json($items);
