@@ -12,11 +12,12 @@
             margin: 20px 0;
         }
         .receipt {
-            max-width: 207px;
+            max-width: 58mm;
             margin: auto;
             padding: 20px 10px;
             border: 1px solid #eee;
             border-radius: 10px;
+            font-size: 12px;
         }
         .receipt-header {
             text-align: center;
@@ -24,30 +25,22 @@
         }
         .receipt-header img {
             max-width: 100%;
-            width: 150px;
+            width: 100px;
         }
-
-        .receipt-header h2{
-            font-size: 18px;
+        .receipt-header h2 {
+            font-size: 16px;
         }
-
-        .receipt-header p{
+        .receipt-header p {
             font-size: 10px;
         }
-
         .receipt-details {
             margin-bottom: 10px;
         }
-
-        .receipt-details p{
-            margin-bottom: 0px;
-            font-size: 10px
+        .receipt-details p {
+            margin-bottom: 0;
+            font-size: 10px;
         }
-
-        .receipt-details h5{
-            font-size: 14px;
-        }
-        .receipt-items span{
+        .receipt-items span {
             font-size: 10px;
         }
         .receipt-footer {
@@ -55,8 +48,7 @@
             margin-top: 20px;
             font-size: 10px;
         }
-
-        .receipt-total span{
+        .receipt-total span {
             font-size: 10px;
         }
         .table th, .table td {
@@ -68,9 +60,9 @@
 
 <div id="receipt" class="receipt">
     <div class="receipt-header">
-        <img src="{{asset('assets/img/content/logo-receipt.png')}}" alt="logo">
+        <img src="{{ asset('assets/img/content/logo-receipt.png') }}" alt="logo">
         <h2>Dirty 2 Clean Tanjung Barat</h2>
-        <p>jl. Tanjung Baran No, 2B, Lenteng Agung, Jagakarsa, RT.5/RW.1, Jakarta Selatan</p>
+        <p>Jl. Tanjung Barat No, 2B, Lenteng Agung, Jagakarsa, RT.5/RW.1, Jakarta Selatan</p>
         <p>08521713106</p>
     </div>
 
@@ -162,11 +154,12 @@
                 margin: 20px 0;
             }
             .receipt {
-                max-width: 207px;
+                max-width: 58mm;
                 margin: auto;
                 padding: 20px 10px;
                 border: 1px solid #eee;
                 border-radius: 10px;
+                font-size: 12px;
             }
             .receipt-header {
                 text-align: center;
@@ -174,25 +167,22 @@
             }
             .receipt-header img {
                 max-width: 100%;
-                width: 150px;
+                width: 100px;
             }
-            .receipt-header h2{
-                font-size: 18px;
+            .receipt-header h2 {
+                font-size: 16px;
             }
-            .receipt-header p{
+            .receipt-header p {
                 font-size: 10px;
             }
             .receipt-details {
                 margin-bottom: 10px;
             }
-            .receipt-details p{
-                margin-bottom: 0px;
-                font-size: 10px
+            .receipt-details p {
+                margin-bottom: 0;
+                font-size: 10px;
             }
-            .receipt-details h5{
-                font-size: 14px;
-            }
-            .receipt-items span{
+            .receipt-items span {
                 font-size: 10px;
             }
             .receipt-footer {
@@ -200,7 +190,7 @@
                 margin-top: 20px;
                 font-size: 10px;
             }
-            .receipt-total span{
+            .receipt-total span {
                 font-size: 10px;
             }
             .table th, .table td {

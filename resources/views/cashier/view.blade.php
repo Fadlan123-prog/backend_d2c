@@ -122,9 +122,9 @@
                                                     <div class="row mb-3">
                                                         <div class="col-12">
                                                             <div class="btn-group" role="group">
-                                                                <button type="button" class="btn btn-info btn-md" data-value="10000">10000</button>
-                                                                <button type="button" class="btn btn-info btn-md" data-value="50000">50000</button>
-                                                                <button type="button" class="btn btn-info btn-md" data-value="100000">100000</button>
+                                                                <button type="button" class="btn btn-info btn-md nominal-btn" data-value="10000">10000</button>
+                                                                <button type="button" class="btn btn-info btn-md nominal-btn" data-value="50000">50000</button>
+                                                                <button type="button" class="btn btn-info btn-md nominal-btn" data-value="100000">100000</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -178,6 +178,11 @@
                 }
             }
         });
+
+        $('.nominal-btn').click(function() {
+                var value = $(this).data('value');
+                $('#nominal').val(formatRupiah(value));
+            });
 
     // Handle category button click
         $('.category-btn').click(function() {
