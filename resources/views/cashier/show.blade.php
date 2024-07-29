@@ -100,7 +100,7 @@
                                                     </div>
                                                     <hr class="my-2">
                                                     <div class="form-outline form-white mb-4">
-                                                        <input type="text" inputmode="numeric" id="nominal" class="form-control form-control-lg" size="17" placeholder="Input Nominal" />
+                                                        <input type="text" id="nominal" class="form-control form-control-lg" size="17" placeholder="Input Nominal" />
                                                         <label class="form-label" for="nominal">Input Nominal</label>
                                                     </div>
 
@@ -149,34 +149,14 @@
     </div>
 </section>
 
-<!-- Modal for Receipt -->
-<div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="receiptModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="receiptModalLabel">Receipt</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="modalReceiptContent">
-                <!-- Receipt content will be inserted here -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="printButton">Print</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
 <!-- Include Owl Carousel JavaScript -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-<!-- Include Bootstrap JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gybBaApj8PXinV4StF5ZZEEXa6zA5sJojq4u/2DxRmGyL7Sk9I" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuHe66pY6oP5ywB8B9HoH0bBaL6pF2UeZ8bh/fehVcm6HZj6/zR1CrzRBp4VX0aX" crossorigin="anonymous"></script>
+
 
 <script>
+
 $(document).ready(function () {
     // Retrieve data from localStorage
     var data = localStorage.getItem('pendingTransaction');
@@ -199,109 +179,202 @@ $(document).ready(function () {
 
             var itemsListHtml = '';
             $.each(itemNames, function(index, item) {
-                if (item !== '' && itemPrices[index] !== undefined) { // Check if item and corresponding price are defined and non-empty
-                    itemsListHtml += '<div class="d-flex justify-content-between"><p class="items-name">' + item + '</p><p class="items-price">' + itemPrices[index] + '</p></div>';
-                }
+                var price = itemPrices[index] || ''; // Get the corresponding price, if available
+                itemsListHtml += `
+                    <div class="d-flex justify-content-between mb-2">
+                        <p class="items-name mb-0">${item}</p>
+                        <p class="items-price mb-0">${price}</p>
+                    </div>
+                `;
             });
 
-            $transactionDetails.html(itemsListHtml);
-        } else {
-            console.log('Element with id "transaction-details" not found.');
-        }
+            // Add the items and then the subtotal separately
+            $transactionDetails.html(`
+                <div class="d-flex justify-content-between mb-2">
+                    <p class="mb-0">Plate Number</p>
+                    <p class="mb-0">${data.plate_number}</p>
+                </div>
+                ${itemsListHtml}
+            `);
 
-        // Update subtotal
-        var $subtotal = $('#subtotal');
-        if ($subtotal.length) {
-            $subtotal.text(data.subtotal);
-            $subtotal.data('subtotal', data.subtotal); // Update data-subtotal attribute
+            // Add the subtotal element after the items
+            $('#transaction-details').html(`
+                <div class="d-flex justify-content-between">
+                    <p class="mb-2">Subtotal</p>
+                    <p class="mb-2" id="subtotal" data-subtotal="${data.total_price}">Rp ${data.total_price}</p>
+                </div>
+            `);
         } else {
-            console.log('Element with id "subtotal" not found.');
+            console.error('Element with ID #selected-items not found.');
         }
     } else {
-        console.log('No data found in localStorage.');
+        console.error('No pending transaction data found in localStorage.');
     }
 
-    // Carousel settings
-    var $owlCarousel = $('.owl-carousel');
-    if ($owlCarousel.length) {
-        $owlCarousel.owlCarousel({
-            loop: false,
-            margin: 10,
-            nav: true,
-            dots: true,
-            autoplay: false,
-            responsive: {
-                0: {
-                    items: 1
-                },
-                600: {
-                    items: 2
-                },
-                1000: {
-                    items: 3
-                }
+    $('.owl-carousel').owlCarousel({
+        loop: false,
+        margin: 10,
+        nav: false, // Set to false to hide navigation buttons
+        dots: false, // Set to false to hide dots
+        responsive: {
+            0: {
+                items: 1
+            },
+            600: {
+                items: 1
+            },
+            1000: {
+                items: 1
             }
-        });
-    } else {
-        console.log('Element with class "owl-carousel" not found.');
-    }
+        }
+    });
 
-    $('.category-btn').on('click', function() {
+    $('.category-btn').click(function() {
         var categoryId = $(this).data('category-id');
+
+        // Make AJAX request to fetch items for the selected category
         $.ajax({
-            url: '/cashier/get-items/' + categoryId,
+            url: '/cashier/items/' + categoryId,
             method: 'GET',
-            success: function(response) {
-                var $itemsContainer = $('#items-container');
-                var $itemsSection = $('#items-section');
-                if ($itemsContainer.length && $itemsSection.length) {
-                    $itemsContainer.empty(); // Clear existing items
-                    $.each(response.items, function(index, item) {
-                        var itemHtml = '<div class="col-md-4 mb-4">' +
-                            '<div class="card h-100">' +
-                            '<div class="card-body d-flex flex-column">' +
-                            '<h5 class="card-title">' + item.name + '</h5>' +
-                            '<p class="card-text mt-auto">' + item.price + '</p>' +
-                            '<button class="btn btn-primary mt-3 add-item-btn" data-item-id="' + item.id + '" data-item-name="' + item.name + '" data-item-price="' + item.price + '">Add Item</button>' +
-                            '</div>' +
-                            '</div>' +
-                            '</div>';
-                        $itemsContainer.append(itemHtml);
+            success: function(data) {
+                // Clear previous items
+                $('#items-container').empty();
+
+                // Check if there are items to display
+                if (data.length > 0) {
+                    $('#items-section').show();
+                    // Append items to the container
+                    $.each(data, function(index, item) {
+                        $('#items-container').append(
+                            '<div class="col-md-4 col-lg-6 item-card" data-item-name="' + item.items_name + '" data-item-price="' + item.harga_item + '">' +
+                                '<div class="card mb-3 mb-lg-0">' +
+                                    '<div class="card-body">' +
+                                        '<span class="card-title">' + item.items_name + '</span>' +
+                                        '<p class="mb-0">' + formatRupiah(item.harga_item) + '</p>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>'
+                        );
                     });
-                    $itemsSection.show();
                 } else {
-                    console.log('Element with id "items-container" or "items-section" not found.');
+                    $('#items-container').append('<p>No items found for this category.</p>');
                 }
             },
             error: function(error) {
-                console.log('Error retrieving items:', error);
+                console.log('Error fetching items:', error);
             }
         });
     });
 
-    $('#items-container').on('click', '.add-item-btn', function() {
-        var itemId = $(this).data('item-id');
-        var itemName = $(this).data('item-name');
-        var itemPrice = $(this).data('item-price');
-
-        var $selectedItems = $('#selected-items');
-        if ($selectedItems.length) {
-            var itemHtml = '<div class="d-flex justify-content-between"><p class="items-name">' + itemName + '</p><p class="items-price">' + itemPrice + '</p></div>';
-            $selectedItems.append(itemHtml);
-
-            // Update subtotal
-            var $subtotal = $('#subtotal');
-            if ($subtotal.length) {
-                var currentSubtotal = parseInt($subtotal.data('subtotal')) || 0;
-                var newSubtotal = currentSubtotal + parseInt(itemPrice);
-                $subtotal.text(newSubtotal);
-                $subtotal.data('subtotal', newSubtotal); // Update data-subtotal attribute
-            } else {
-                console.log('Element with id "subtotal" not found.');
-            }
-        } else {
-            console.log('Element with id "selected-items" not found.');
+    $('#items-container').on('click', '.item-card', function() {
+        // Check if item has already been clicked
+        if ($(this).hasClass('selected')) {
+            return;
         }
+
+        var itemName = $(this).data('item-name');
+        var itemPrice = parseFloat($(this).data('item-price'));
+
+        // Append the selected item to the selected-items section
+        $('#selected-items').append(
+            '<div class="d-flex justify-content-between mb-2">' +
+                '<p class="items-name mb-0">' + itemName + '</p>' +
+                '<p class="items-price mb-0">' + formatRupiah(itemPrice) + '</p>' +
+            '</div>'
+        );
+
+        // Update the subtotal
+        var currentSubtotal = parseFloat($('#subtotal').data('subtotal')) || 0;
+        var newSubtotal = currentSubtotal + itemPrice;
+        $('#subtotal').data('subtotal', newSubtotal);
+        $('#subtotal').text(formatRupiah(newSubtotal));
+
+        // Mark the item as selected
+        $(this).addClass('selected');
+
+        // Re-add the subtotal element to ensure it stays at the bottom
+        $('#transaction-details').append($('#subtotal').parent().detach());
+    });
+
+    $('.btn-group button').click(function() {
+        var paymentType = $(this).data('value'); // Get the value from data attribute
+        $('#payment_type_hidden').val(paymentType); // Set the value of hidden input
+
+        if (paymentType === 'Tokopedia' || paymentType === 'Transfer') {
+            // Hide the nominal input field if Tokopedia or Transfer is selected
+            $('#nominal').hide();
+        } else {
+            $('#nominal').show(); // Show the nominal input field otherwise
+        }
+    });
+
+    $('#nominal').on('input', function() {
+        var value = $(this).val().replace(/\D/g, ''); // Remove non-numeric characters
+        $(this).val(formatRupiah(value));
+
+        var nominalValue = parseFloat(value);
+        var subtotal = parseFloat($('#subtotal').data('subtotal'));
+
+        if (nominalValue >= 0) {
+            $('#payment_type_hidden').val('Cash'); // Set payment type to Cash if nominal is filled
+        }
+
+        if (nominalValue >= subtotal) {
+            var change = nominalValue - subtotal;
+            $('#change').html(
+                '<div class="d-flex justify-content-between mb-2">' +
+                    '<p class="mb-0">Change</p>' +
+                    '<p class="mb-0">' + formatRupiah(change) + '</p>' +
+                '</div>'
+            ); // Display change
+        } else {
+            $('#change').text(''); // Clear change if nominal is less than subtotal
+        }
+    });
+
+    $('#addCustomerForm').on('submit', function(event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+
+        var selectElement = document.getElementById('exampleSelect2');
+        selectElement.value = selectElement.value.toUpperCase();
+
+        var isAlreadyAdded = false;
+        // Append the selected plate number to the selected-items section
+        var plateNumber = selectElement.value;
+        $('#selected-items .d-flex').each(function() {
+            var existingPlateNumber = $(this).find('p.mb-0').eq(1).text();
+            if (existingPlateNumber === plateNumber) {
+                isAlreadyAdded = true;
+                return false; // Break out of the each loop
+            }
+        });
+
+        if (!isAlreadyAdded) {
+            $('#selected-items').append(
+                '<div class="d-flex justify-content-between mb-2">' +
+                    '<p class="mb-0">Plate Number</p>' +
+                    '<p class="mb-0">' + plateNumber + '</p>' +
+                '</div>'
+            );
+        } else {
+            alert('This plate number has already been added.');
+        }
+
+        // Make AJAX request to submit the form data
+        $.ajax({
+            url: '{{ route("cashier.addcustomer") }}',
+            method: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                console.log('Customer added successfully:', response);
+                // Optionally, handle the response if needed
+                var newOption = new Option(selectElement.value, selectElement.value, true, true);
+                $('#exampleSelect2').append(newOption).trigger('change');
+            },
+            error: function(error) {
+                console.log('Error adding customer:', error);
+            }
+        });
     });
 
     $('#transactionForm').on('submit', function(event) {
@@ -361,68 +434,38 @@ $(document).ready(function () {
         var formAction = $(this).data('form-action');
         $('#transactionForm').data('form-action', formAction);
     });
-
-    $('#btn-transfer, #btn-tokopedia').on('click', function() {
-        var paymentType = $(this).data('value');
-        $('#payment_type_hidden').val(paymentType);
-
-        var $transactionDetails = $('#transaction-details');
-        if ($transactionDetails.length) {
-            var subtotal = parseInt($('#subtotal').data('subtotal')) || 0;
-            var nominal = parseInt($('#nominal').val()) || 0;
-            var kembalian = nominal - subtotal;
-            if (nominal > 0) {
-                var paymentDetailsHtml = '<div class="d-flex justify-content-between"><p>Payment Type:</p><p>' + paymentType + '</p></div>' +
-                    '<div class="d-flex justify-content-between"><p>Nominal:</p><p>' + nominal + '</p></div>' +
-                    '<div class="d-flex justify-content-between"><p>Kembalian:</p><p>' + kembalian + '</p></div>';
-                $transactionDetails.html(paymentDetailsHtml);
-
-                var changeHtml = '<div class="d-flex justify-content-between"><p>Kembalian:</p><p>' + kembalian + '</p></div>';
-                $('#change').html(changeHtml);
-            }
-        }
-    });
-
-    $('button[data-value]').on('click', function() {
-        var value = $(this).data('value');
-        var currentNominal = parseInt($('#nominal').val()) || 0;
-        var newNominal = currentNominal + value;
-        $('#nominal').val(newNominal);
-
-        // Update kembalian
-        var subtotal = parseInt($('#subtotal').data('subtotal')) || 0;
-        var kembalian = newNominal - subtotal;
-        var $transactionDetails = $('#transaction-details');
-        if ($transactionDetails.length) {
-            var paymentDetailsHtml = $transactionDetails.html() +
-                '<div class="d-flex justify-content-between"><p>Kembalian:</p><p>' + kembalian + '</p></div>';
-            $transactionDetails.html(paymentDetailsHtml);
-
-            var changeHtml = '<div class="d-flex justify-content-between"><p>Kembalian:</p><p>' + kembalian + '</p></div>';
-            $('#change').html(changeHtml);
-        }
-    });
 });
+
+
+function formatRupiah(amount) {
+    if (!amount) return '';
+    return 'Rp ' + amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
 
 function printReceipt() {
     var printContents = document.getElementById('receipt').innerHTML;
-    document.getElementById('modalReceiptContent').innerHTML = printContents;
-    var receiptModal = new bootstrap.Modal(document.getElementById('receiptModal'), {
-        keyboard: false
-    });
-    receiptModal.show();
-}
-
-document.getElementById('printButton').addEventListener('click', function() {
-    var printContents = document.getElementById('modalReceiptContent').innerHTML;
     var originalContents = document.body.innerHTML;
 
     document.body.innerHTML = '<html><head><title>Receipt</title></head><body>' + printContents + '</body></html>';
 
-
+    window.print();
 
     document.body.innerHTML = originalContents;
     location.reload();
+}
+
+$(document).ready(function() {
+    $('#exampleSelect2').select2({
+        tags: true,
+        placeholder: "Pilih atau masukkan teks",
+        allowClear: true
+    });
 });
+
+function convertToUpper() {
+    var selectElement = document.getElementById('exampleSelect2');
+    selectElement.value = selectElement.value.toUpperCase();
+}
 </script>
+
 @endsection

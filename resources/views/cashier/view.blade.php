@@ -153,6 +153,24 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="receiptModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="receiptModalLabel">Receipt</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalReceiptContent">
+                    <!-- Receipt content will be inserted here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="printButton">Print</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 <!-- Include jQuery -->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
@@ -419,17 +437,120 @@ function formatRupiah(amount) {
     return 'Rp ' + amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
-function printReceipt() {
-    var printContents = document.getElementById('receipt').innerHTML;
-    var originalContents = document.body.innerHTML;
+ Function to generate receipt content
+    function generateReceiptContent() {
+        var itemsHtml = $('#selected-items').html();
+        var subtotal = $('#subtotal_hidden').val();
+        var nominal = $('#nominal').val();
+        var paymentType = $('#payment_type_hidden').val();
+        var kembalian = nominal - subtotal;
 
-    document.body.innerHTML = '<html><head><title>Receipt</title></head><body>' + printContents + '</body></html>';
+        return `
+            <div class="receipt">
+                <div class="receipt-header">
+                    <img src="{{ asset('assets/img/content/logo-receipt.png') }}" alt="logo">
+                    <h2>Dirty 2 Clean Tanjung Barat</h2>
+                    <p>Jl. Tanjung Barat No, 2B, Lenteng Agung, Jagakarsa, RT.5/RW.1, Jakarta Selatan</p>
+                    <p>08521713106</p>
+                </div>
+                <div class="receipt-details">
+                    <p>Tanggal: </p>
+                    <p>Jam: </p>
+                    <p>Nomor Plat: </p>
+                    <p>Kasir: </p>
+                </div>
+                <hr class="dashed-hr">
+                <div class="receipt-items">
+                    ${itemsHtml}
+                </div>
+                <hr class="dashed-hr">
+                <div class="receipt-total">
+                    <div class="d-flex justify-content-between">
+                        <span>Total:</span>
+                        <span>Rp ${subtotal}</span>
+                    </div>
+                </div>
+                <hr class="dashed-hr">
+                <div class="receipt-footer">
+                    <p>Powered by Dirty 2 Clean</p>
+                </div>
+            </div>
+        `;
+    }
 
-    window.print();
+    Event listener for modal show event
+    $('#receiptModal').on('show.bs.modal', function () {
+        var receiptContent = generateReceiptContent();
+        $('#modalReceiptContent').html(receiptContent);
+    });
 
-    document.body.innerHTML = originalContents;
-    location.reload();
-}
+    Event listener for print button
+    $('#printButton').click(function () {
+        var receiptContent = generateReceiptContent();
+        var printWindow = window.open('', '', 'height=400,width=800');
+        printWindow.document.write(`
+            <html>
+            <head>
+                <title>Receipt</title>
+                <style>
+                    .dashed-hr {
+                        border: none;
+                        border-top: 1px dashed #000;
+                        margin: 20px 0;
+                    }
+                    .receipt {
+                        max-width: 58mm;
+                        margin: auto;
+                        padding: 20px 10px;
+                        border: 1px solid #eee;
+                        border-radius: 10px;
+                        font-size: 12px;
+                    }
+                    .receipt-header {
+                        text-align: center;
+                        margin-bottom: 10px;
+                    }
+                    .receipt-header img {
+                        max-width: 100%;
+                        width: 100px;
+                    }
+                    .receipt-header h2 {
+                        font-size: 16px;
+                    }
+                    .receipt-header p {
+                        font-size: 10px;
+                    }
+                    .receipt-details {
+                        margin-bottom: 10px;
+                    }
+                    .receipt-details p {
+                        margin-bottom: 0;
+                        font-size: 10px;
+                    }
+                    .receipt-items span {
+                        font-size: 10px;
+                    }
+                    .receipt-footer {
+                        text-align: center;
+                        margin-top: 20px;
+                        font-size: 10px;
+                    }
+                    .receipt-total span {
+                        font-size: 10px;
+                    }
+                    .table th, .table td {
+                        vertical-align: middle;
+                    }
+                </style>
+            </head>
+            <body>
+                ${receiptContent}
+            </body>
+            </html>
+        `);
+        printWindow.print();
+        printWindow.document.close();
+    });
 
 $(document).ready(function() {
     $('#exampleSelect2').select2({
