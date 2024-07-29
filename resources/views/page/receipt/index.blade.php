@@ -131,7 +131,7 @@
                     itemsListHtml += `
                         <div class="d-flex justify-content-between mb-0">
                             <span class="items-name mb-0">${name}</span>
-                            <span class="items-price mb-0">${price}</span>
+                            <span class="items-price mb-0 text-right">${price}</span>
                         </div>
                     `;
                 });
