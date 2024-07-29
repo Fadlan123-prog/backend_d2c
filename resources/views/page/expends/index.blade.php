@@ -4,6 +4,13 @@
 <div class="container">
     <div class="container-fluid">
         <div class="row">
+            <div class="col-md-4">
+                <a href="{{ route('cashier.index')}}" class="btn bg-black">
+                    Back
+                </a>
+            </div>
+        </div>
+        <div class="row mt-4">
             <div class="col-xl-3 col-sm-3">
                 <a href="{{ route('expends.create') }}">
                     <button type="button" class="btn bg-black">Add Expends Item</button>
@@ -14,7 +21,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3>Sales List</h3>
+                        <h3>Expands List</h3>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -50,7 +57,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

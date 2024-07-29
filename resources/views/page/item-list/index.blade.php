@@ -32,13 +32,6 @@
                         @php
                             $hasSize = $item->sizes && $item->sizes->isNotEmpty();
                         @endphp
-
-                        {{-- @php
-                        function formatRupiah($number)
-                        {
-                            return 'Rp ' . number_format($number, 0, ',', '.');
-                        }
-                        @endphp --}}
                         @if ($hasSize)
 
                         <tr data-bs-toggle="collapse" data-bs-target="#sizes{{ $item->id }}" aria-expanded="false" aria-controls="sizes{{ $item->id }}">

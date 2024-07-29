@@ -100,7 +100,7 @@
                                                     </div>
                                                     <hr class="my-2">
                                                     <div class="form-outline form-white mb-4">
-                                                        <input type="text" id="nominal" class="form-control form-control-lg" size="17" placeholder="Input Nominal" />
+                                                        <input type="text" inputmode="numeric" id="nominal" class="form-control form-control-lg" size="17" placeholder="Input Nominal" />
                                                         <label class="form-label" for="nominal">Input Nominal</label>
                                                     </div>
 
@@ -419,7 +419,7 @@ document.getElementById('printButton').addEventListener('click', function() {
 
     document.body.innerHTML = '<html><head><title>Receipt</title></head><body>' + printContents + '</body></html>';
 
-    window.print();
+
 
     document.body.innerHTML = originalContents;
     location.reload();

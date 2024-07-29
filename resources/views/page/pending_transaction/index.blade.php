@@ -3,6 +3,13 @@
 @section('content')
 <div class="container">
     <div class="row">
+        <div class="col-md-4">
+            <a href="{{ route('cashier.index')}}" class="btn bg-black">
+                Back
+            </a>
+        </div>
+    </div>
+    <div class="row mt-4">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
