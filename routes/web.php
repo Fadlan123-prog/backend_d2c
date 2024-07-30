@@ -67,6 +67,7 @@ Route::group(['middleware' => ['role:cashier']], function(){
     Route::get('/receipt/{id}', [ReceiptController::class, 'showReceipt'])->name('receipt.show');
     Route::post('/sales/void', [SalesController::class, 'void'])->name('sales.void');
     Route::delete('cashier/pending-transaction/{id}', [PendingTransactionController::class, 'destroy'])->name('pending.transaction.delete');
+    Route::get('cashier/close', [CashierController::class, 'close'])->name('cashier.close');
 
 });
 

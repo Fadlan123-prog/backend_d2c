@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\Categories;
 use App\Models\Item;
 use App\Models\Customer;
+use App\Models\Sales;
+use DB;
 
 class CashierController extends Controller
 {
@@ -42,5 +44,54 @@ class CashierController extends Controller
 
         // Return items as JSON response
         return response()->json($items);
+    }
+
+    public function close(Request $request)
+    {
+        // Total penjualan berdasarkan kategori
+        $salesByCategory = Sales::select('items.category_id', DB::raw('SUM(total_price) as total_amount'))
+            ->join('items', 'sales.item_id', '=', 'items.id')
+            ->groupBy('items.category_id')
+            ->get()
+            ->map(function ($sale) {
+                $sale->category_name = Categories::find($sale->category_id)->categories_name;
+                return $sale;
+            });
+
+        // Total penjualan berdasarkan item
+        $salesByItem = Sales::select('items.id', 'items.items_name', DB::raw('SUM(total_price) as total_amount'))
+            ->join('items', 'sales.item_id', '=', 'items.id')
+            ->groupBy('items.id', 'items.items_name')
+            ->get();
+
+        // Total penjualan
+        $totalSales = Sales::sum('total_price');
+        $totalCash = Sales::where('payment_method', 'cash')->sum('total_price');
+        $totalTransfer = Sales::where('payment_method', 'transfer')->sum('total_price');
+        $totalTokopedia = Sales::where('payment_method', 'tokopedia')->sum('total_price');
+
+        $totalPaymentTypes = $totalCash + $totalTransfer + $totalTokopedia;
+
+        // Total pengeluaran
+        $expenses = Expense::all();
+        $totalExpenses = $expenses->sum('amount');
+        $expensesDetails = $expenses->map(function ($expense) {
+            return ['item_name' => $expense->item_name, 'amount' => $expense->amount];
+        });
+
+        // Sisa penjualan tunai
+        $remainingCash = $totalCash - $totalExpenses;
+
+        return view('cashier.close', compact(
+            'salesByCategory',
+            'salesByItem',
+            'totalSales',
+            'totalCash',
+            'totalTransfer',
+            'totalTokopedia',
+            'totalPaymentTypes',
+            'expensesDetails',
+            'remainingCash'
+        ));
     }
 }
