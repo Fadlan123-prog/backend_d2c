@@ -9,6 +9,8 @@ use App\Models\Categories;
 use App\Models\Item;
 use App\Models\Customer;
 use App\Models\Sales;
+use App\Models\SalesItem;
+use App\Models\Expends;
 use DB;
 
 class CashierController extends Controller
@@ -49,18 +51,19 @@ class CashierController extends Controller
     public function close(Request $request)
     {
         // Total penjualan berdasarkan kategori
-        $salesByCategory = Sales::select('items.category_id', DB::raw('SUM(total_price) as total_amount'))
-            ->join('items', 'sales.item_id', '=', 'items.id')
+        $salesByCategory = SalesItem::select('items.category_id', DB::raw('SUM(sales_item.harga_items) as total_amount'))
+            ->join('items', 'sales_item.item_id', '=', 'items.id')
             ->groupBy('items.category_id')
             ->get()
             ->map(function ($sale) {
-                $sale->category_name = Categories::find($sale->category_id)->categories_name;
+                $category = Categories::find($sale->category_id);
+                $sale->category_name = $category ? $category->categories_name : 'Unknown Category';
                 return $sale;
             });
 
         // Total penjualan berdasarkan item
-        $salesByItem = Sales::select('items.id', 'items.items_name', DB::raw('SUM(total_price) as total_amount'))
-            ->join('items', 'sales.item_id', '=', 'items.id')
+        $salesByItem = SalesItem::select('items.id', 'items.items_name', DB::raw('SUM(sales_item.harga_items) as total_amount'))
+            ->join('items', 'sales_item.item_id', '=', 'items.id')
             ->groupBy('items.id', 'items.items_name')
             ->get();
 
@@ -73,7 +76,7 @@ class CashierController extends Controller
         $totalPaymentTypes = $totalCash + $totalTransfer + $totalTokopedia;
 
         // Total pengeluaran
-        $expenses = Expense::all();
+        $expenses = Expends::all();
         $totalExpenses = $expenses->sum('amount');
         $expensesDetails = $expenses->map(function ($expense) {
             return ['item_name' => $expense->item_name, 'amount' => $expense->amount];
@@ -81,8 +84,9 @@ class CashierController extends Controller
 
         // Sisa penjualan tunai
         $remainingCash = $totalCash - $totalExpenses;
+        $dateTime = Carbon::now()->setTimezone('Asia/Jakarta');
 
-        return view('cashier.close', compact(
+        return view('page.closed.closed', compact(
             'salesByCategory',
             'salesByItem',
             'totalSales',
@@ -91,7 +95,8 @@ class CashierController extends Controller
             'totalTokopedia',
             'totalPaymentTypes',
             'expensesDetails',
-            'remainingCash'
+            'remainingCash',
+            'dateTime'
         ));
     }
 }

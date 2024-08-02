@@ -8,38 +8,55 @@ use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use App\Models\SalesItem;
+use Auth;
 
 class SalesController extends Controller
 {
 
     public function index(){
-        $sales = Sales::all();
+        $sales = Sales::with(['customer', 'salesItems.item', 'salesItems.size'])->get();
         $dateTime = Carbon::now()->setTimezone('Asia/Jakarta');
 
         return view('page.sales-list.index', compact('sales', 'dateTime'));
     }
 
-    public function store(Request $request){
-        // Validate the request
+    public function store(Request $request)
+    {
+        $items = json_decode($request->items_id, true);
 
-        // Create a new transaction record
-        $sales = new Sales();
-        $sales->plate_number = $request->plate_number;
-        $sales->date = Carbon::now()->format('Y-m-d');
-        $sales->time = Carbon::now()->format('H:i:s');
-        $sales->cashier_name = auth()->user()->name; // Asumsikan user sudah login
-        $sales->item_name = json_encode($request->items);
-        $sales->item_price = json_encode($request->prices);
-        $sales->total_price = $request->subtotal;
-        $sales->payment_method = $request->payment_type;
-        $sales->save();
+        // Create the Sale record
+        $sale = Sales::create([
+            'customer_id' => $request->customer_id,
+            'total_price' => $request->subtotal,
+            'payment_method' => $request->payment_type,
+            'cashier_name' => Auth::user()->name,
+            'date' => Carbon::now()->format('Y-m-d'),
+            'time' => Carbon::now()->format('H:i:s'),
+        ]);
 
-        return response()->json(['success' => 'Transaction stored successfully']);
+        if ($items) {
+            foreach ($items as $item) {
+                // Debugging output to check the structure of $item
+                Log::info('Item:', $item);
 
-        // Associate items with the transaction
-        $transaction->items()->sync($validated['items']); // Adjust based on your relationship
+                // Validate the structure of $item
+                if (!isset($item['item_id']) || !isset($item['prices'])) {
+                    Log::error('Missing item_id or prices in item:', $item);
+                    continue; // Skip this iteration if the structure is not as expected
+                }
 
-        return redirect()->back()->with('success', 'Transaction stored successfully');
+                // Create a new SalesItem
+                SalesItem::create([
+                    'sales_id' => $sale->id,
+                    'item_id' => $item['item_id'],
+                    'size_id' => $item['size_id'] ?? null, // Use null if size_id is not provided
+                    'harga_items' => $item['prices'],
+                ]);
+            }
+        }
+
+        return response()->json(['success' => true, 'sale_id' => $sale->id]);
     }
 
     public function void(Request $request)

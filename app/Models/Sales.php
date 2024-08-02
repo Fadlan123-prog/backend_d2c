@@ -12,7 +12,7 @@ class Sales extends Model
     protected $table = 'sales'; // Nama tabel
 
     protected $fillable = [
-        'plate_number',
+        'customer_id',
         'date',
         'time',
         'cashier_name',
@@ -24,8 +24,21 @@ class Sales extends Model
     ];
 
     // Relasi ke Item
-    public function item()
+    public function customer()
     {
-        return $this->belongsTo(Item::class, 'item_id'); // Menghubungkan dengan model Item
+        return $this->belongsTo(Customer::class);
+    }
+
+    public function salesItems()
+    {
+        return $this->hasMany(SalesItem::class);
+    }
+
+    public function customers(){
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
+
+    public function items(){
+        return $this->belongsTo(Item::class);
     }
 }

@@ -25,4 +25,13 @@ class Item extends Model
     {
         return $this->belongsToMany(Size::class, 'item_size')->withPivot('price');
     }
+
+    public function sales(){
+        return $this->belongsToMany(Sales::class, 'sales_item')->withPivot('price');
+    }
+
+    public function salesItems()
+    {
+        return $this->hasMany(SalesItem::class);
+    }
 }

@@ -52,7 +52,7 @@
                                 @foreach ($sales as $sale)
                                     <tr class= "{{ $sale->status == 'voided' ? 'bg-danger text-white' : '' }}">
                                         <td>
-                                            <p class="text-xs font-weight-bold mb-0">{{ $sale->plate_number }}</p>
+                                            <p class="text-xs font-weight-bold mb-0">{{ $sale->customers->plate_number }}</p>
                                         </td>
                                         <td>
                                             <p class="text-xs font-weight-bold mb-0">{{ $sale->date }}</p>
@@ -64,7 +64,18 @@
                                             <p class="text-xs font-weight-bold mb-0">{{ $sale->cashier_name }}</p>
                                         </td>
                                         <td>
-                                            <p class="text-xs font-weight-bold mb-0">{{ $sale->item_name }}</p>
+                                            <ul class="list-unstyled">
+                                                @foreach ($sale->salesItems as $salesItem)
+                                                    <li>
+                                                        <p class="text-xs font-weight-bold mb-0 pt-1">
+                                                            {{ $salesItem->item->items_name }}
+                                                            @if($salesItem->size)
+                                                                ({{ $salesItem->size->size }})
+                                                            @endif
+                                                        </p>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
                                         </td>
                                         <td>
                                             <p class="text-xs font-weight-bold mb-0">{{ $sale->total_price }}</p>
@@ -112,37 +123,6 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    {{-- @if ($sale->status == 'voided')
-                                        <tr class="bg-danger text-white">
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{ $sale->plate_number }}</p>
-                                            </td>
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{ $sale->date }}</p>
-                                            </td>
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{ $sale->time }}</p>
-                                            </td>
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{ $sale->cashier_name }}</p>
-                                            </td>
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{ $sale->item_name }}</p>
-                                            </td>
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{ $sale->total_price }}</p>
-                                            </td>
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{ $sale->payment_method }}</p>
-                                            </td>
-                                            <td>
-                                                <button type="button" class="btn btn-secondary" disabled>
-                                                    Voided
-                                                </button>
-                                                <a href="{{ route('receipt.show', $sale->id) }}" target="_blank" class="btn btn-success">Print Receipt</a>
-                                            </td>
-                                        </tr>
-                                    @endif --}}
                                 @endforeach
                             </tbody>
                         </table>

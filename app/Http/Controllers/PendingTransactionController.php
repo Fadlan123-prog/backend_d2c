@@ -19,26 +19,52 @@ class PendingTransactionController extends Controller
         return view('page.pending_transaction.index', compact('categories', 'customers', 'dateTime', 'pending_transaction'));
     }
 
-    public function store(Request $request){
-        $sales = new PendingTransaction();
-        $sales->plate_number = $request->plate_number;
-        $sales->date = Carbon::now()->format('Y-m-d');
-        $sales->time = Carbon::now()->format('H:i:s');
-        $sales->cashier_name = auth()->user()->name; // Asumsikan user sudah login
-        $sales->item_name = json_encode($request->items);
-        $sales->item_price = json_encode($request->prices);
-        $sales->total_price = $request->subtotal;
-        $sales->payment_method = $request->payment_type;
-        $sales->save();
-
-        // Associate items with the transaction
-        // $transaction->items()->sync($validated['items']); // Adjust based on your relationship
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Pending berhasil disimpan!',
-            'redirect_url' => route('pending.transaction.index')
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'customer_id' => 'required|integer',
+            'subtotal' => 'required|numeric',
+            'payment_type' => 'required|string',
+            'items' => 'required|json',
+            'prices' => 'required|json',
+            'item_ids' => 'required|json',
         ]);
+
+        try {
+            // Decode the JSON data
+            $items = json_decode($validated['items'], true);
+            $prices = json_decode($validated['prices'], true);
+            $itemIds = json_decode($validated['item_ids'], true);
+
+            // Create a new pending transaction entry
+            $pendingTransaction = new PendingTransaction();
+            $pendingTransaction->customer_id = $validated['customer_id'];
+            $pendingTransaction->date = now()->format('Y-m-d');
+            $pendingTransaction->time = now()->format('H:i:s');
+            $pendingTransaction->cashier_name = auth()->user()->name; // Assume cashier is the logged in user
+            $pendingTransaction->total_price = $validated['subtotal'];
+            $pendingTransaction->payment_method = $validated['payment_type'];
+            $pendingTransaction->save();
+
+            // Create pending_transaction_item entries
+            foreach ($itemIds as $index => $itemId) {
+                $pendingTransactionItem = new PendingTransactionItem();
+                $pendingTransactionItem->pending_transaction_id = $pendingTransaction->id;
+                $pendingTransactionItem->item_id = $itemId;
+                $pendingTransactionItem->harga_items = $prices[$index];
+                $pendingTransactionItem->save();
+            }
+
+            return response()->json([
+                'success' => true,
+                'receipt_html' => view('receipt', compact('pendingTransaction', 'items'))->render()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function getPendingTransaction($id)

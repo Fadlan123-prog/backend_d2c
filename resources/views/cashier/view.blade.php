@@ -13,7 +13,7 @@
                         <div class="form-group">
                             <select class="form-control" id="exampleSelect2" name="plate_number" style="width: 100%;">
                                 @foreach($customers as $data)
-                                    <option value="{{ $data->plate_number }}">{{ $data->plate_number }}</option>
+                                    <option value="{{ $data->plate_number }}" data-customer-id ="{{ $data->id }}">{{ $data->plate_number }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -77,10 +77,11 @@
                                                 <form id="transactionForm" class="mt-4" method="POST">
                                                     {{ csrf_field() }}
 
-                                                    <input type="hidden" name="plate_number" id="plate_number">
+                                                    <input type="hidden" name="customer_id" id="customer_id">
                                                     <input type="hidden" name="subtotal" id="subtotal_hidden">
                                                     <input type="hidden" name="payment_type" id="payment_type_hidden">
-                                                    <input type="hidden" name="items" id="items_hidden">
+                                                    <input type="hidden" name="items_id" id="items_hidden">
+                                                    <input type="hidden" name="sizes" id="sizes_hidden">
                                                     <input type="hidden" id="prices_hidden" name="prices"><!-- This will be populated dynamically -->
 
                                                     <div id="receipt">
@@ -122,9 +123,9 @@
                                                     <div class="row mb-3">
                                                         <div class="col-12">
                                                             <div class="btn-group" role="group">
-                                                                <button type="button" class="btn btn-info btn-md" data-value="10000">10000</button>
-                                                                <button type="button" class="btn btn-info btn-md" data-value="50000">50000</button>
-                                                                <button type="button" class="btn btn-info btn-md" data-value="100000">100000</button>
+                                                                <button type="button" class="btn btn-info btn-md nominal-btn" data-value="10000">10000</button>
+                                                                <button type="button" class="btn btn-info btn-md nominal-btn" data-value="50000">50000</button>
+                                                                <button type="button" class="btn btn-info btn-md nominal-btn" data-value="100000">100000</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -154,29 +155,6 @@
         </div>
     </div>
 </section>
-
-<div class="modal fade" id="receiptModal" tabindex="-1" role="dialog" aria-labelledby="receiptModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="receiptModalLabel">Receipt</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div id="receipt-content">
-                    <!-- Receipt content will be populated here -->
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="confirm-checkout">Confirm Checkout</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Include jQuery -->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
 <!-- Include Owl Carousel JavaScript -->
@@ -202,6 +180,11 @@
             }
         });
 
+        $('.nominal-btn').click(function() {
+                var value = $(this).data('value');
+                $('#nominal').val(formatRupiah(value));
+            });
+
     // Handle category button click
         $('.category-btn').click(function() {
             var categoryId = $(this).data('category-id');
@@ -223,7 +206,7 @@
                 if (item.sizes && item.sizes.length > 0) {
                     $.each(item.sizes, function(sizeIndex, size) {
                         $('#items-container').append(
-                            '<div class="col-md-4 col-lg-6 item-card" data-item-name="' + item.items_name + '" data-item-price="' + size.pivot.price + '">' +
+                            '<div class="col-md-4 col-lg-6 item-card" data-size-name="' + size.size + '" data-size-item="' + size.id + '" data-item-id="' + item.id + '" data-item-name="' + item.items_name + '" data-item-price="' + size.pivot.price + '">' +
                                 '<div class="card mb-3 mb-lg-0">' +
                                     '<div class="card-body">' +
                                         '<span class="card-title">' + item.items_name + ' (' + size.size + ')</span>' +
@@ -236,7 +219,7 @@
                 } else {
                     // Default case if no sizes are available
                     $('#items-container').append(
-                        '<div class="col-md-4 col-lg-6 item-card" data-item-name="' + item.items_name + '" data-item-price="' + item.harga_item + '">' +
+                        '<div class="col-md-4 col-lg-6 item-card" data-item-id="' + item.id + '" data-item-name="' + item.items_name + '" data-item-price="' + item.harga_item + '">' +
                             '<div class="card mb-3 mb-lg-0">' +
                                 '<div class="card-body">' +
                                     '<span class="card-title">' + item.items_name + '</span>' +
@@ -266,14 +249,26 @@
 
             var itemName = $(this).data('item-name');
             var itemPrice = parseFloat($(this).data('item-price'));
+            var itemId = $(this).data('item-id');
+            var sizeItem = $(this).data('size-item');
+            var sizeName = $(this).data('size-name');
 
             // Append the selected item to the selected-items section
-            $('#selected-items').append(
-                '<div class="d-flex justify-content-between mb-2">' +
-                    '<p class="items-name mb-0">' + itemName + '</p>' +
-                    '<p class="items-price mb-0">' + formatRupiah(itemPrice) + '</p>' +
-                '</div>'
-            );
+            if(sizeItem) {
+                $('#selected-items').append(
+                    '<div class="d-flex justify-content-between mb-2">' +
+                        '<p class="items-name mb-0" data-item-id="' + itemId + '"  data-size-id="' + sizeItem + '">' + itemName + ' (' + sizeName + ')</p>' +
+                        '<p class="items-price mb-0" data-item-price="' + itemPrice + '">' + formatRupiah(itemPrice) + '</p>' +
+                    '</div>'
+                );
+            } else {
+                $('#selected-items').append(
+                    '<div class="d-flex justify-content-between mb-2">' +
+                        '<p class="items-name mb-0" data-item-id="' + itemId + '">' + itemName + '</p>' +
+                        '<p class="items-price mb-0" data-item-price="' + itemPrice + '">' + formatRupiah(itemPrice) + '</p>' +
+                    '</div>'
+                );
+            }
 
             // Update the subtotal
             var currentSubtotal = parseFloat($('#subtotal').data('subtotal')) || 0;
@@ -327,12 +322,22 @@
         $('#addCustomerForm').on('submit', function(event) {
             event.preventDefault(); // Prevent the form from submitting normally
 
-            var selectElement = document.getElementById('exampleSelect2');
-            selectElement.value = selectElement.value.toUpperCase();
+            var selectElement = $('#exampleSelect2');
+            var selectedOption = selectElement.find('option:selected');
+            var customerId = selectedOption.data('customer-id');
+            var plateNumber = selectedOption.val().toUpperCase();
+
+            // Debug statements
+            console.log('Selected Option:', selectedOption);
+            console.log('Customer ID:', customerId);
+            console.log('Plate Number:', plateNumber);
+
+            if (!customerId) {
+                alert('Customer ID is undefined. Please check the data-customer-id attribute.');
+                return;
+            }
 
             var isAlreadyAdded = false;
-            // Append the selected plate number to the selected-items section
-            var plateNumber = selectElement.value;
             $('#selected-items .d-flex').each(function() {
                 var existingPlateNumber = $(this).find('p.mb-0').eq(1).text();
                 if (existingPlateNumber === plateNumber) {
@@ -345,7 +350,7 @@
                 $('#selected-items').append(
                     '<div class="d-flex justify-content-between mb-2">' +
                         '<p class="mb-0">Plate Number</p>' +
-                        '<p class="mb-0">' + plateNumber + '</p>' +
+                        '<p class="mb-0 plate" data-customer-id="' + customerId + '">' + plateNumber + '</p>' +
                     '</div>'
                 );
             } else {
@@ -372,57 +377,66 @@
 
     // Handle form submission for transaction form
     $('#transactionForm').on('submit', function(event) {
-    event.preventDefault(); // Prevent normal form submission
+        event.preventDefault(); // Prevent normal form submission
 
-    // Collect selected items
-    var selectedItems = [];
-    var itemNames = [];
-    var itemPrices = [];
-    $('#selected-items .d-flex').each(function() {
-        var itemName = $(this).find('p.items-name').text();
-        var itemPrice = $(this).find('p.items-price').text();
+        // Collect selected items
+        var selectedItems = [];
+        var selectedCustomerId = $('#selected-items').find('p.plate').data('customer-id');
 
-        if (itemName && itemPrice) { // Ensure both values are present
-            selectedItems.push({ name: itemName, price: itemPrice });
-            itemNames.push(itemName); // Add to itemNames array
-            itemPrices.push(itemPrice); // Add to itemPrices array
-        }
-    });
+        $('#selected-items .d-flex').each(function() {
+            var itemId = $(this).find('p.items-name').data('item-id');
+            var itemPrice = $(this).find('p.items-price').data('item-price');
+            var sizeId = $(this).find('p.items-name').data('size-id');
 
-    // Set hidden input values
-    $('#plate_number').val($('#exampleSelect2').val());
-    $('#subtotal_hidden').val($('#subtotal').data('subtotal'));
-    $('#items_hidden').val(itemNames.join(', '));
-    $('#prices_hidden').val(itemPrices.join(', '));
-
-    // Determine form action based on clicked button
-    var formAction = $('#transactionForm').data('form-action');
-
-    // Update form action
-    $('#transactionForm').attr('action', formAction);
-
-    // Submit form via AJAX
-    $.ajax({
-        url: formAction,
-        method: 'POST',
-        data: $(this).serialize(),
-        success: function(response) {
-            console.log('Form submitted successfully:', response);
-
-            if (formAction === '{{ route("pending.transaction.store") }}') {
-                window.location.href = '{{ route("pending.transaction.index") }}';
+            if (itemId && itemPrice) {
+                var item = {
+                    item_id: itemId,
+                    prices: itemPrice
+                };
+                if (sizeId) {
+                    item.size_id = sizeId;
+                }
+                selectedItems.push(item);
             }
+        });
 
-            if (formAction === '{{ route("sales.store") }}') {
-                // Call printReceipt function only for checkout
-                printReceipt();
+        // Set hidden input values
+        $('#customer_id').val(selectedCustomerId);
+        $('#subtotal_hidden').val($('#subtotal').data('subtotal'));
+        $('#items_hidden').val(JSON.stringify(selectedItems));
+
+        // Determine form action based on clicked button
+        var formAction = $('#transactionForm').data('form-action');
+
+        // Create a FormData object
+        var formData = new FormData(this);
+        formData.append('items_id', JSON.stringify(selectedItems));
+        formData.append('customer_id', selectedCustomerId);
+
+        // Submit form via AJAX
+        $.ajax({
+            url: formAction,
+            method: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log('Form submitted successfully:', response);
+
+                if (formAction === '{{ route("pending.transaction.store") }}') {
+                    window.location.href = '{{ route("pending.transaction.index") }}';
+                }
+
+                if (formAction === '{{ route("sales.store") }}') {
+                    // Call printReceipt function only for checkout
+                    printReceipt();
+                }
+            },
+            error: function(error) {
+                console.log('Error submitting form:', error);
             }
-        },
-        error: function(error) {
-            console.log('Error submitting form:', error);
-        }
+        });
     });
-});
 
     // Set form action based on button click
         $('button[type="submit"]').click(function() {
@@ -437,103 +451,17 @@ function formatRupiah(amount) {
     return 'Rp ' + amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
-$('#checkout-button').click(function() {
-            var receiptHtml = $('#receipt').html();
-            $('#receipt-content').html(receiptHtml);
-            $('#receiptModal').modal('show');
+function printReceipt() {
+    var printContents = document.getElementById('receipt').innerHTML;
+    var originalContents = document.body.innerHTML;
 
-            // Set the date, time, plate number, cashier name, and total price in the modal
-            $('#receipt-date').text(new Date().toLocaleDateString());
-            $('#receipt-time').text(new Date().toLocaleTimeString());
-            $('#receipt-plate-number').text($('#plate_number').val());
-            $('#receipt-cashier-name').text('{{ auth()->user()->name }}'); // Assuming cashier name is the logged-in user
+    document.body.innerHTML = '<html><head><title>Receipt</title></head><body>' + printContents + '</body></html>';
 
-            var subtotalElement = $('#subtotal');
-            var subtotal = subtotalElement.data('subtotal');
-            $('#receipt-total-price').text('Rp ' + subtotal);
+    window.print();
 
-            var selectedItemsHtml = $('#selected-items').html();
-            $('#receipt-selected-items').html(selectedItemsHtml);
-        });
-
-        // Handle confirm checkout button click
-        $('#confirm-checkout').click(function() {
-            var formAction = $('#checkout-button').data('form-action');
-            $('#transactionForm').attr('action', formAction).submit();
-        });
-
-        // Print receipt button click
-        $('#print-receipt').click(function() {
-            printReceipt();
-        });
-
-
-    function printReceipt() {
-        var printWindow = window.open('', '', 'height=600,width=800');
-        var receiptContent = document.getElementById('receipt').innerHTML;
-
-        // Inject CSS into the print window
-        var cssStyles = `
-            .dashed-hr {
-                border: none;
-                border-top: 1px dashed #000;
-                margin: 20px 0;
-            }
-            .receipt {
-                max-width: 58mm;
-                margin: auto;
-                padding: 20px 10px;
-                border: 1px solid #eee;
-                border-radius: 10px;
-                font-size: 12px;
-            }
-            .receipt-header {
-                text-align: center;
-                margin-bottom: 10px;
-            }
-            .receipt-header img {
-                max-width: 100%;
-                width: 100px;
-            }
-            .receipt-header h2 {
-                font-size: 16px;
-            }
-            .receipt-header p {
-                font-size: 10px;
-            }
-            .receipt-details {
-                margin-bottom: 10px;
-            }
-            .receipt-details p {
-                margin-bottom: 0;
-                font-size: 10px;
-            }
-            .receipt-items span {
-                font-size: 10px;
-            }
-            .receipt-footer {
-                text-align: center;
-                margin-top: 20px;
-                font-size: 10px;
-            }
-            .receipt-total span {
-                font-size: 10px;
-            }
-            .table th, .table td {
-                vertical-align: middle;
-            }
-        `;
-
-        printWindow.document.write('<html><head><title>Receipt</title>');
-        printWindow.document.write('<style>' + cssStyles + '</style>');
-        printWindow.document.write('</head><body>');
-        printWindow.document.write(receiptContent);
-        printWindow.document.write('</body></html>');
-
-        // printWindow.document.close();
-        // printWindow.focus();
-        // printWindow.print();
-    }
+    document.body.innerHTML = originalContents;
+    location.reload();
+}
 
 $(document).ready(function() {
     $('#exampleSelect2').select2({
