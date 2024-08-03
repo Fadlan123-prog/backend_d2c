@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('item_id');
             $table->unsignedBigInteger('size_id')->nullable();
             $table->decimal('harga_items', 8, 2);
+            $table->integer('quantity')->nullable();
             $table->timestamps();
 
             $table->foreign('sales_id')->references('id')->on('sales')->onDelete('cascade');

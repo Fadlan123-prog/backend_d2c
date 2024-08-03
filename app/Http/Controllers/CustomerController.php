@@ -14,14 +14,14 @@ class CustomerController extends Controller
 
     public function store(Request $request){
         $validatedData = $request->validate([
-            'plate_number' => 'required|string|max:255'
+            'plate_number' => 'required|unique:customers,plate_number|string|max:255'
         ]);
 
-        Customer::updateOrCreate(
+        $customer = Customer::updateOrCreate(
             ['plate_number' => $validatedData['plate_number']],
             ['plate_number' => $validatedData['plate_number']]
         );
 
-        return redirect()->back()->with('success', 'Customer saved successfully!');
+        return response()->json(['id' => $customer->id]);
     }
 }

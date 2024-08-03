@@ -71,7 +71,7 @@
             <div class="col-md-12">
                 <p>Tanggal : {{ $sale->date }}</p>
                 <p>Jam : {{ $sale->time }}</p>
-                <p>Nomor Plat : {{ $sale->plate_number }}</p>
+                <p>Nomor Plat : {{ $sale->customers->plate_number }}</p>
                 <p>Kasir : {{ $sale->cashier_name }}</p>
             </div>
         </div>
@@ -113,7 +113,7 @@
 <script>
     $(document).ready(function() {
         // Get item names and prices from Blade variables and process them
-        var itemNamesString = "{{ $sale->item_name }}";
+        var itemNamesString = "{{ $sale->salesItems->item->items_name }}";
         var itemPricesString = "{{ $sale->item_price }}";
 
         // Handle escaping manually if needed
