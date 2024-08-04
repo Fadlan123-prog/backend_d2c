@@ -27,22 +27,29 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($pending_transaction as $pending)
+                                @foreach ($pendingTransaction as $pending)
 
                                 <tr>
                                     <td>
                                         <div class="d-flex px-2 py-1">
                                             <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 text-xs">{{ $pending->plate_number }}</h6>
+                                                <h6 class="mb-0 text-xs">{{ $pending->customers->plate_number }}</h6>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="d-flex px-2 py-1">
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 text-xs">{{ $pending->item_name }}</h6>
-                                            </div>
-                                        </div>
+                                        <ul class="list-unstyled">
+                                            @foreach ($pending->pendingItems as $pendingItem)
+                                                <li>
+                                                    <p class="text-xs font-weight-bold mb-0 pt-1">
+                                                        {{ $pendingItem->item->items_name }}
+                                                        @if($pendingItem->size)
+                                                            ({{ $pendingItem->size->size }})
+                                                        @endif
+                                                    </p>
+                                                </li>
+                                            @endforeach
+                                        </ul>
                                     </td>
                                     <td>
                                         <div class="d-flex px-2 py-1">

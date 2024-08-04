@@ -12,6 +12,7 @@
                     <div class="col-lg-8">
                         <div class="form-group">
                             <select class="form-control" id="exampleSelect2" name="plate_number" style="width: 100%;">
+                                <option value="" selected disable></option>
                                 @foreach($customers as $data)
                                     <option value="{{ $data->plate_number }}" data-customer-id ="{{ $data->id }}">{{ $data->plate_number }}</option>
                                 @endforeach
@@ -122,7 +123,7 @@
 
                                                     <div class="row mb-3">
                                                         <div class="col-12">
-                                                            <div class="btn-group" role="group">
+                                                            <div class="btn-group" role="group" id="nominal-buttons">
                                                                 <button type="button" class="btn btn-info btn-md nominal-btn" data-value="10000">10000</button>
                                                                 <button type="button" class="btn btn-info btn-md nominal-btn" data-value="50000">50000</button>
                                                                 <button type="button" class="btn btn-info btn-md nominal-btn" data-value="100000">100000</button>
@@ -180,10 +181,17 @@
             }
         });
 
-        $('.nominal-btn').click(function() {
-                var value = $(this).data('value');
-                $('#nominal').val(formatRupiah(value));
-            });
+
+        var $nominalButtonsContainer = $('#nominal-buttons');
+
+        $nominalButtonsContainer.on('click', '.nominal-btn', function() {
+            var valueToAdd = parseInt($(this).data('value'), 10);
+            var $nominalInput = $('#nominal');
+            var currentNominal = parseInt($nominalInput.val().replace(/[^\d]/g, ''), 10) || 0; // Remove non-digit characters and parse as int
+            var newNominal = currentNominal + valueToAdd;
+            $nominalInput.val(formatRupiah(newNominal));
+            $('#payment_type_hidden').val('Cash');
+        });
 
     // Handle category button click
         $('.category-btn').click(function() {
@@ -322,6 +330,8 @@
         $('#addCustomerForm').on('submit', function(event) {
             event.preventDefault(); // Prevent the form from submitting normally
 
+
+
             var selectElement = $('#exampleSelect2');
             var selectedOption = selectElement.find('option:selected');
             var customerId = selectedOption.data('customer-id');
@@ -332,10 +342,7 @@
             console.log('Customer ID:', customerId);
             console.log('Plate Number:', plateNumber);
 
-            if (!customerId) {
-                alert('Customer ID is undefined. Please check the data-customer-id attribute.');
-                return;
-            }
+
 
             var isAlreadyAdded = false;
             $('#selected-items .d-flex').each(function() {
@@ -373,6 +380,7 @@
                     console.log('Error adding customer:', error);
                 }
             });
+
         });
 
     // Handle form submission for transaction form
@@ -429,7 +437,7 @@
 
                 if (formAction === '{{ route("sales.store") }}') {
                     // Call printReceipt function only for checkout
-                    printReceipt();
+                    window.location.href = '{{ route("cashier.index") }}';
                 }
             },
             error: function(error) {

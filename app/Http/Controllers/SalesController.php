@@ -79,7 +79,7 @@ class SalesController extends Controller
         $voidSale->save();
 
         // Update the original sale to void
-        $sale->status = 'void';
+        $sale->status = '';
         $sale->save();
 
         return redirect()->back()->with('success', 'Sale voided successfully.');

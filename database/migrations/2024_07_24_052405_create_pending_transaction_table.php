@@ -13,14 +13,13 @@ return new class extends Migration
     {
         Schema::create('pending_transaction', function (Blueprint $table) {
             $table->id();
-            $table->char('plate_number', 10);
+            $table->foreignId('customer_id')->constrained()->onDelete('cascade');
             $table->date('date');
             $table->time('time');
             $table->string('cashier_name', 100);
-            $table->json('item_name');
-            $table->json('item_price');
             $table->integer('total_price');
             $table->string('payment_method', 100);
+            $table->string('status', 100)->nullable();
             $table->timestamps();
         });
     }

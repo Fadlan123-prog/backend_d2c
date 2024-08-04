@@ -12,9 +12,7 @@ class PendingTransaction extends Model
     protected $table = 'pending_transaction';
 
     protected $fillable = [
-        'plate_number',
-        'item_name',
-        'item_price',
+        'customer_id',
         'total_price',
         'payment_method',
         'date',
@@ -25,5 +23,18 @@ class PendingTransaction extends Model
     public function customer()
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function pendingItems()
+    {
+        return $this->hasMany(PendingItem::class);
+    }
+
+    public function customers(){
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
+
+    public function items(){
+        return $this->belongsTo(Item::class);
     }
 }

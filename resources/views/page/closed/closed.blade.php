@@ -3,83 +3,157 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-12">
-            @if(session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
-            @if($errors->any())
-                <div class="alert alert-danger">
-                    {{ $errors->first() }}
-                </div>
-            @endif
-        </div>
-    </div>
-
-    <div class="row">
         <div class="col-md-4">
             <a href="{{ route('cashier.index')}}" class="btn bg-black">
                 Back
             </a>
         </div>
     </div>
+    <hr>
+    <div class="card">
+        <div class="card-body">
+            <h1>Close Sales</h1>
 
-    <div class="row">
-        <div class="col-md-12">
-            <h3>Sales Summary</h3>
-            <h4>Total Sales: {{ $totalSales }}</h4>
-            <h4>Total Cash: {{ $totalCash }}</h4>
-            <h4>Total Transfer: {{ $totalTransfer }}</h4>
-            <h4>Total Tokopedia: {{ $totalTokopedia }}</h4>
-            <h4>Total Expenses: {{ $totalExpenses }}</h4>
-            <h4>Remaining Cash: {{ $remainingCash }}</h4>
-        </div>
-    </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <form method="GET" action="{{ route('cashier.close') }}">
+                        <div class="form-group">
+                            <label for="date">Select Date</label>
+                            <input type="date" id="date" name="date" class="form-control" value="{{ old('date', $date ?? now()->format('Y-m-d')) }}">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                    </form>
+                </div>
+            </div>
 
-    <div class="row">
-        <div class="col-md-6">
-            <h3>Sales by Category</h3>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Category Name</th>
-                        <th>Items Sold</th>
-                        <th>Total Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($salesByCategory as $categorySale)
-                        <tr>
-                            <td>{{ $categorySale->category_name }}</td>
-                            <td>{{ $categorySale->items_sold }}</td>
-                            <td>{{ $categorySale->total_amount }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+            <hr>
 
-        <div class="col-md-6">
-            <h3>Sales by Item</h3>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Item Name</th>
-                        <th>Items Sold</th>
-                        <th>Total Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($salesByItem as $itemSale)
-                        <tr>
-                            <td>{{ $itemSale->items_name }}</td>
-                            <td>{{ $itemSale->items_sold }}</td>
-                            <td>{{ $itemSale->total_amount }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <h2 class="text-center">Sales by Category</h2>
+                            <table class="table table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Category</th>
+                                        <th>Items Sold</th>
+                                        <th>Total Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($salesByCategory as $sale)
+                                    <tr>
+                                        <td>{{ $sale->category_name }}</td>
+                                        <td>{{ $sale->items_sold }}</td>
+                                        <td>{{ formatRupiah($sale->total_amount) }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <h2 class="text-center">Sales by Item</h2>
+                            <table class="table table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Items Sold</th>
+                                        <th>Total Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($salesByItem as $sale)
+                                    <tr>
+                                        <td>{{ $sale->items_name }}</td>
+                                        <td>{{ $sale->items_sold }}</td>
+                                        <td>{{ formatRupiah($sale->total_amount) }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="text-center">Total Sales and Payment Methods</h2>
+                            <table class="table table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Total Sales</th>
+                                        <th>Total Cash</th>
+                                        <th>Total Transfer</th>
+                                        <th>Total Tokopedia</th>
+                                        <th>Total Payment Types</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{ formatRupiah($totalSales) }}</td>
+                                        <td>{{ formatRupiah($totalCash) }}</td>
+                                        <td>{{ formatRupiah($totalTransfer) }}</td>
+                                        <td>{{ formatRupiah($totalTokopedia) }}</td>
+                                        <td>{{ formatRupiah($totalPaymentTypes) }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row">
+                <div class="col-lg-6">
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="text-center">Total Expenses</h2>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Expense Name</th>
+                                        <th>Expense Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($expensesDetails as $expense)
+                                    <tr>
+                                        <td>{{ $expense['expend_name'] }}</td>
+                                        <td>{{ formatRupiah($expense['expend_price']) }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="text-center">Remaining Cash</h2>
+                            <p>{{ formatRupiah($remainingCash) }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
         </div>
     </div>
 </div>

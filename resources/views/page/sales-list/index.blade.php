@@ -78,7 +78,7 @@
                                             </ul>
                                         </td>
                                         <td>
-                                            <p class="text-xs font-weight-bold mb-0">{{ $sale->total_price }}</p>
+                                            <p class="text-xs font-weight-bold mb-0">{{ formatRupiah($sale->total_price) }}</p>
                                         </td>
                                         <td>
                                             <p class="text-xs font-weight-bold mb-0">{{ $sale->payment_method }}</p>

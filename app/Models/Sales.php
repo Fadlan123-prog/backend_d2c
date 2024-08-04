@@ -16,7 +16,6 @@ class Sales extends Model
         'date',
         'time',
         'cashier_name',
-        'item_id', // Ganti 'item_name' dengan 'item_id' jika ada relasi
         'item_price',
         'total_price',
         'status',
