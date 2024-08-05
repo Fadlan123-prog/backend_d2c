@@ -91,13 +91,11 @@ class PendingTransactionController extends Controller
         return view('cashier.show', compact('pendingTransaction', 'customers', 'categories', 'dateTime'));
     }
 
-    public function destroy($id){
-        $pending = PendingTransaction::find($id);
-        if($pending){
-            $pending->delete();
-            return redirect()->route('pending.transaction.index')->with('success', 'Data Deleted successfully');
-        }
+    public function destroy($id)
+{
+    $pendingTransaction = PendingTransaction::findOrFail($id);
+    $pendingTransaction->delete();
 
-        return redirect()->route('pending.transaction.index')->with('error', 'Data not found');
-    }
+    return response()->json(['message' => 'Pending transaction deleted successfully']);
+}
 }
