@@ -94,8 +94,8 @@
                                                             </div>
                                                             @foreach ($pendingTransaction->pendingItems as $pending)
                                                                 <div class="d-flex justify-content-between mb-0">
-                                                                    <span class="items-name mb-0" data-item-id = "{{ $pending->item->id }}" data-size-id="{{ $pending->size->id ?? '' }}" >{{ $pending->item->items_name }} {{ $pending->size->size ?? '' }}</span>
-                                                                    <span class="items-price mb-0 text-right">{{ formatRupiah($pending->harga_items) }}</span>
+                                                                    <p class="items-name mb-0" data-item-id = "{{ $pending->item->id }}" data-size-id="{{ $pending->size->id ?? '' }}" >{{ $pending->item->items_name }} {{ $pending->size->size ?? '' }}</p>
+                                                                    <p class="items-price mb-0 text-right">{{ formatRupiah($pending->harga_items) }}</p>
                                                                 </div>
                                                             @endforeach
                                                         </div>
@@ -402,13 +402,13 @@
 
         $('#selected-items .d-flex').each(function() {
             var itemId = $(this).find('p.items-name').data('item-id');
-            var itemPrice = $(this).find('p.items-price').data('item-price');
+            var itemPrice = $(this).find('p.items-price').text();
             var sizeId = $(this).find('p.items-name').data('size-id');
 
             if (itemId && itemPrice) {
                 var item = {
                     item_id: itemId,
-                    prices: itemPrice
+                    prices: itemPrice.trim().replace(/\D/g, '') // Assuming the price is formatted as currency and you want only the numeric part
                 };
                 if (sizeId) {
                     item.size_id = sizeId;
@@ -416,6 +416,10 @@
                 selectedItems.push(item);
             }
         });
+
+        // Debug statements
+        console.log('Selected Items:', selectedItems);
+        console.log('Selected Customer ID:', selectedCustomerId);
 
         // Set hidden input values
         $('#customer_id').val(selectedCustomerId);
