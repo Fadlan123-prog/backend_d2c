@@ -83,7 +83,7 @@
         <div class="row">
             <div class="col-md-12">
                 @foreach ($sales->salesItems as $salesItem)
-                    <div class="d-flex justify-content-between mb-0">
+                    <div class="d-flex justify-content-between mb-0" style="display: flex; justify-content:space-between;">
                         <span class="items-name mb-0">{{ $salesItem->item->items_name }} {{ $salesItem->size->size ?? '' }}</span>
                         <span class="items-price mb-0 text-right">{{ formatRupiah($salesItem->harga_items) }}</span>
                     </div>
@@ -95,7 +95,7 @@
     <hr class="dashed-hr">
 
     <div class="receipt-total">
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between" style="display: flex; justify-content:space-between;">
             <span>Total :</span>
             <span>{{ formatRupiah($sales->total_price) }}</span>
         </div>
