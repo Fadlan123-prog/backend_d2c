@@ -11,7 +11,7 @@ class SalesItem extends Model
 
     protected $table = 'sales_item';
 
-    protected $fillable = ['sales_id', 'item_id', 'size_id', 'harga_items', 'quantity'];
+    protected $fillable = ['sales_id', 'item_id', 'size_id', 'harga_items'];
 
     public function sale()
     {
@@ -26,10 +26,5 @@ class SalesItem extends Model
     public function size()
     {
         return $this->belongsTo(Size::class);
-    }
-
-    public function category()
-    {
-        return $this->item->belongsTo(Categories::class, 'category_id');
     }
 }

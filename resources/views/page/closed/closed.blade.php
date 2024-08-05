@@ -71,7 +71,7 @@
                                 <tbody>
                                     @foreach($salesByItem as $sale)
                                     <tr>
-                                        <td>{{ $sale->items_name }}</td>
+                                        <td>{{ $sale->items_name }} - {{ $sale->size_name ? $sale->size_name : '' }}</td>
                                         <td>{{ $sale->items_sold }}</td>
                                         <td>{{ formatRupiah($sale->total_amount) }}</td>
                                     </tr>
@@ -154,7 +154,16 @@
 
             <hr>
 
+            <button class="btn bg-black" id="print-receipt-btn">Print Receipt</button>
+
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('print-receipt-btn').addEventListener('click', function() {
+    var date = "{{ $date }}";
+    window.open('{{ url("/cashier/closed/print/") }}/' + date, '_blank');
+});
+</script>
 @endsection

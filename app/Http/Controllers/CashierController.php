@@ -11,7 +11,7 @@ use App\Models\Customer;
 use App\Models\Sales;
 use App\Models\SalesItem;
 use App\Models\Expends;
-use DB, Log;
+use DB, Log, Auth;
 
 class CashierController extends Controller
 {
@@ -82,12 +82,13 @@ class CashierController extends Controller
         Log::info('Sales by Category: ' . $salesByCategory->toJson());
 
         // Filter the sales by the selected date and include only those with a null status
-        $salesByItem = SalesItem::select('items.id', 'items.items_name', DB::raw('COUNT(sales_item.item_id) as items_sold'), DB::raw('SUM(sales_item.harga_items) as total_amount'))
+        $salesByItem = SalesItem::select('items.id', 'items.items_name', DB::raw('COUNT(sales_item.item_id) as items_sold'), DB::raw('IFNULL(sizes.size, "") as size_name'), DB::raw('SUM(sales_item.harga_items) as total_amount'))
             ->join('items', 'sales_item.item_id', '=', 'items.id')
+            ->leftJoin('sizes', 'sales_item.size_id', '=', 'sizes.id')
             ->join('sales', 'sales_item.sales_id', '=', 'sales.id')
             ->whereDate('sales.date', $parsedDate)
             ->whereNull('sales.status') // Include only sales with null status
-            ->groupBy('items.id', 'items.items_name')
+            ->groupBy('items.id', 'items.items_name', 'sizes.size')
             ->get();
 
         // Log the sales by item
@@ -148,6 +149,106 @@ class CashierController extends Controller
             'totalExpenses',
             'dateTime',
             'date'
+        ));
+    }
+
+    public function printReceipt($date)
+    {
+        // Parse the date to ensure it's valid
+        try {
+            $parsedDate = Carbon::parse($date)->format('Y-m-d');
+        } catch (\Exception $e) {
+            // Handle invalid date
+            return redirect()->back()->withErrors(['Invalid date provided']);
+        }
+
+        // Get the data for the receipt
+        $salesItems = SalesItem::select(
+            'items.category_id',
+            'items.items_name',
+            DB::raw('IFNULL(sizes.size, "N/A") as size_name'),
+            DB::raw('COUNT(sales_item.item_id) as items_sold'),
+            DB::raw('SUM(sales_item.harga_items) as total_amount')
+        )
+        ->join('items', 'sales_item.item_id', '=', 'items.id')
+        ->leftJoin('sizes', 'sales_item.size_id', '=', 'sizes.id') // Use leftJoin to include items without sizes
+        ->join('sales', 'sales_item.sales_id', '=', 'sales.id')
+        ->whereDate('sales.date', $parsedDate)
+        ->where(function ($query) {
+            $query->where('sales.status', '!=', 'voided')
+                  ->orWhereNull('sales.status');
+        })
+        ->groupBy('items.category_id', 'items.id', 'items.items_name', 'sizes.size')
+        ->get();
+
+        // Organize the data by category
+        $salesByCategory = [];
+        foreach ($salesItems as $item) {
+            $category = Categories::find($item->category_id);
+            $categoryName = $category ? $category->categories_name : 'Unknown Category';
+            $salesByCategory[$categoryName][] = $item;
+        }
+
+        $totalSales = Sales::whereDate('date', $parsedDate)
+            ->where(function ($query) {
+                $query->where('status', '!=', 'voided')
+                      ->orWhereNull('status');
+            })
+            ->sum('total_price');
+
+        $totalCash = Sales::where('payment_method', 'cash')
+            ->whereDate('date', $parsedDate)
+            ->where(function ($query) {
+                $query->where('status', '!=', 'voided')
+                      ->orWhereNull('status');
+            })
+            ->sum('total_price');
+
+        $totalTransfer = Sales::where('payment_method', 'transfer')
+            ->whereDate('date', $parsedDate)
+            ->where(function ($query) {
+                $query->where('status', '!=', 'voided')
+                      ->orWhereNull('status');
+            })
+            ->sum('total_price');
+
+        $totalTokopedia = Sales::where('payment_method', 'tokopedia')
+            ->whereDate('date', $parsedDate)
+            ->where(function ($query) {
+                $query->where('status', '!=', 'voided')
+                      ->orWhereNull('status');
+            })
+            ->sum('total_price');
+
+        $totalPaymentTypes = $totalCash + $totalTransfer + $totalTokopedia;
+
+        $expenses = Expends::whereDate('created_at', $parsedDate)->get();
+        $totalExpenses = $expenses->sum('expend_price');
+        $expensesDetails = $expenses->map(function ($expense) {
+            return ['expend_name' => $expense->expend_name, 'expend_price' => $expense->expend_price];
+        });
+
+        $dateTime = Carbon::now()->setTimezone('Asia/Jakarta');
+        $remainingCash = $totalCash - $totalExpenses;
+        $cashierName = Auth::user()->name;
+        $dateClosed = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d');
+        $timeClosed = Carbon::now()->setTimezone('Asia/Jakarta')->format('H:i:s');
+
+        return view('page.receipt.closed', compact(
+            'salesByCategory',
+            'totalSales',
+            'totalCash',
+            'totalTransfer',
+            'totalTokopedia',
+            'totalPaymentTypes',
+            'expensesDetails',
+            'remainingCash',
+            'totalExpenses',
+            'dateTime',
+            'date',
+            'cashierName',
+            'dateClosed',
+            'timeClosed'
         ));
     }
 }

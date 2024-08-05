@@ -58,6 +58,7 @@ Route::group(['middleware' => ['role:cashier']], function(){
     Route::get('cashier/expends/add-expends', [ExpendsController::class, 'create'])->name('expends.create');
     Route::post('cashier/expends/add-expends', [ExpendsController::class, 'store'])->name('expends.store');
     Route::get('/cashier/expends/{expends}/edit', [ExpendsController::class, 'edit'])->name('expends.edit');
+    Route::get('/cashier/closed/print/{date}', [CashierController::class, 'printReceipt'])->name('cashier.printReceipt');
 
     Route::get('/receipt/{id}', [ReceiptController::class, 'showReceipt'])->name('receipt.show');
     Route::post('/sales/void', [SalesController::class, 'void'])->name('sales.void');
