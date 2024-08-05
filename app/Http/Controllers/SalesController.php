@@ -56,6 +56,8 @@ class SalesController extends Controller
             }
         }
 
+        Log::info('sale items:', $sale->salesItems);
+
         return response()->json(['success' => true, 'sale_id' => $sale->id]);
     }
 

@@ -52,7 +52,7 @@
                                 @foreach ($sales as $sale)
                                     <tr class= "{{ $sale->status == 'voided' ? 'bg-danger text-white' : '' }}">
                                         <td>
-                                            <p class="text-xs font-weight-bold mb-0">{{ $sale->customers->plate_number }}</p>
+                                            <p class="text-xs font-weight-bold mb-0">{{ $sale->customer->plate_number }}</p>
                                         </td>
                                         <td>
                                             <p class="text-xs font-weight-bold mb-0">{{ $sale->date }}</p>

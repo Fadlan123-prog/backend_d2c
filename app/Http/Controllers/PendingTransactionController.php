@@ -82,9 +82,13 @@ class PendingTransactionController extends Controller
         }
     }
 
-    public function show(){
-        $pendingTransaction = PendingTransaction::with('customer', 'pendingItems.item', 'pendingItems.size')->get();
-        return view('page.pendingTransaction.show', compact('pendingTransaction'));
+    public function show($id){
+        $customers = Customer::all();
+        $pendingTransaction = PendingTransaction::with('customer', 'pendingItems.item', 'pendingItems.size')->findOrFail($id);
+        $categories = Categories::all();
+        $dateTime = Carbon::now()->setTimezone('Asia/Jakarta');
+
+        return view('cashier.show', compact('pendingTransaction', 'customers', 'categories', 'dateTime'));
     }
 
     public function destroy($id){

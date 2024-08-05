@@ -84,7 +84,7 @@
             <div class="col-md-12">
                 @foreach ($sales->salesItems as $salesItem)
                     <div class="d-flex justify-content-between mb-0">
-                        <span class="items-name mb-0">{{ $salesItem->item->items_name }} {{ $salesItem->size->size_name ?? '' }}</span>
+                        <span class="items-name mb-0">{{ $salesItem->item->items_name }} {{ $salesItem->size->size ?? '' }}</span>
                         <span class="items-price mb-0 text-right">{{ formatRupiah($salesItem->harga_items) }}</span>
                     </div>
                 @endforeach

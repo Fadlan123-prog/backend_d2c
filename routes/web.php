@@ -53,7 +53,7 @@ Route::group(['middleware' => ['role:cashier']], function(){
     Route::get('cashier/pending-transaction', [PendingTransactionController::class, 'index'])->name('pending.transaction.index');
     Route::post('cashier/pending-transaction', [PendingTransactionController::class, 'store'])->name('pending.transaction.store');
     Route::get('/cashier/pending-transaction/{id}', [PendingTransactionController::class, 'getPendingTransaction']);
-    Route::get('/cashier/show-pending-transaction', [PendingTransactionController::class, 'show'])->name('pending.transaction.show');
+    Route::get('/cashier/show-pending-transaction/{id}', [PendingTransactionController::class, 'show'])->name('pending.transaction.show');
     Route::get('cashier/expends', [ExpendsController::class, 'index'])->name('expends.index');
     Route::get('cashier/expends/add-expends', [ExpendsController::class, 'create'])->name('expends.create');
     Route::post('cashier/expends/add-expends', [ExpendsController::class, 'store'])->name('expends.store');
