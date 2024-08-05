@@ -69,10 +69,10 @@
     <div class="receipt-details">
         <div class="row">
             <div class="col-md-12">
-                <p>Tanggal : {{ $sale->date }}</p>
-                <p>Jam : {{ $sale->time }}</p>
-                <p>Nomor Plat : {{ $sale->customers->plate_number }}</p>
-                <p>Kasir : {{ $sale->cashier_name }}</p>
+                <p>Tanggal : {{ $dateTime->format('Y-m-d') }}</p>
+                <p>Jam : {{ $dateTime->format('H:i:s') }}</p>
+                <p>Nomor Plat : {{ $sales->customer->plate_number }}</p>
+                <p>Kasir : {{ Auth::user()->name }}</p>
             </div>
         </div>
     </div>
@@ -82,9 +82,13 @@
     <div class="receipt-items">
         <div class="row">
             <div class="col-md-12">
-                <div id="selected-item"></div>
+                @foreach ($sales->salesItems as $salesItem)
+                    <div class="d-flex justify-content-between mb-0">
+                        <span class="items-name mb-0">{{ $salesItem->item->items_name }} {{ $salesItem->size->size_name ?? '' }}</span>
+                        <span class="items-price mb-0 text-right">{{ formatRupiah($salesItem->harga_items) }}</span>
+                    </div>
+                @endforeach
             </div>
-            <!-- Items will be injected here by JavaScript -->
         </div>
     </div>
 
@@ -93,7 +97,7 @@
     <div class="receipt-total">
         <div class="d-flex justify-content-between">
             <span>Total :</span>
-            <span>{{ formatRupiah($sale->total_price) }}</span>
+            <span>{{ formatRupiah($sales->total_price) }}</span>
         </div>
     </div>
 
@@ -111,42 +115,10 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
-    $(document).ready(function() {
-        // Get item names and prices from Blade variables and process them
-        var itemNamesString = "{{ $sale->salesItems->item->items_name }}";
-        var itemPricesString = "{{ $sale->item_price }}";
-
-        // Handle escaping manually if needed
-        var itemNames = itemNamesString.split(',')
-            .map(function(item) { return item.replace(/^\s*"\s*|\s*"\s*$/g, '').trim(); });
-        var itemPrices = itemPricesString.split(',')
-            .map(function(price) { return price.replace(/^\s*"\s*|\s*"\s*$/g, '').trim(); });
-
-        var $transactionDetails = $('#selected-item');
-        if ($transactionDetails.length) {
-            var itemsListHtml = '';
-            if (itemNames.length > 0) {
-                $.each(itemNames, function(index, name) {
-                    var price = itemPrices[index] || '';
-                    itemsListHtml += `
-                        <div class="d-flex justify-content-between mb-0">
-                            <span class="items-name mb-0">${name}</span>
-                            <span class="items-price mb-0 text-right">${price}</span>
-                        </div>
-                    `;
-                });
-            } else {
-                itemsListHtml = '<p>No items found.</p>';
-            }
-            $transactionDetails.html(itemsListHtml);
-        }
-    });
-
     function printReceipt() {
         var printWindow = window.open('', '', 'height=600,width=800');
         var receiptContent = document.getElementById('receipt').innerHTML;
 
-        // Inject CSS into the print window
         var cssStyles = `
             .dashed-hr {
                 border: none;
