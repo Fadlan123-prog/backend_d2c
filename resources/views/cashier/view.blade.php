@@ -133,16 +133,22 @@
 
                                                     <hr class="my-3">
 
-                                                    <button type="submit" class="btn btn-info btn-block btn-lg" data-form-action="{{ route('sales.store') }}">
-                                                        <div class="d-flex justify-content-between">
-                                                            <span>Checkout</span>
+                                                    <div class="row d-flex justify-content-between">
+                                                        <div class="col-lg-6 col-6">
+                                                            <button type="submit" class="btn btn-info btn-block btn-md" data-form-action="{{ route('sales.store') }}">
+                                                                <div class="d-flex justify-content-between">
+                                                                    <span>Checkout</span>
+                                                                </div>
+                                                            </button>
                                                         </div>
-                                                    </button>
-                                                    <button type="submit" class="btn btn-success btn-block btn-lg" data-form-action="{{ route('pending.transaction.store') }}">
-                                                        <div class="d-flex justify-content-between">
-                                                            <span>Pending</span>
+                                                        <div class="col-lg-6 col-6">
+                                                            <button type="submit" class="btn btn-success btn-block btn-md" data-form-action="{{ route('pending.transaction.store') }}">
+                                                                <div class="d-flex justify-content-between">
+                                                                    <span>Pending</span>
+                                                                </div>
+                                                            </button>
                                                         </div>
-                                                    </button>
+                                                    </div>
                                                 </form>
                                             </div>
                                         </div>
@@ -340,7 +346,6 @@
         console.log('Customer ID:', customerId);
         console.log('Plate Number:', plateNumber);
 
-<<<<<<< HEAD
             var selectElement = $('#exampleSelect2');
             var selectedOption = selectElement.find('option:selected');
             var customerId = selectedOption.data('customer-id');
@@ -384,17 +389,11 @@
                     var newOption = new Option(selectElement.value, selectElement.value, true, true);
                     $('#exampleSelect2').append(newOption).trigger('change');
 
-
-
-
                 },
                 error: function(error) {
                     console.log('Error adding customer:', error);
                 }
             });
-=======
-        var isAlreadyAdded = false;
->>>>>>> aed678bcff39cd8a48e868cbada77ebfc36878bf
 
         // Check if any customer is already added
         $('#selected-items .plate').each(function() {

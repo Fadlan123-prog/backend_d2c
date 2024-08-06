@@ -90,7 +90,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <form method="POST" action="{{ route('pending.transaction.delete', $pending->id) }}">
+                                                        <form method="POST" action="{{ route('pending.transaction.destroy', $pending->id) }}">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-white">Ok, Got it</button>
