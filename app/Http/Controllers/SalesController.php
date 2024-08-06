@@ -31,8 +31,8 @@ class SalesController extends Controller
             'total_price' => $request->subtotal,
             'payment_method' => $request->payment_type,
             'cashier_name' => Auth::user()->name,
-            'date' => Carbon::now()->format('Y-m-d')->setTimezone('Asia/Jakarta'),
-            'time' => Carbon::now()->format('H:i:s')->setTimezone('Asia/Jakarta'),
+            'date' => Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d'),
+            'time' => Carbon::now()->setTimezone('Asia/Jakarta')->format('H:i:s'),
         ]);
 
         Log::info('Items:', $items); // Debugging output to check the structure of $items (optional)
