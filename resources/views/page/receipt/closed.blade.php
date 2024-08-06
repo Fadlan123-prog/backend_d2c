@@ -91,7 +91,7 @@
                             <div class="col-md-12">
                                         @foreach ($items as $item)
                                             <div class="d-flex justify-content-between mb-0" style="display: flex; justify-content:space-between;">
-                                                <span class="items-name mb-0">{{ $item->items_name }} {{$item->size_name}}</span>
+                                                <span class="items-name mb-0">{{ $item->items_name }} {{$item->size_name ?? ''}}</span>
                                                 <span class="items-price mb-0 text-right">{{ $item->items_sold }}</span>
                                             </div>
                                         @endforeach
@@ -162,6 +162,8 @@
                     @endforeach
 
                 </div>
+
+                <hr>
 
                 <div class="receipt-items">
                     <div class="d-flex justify-content-between mb-0" style="display: flex; justify-content:space-between;">
