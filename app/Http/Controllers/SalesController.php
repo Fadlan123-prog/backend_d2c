@@ -35,6 +35,8 @@ class SalesController extends Controller
             'time' => Carbon::now()->format('H:i:s'),
         ]);
 
+        Log::info('Items:', $items); // Debugging output to check the structure of $items (optional)
+
         if ($items) {
             foreach ($items as $item) {
                 // Debugging output to check the structure of $item
@@ -56,7 +58,6 @@ class SalesController extends Controller
             }
         }
 
-        Log::info('sale items:', $sale->salesItems);
 
         return response()->json(['success' => true, 'sale_id' => $sale->id]);
     }

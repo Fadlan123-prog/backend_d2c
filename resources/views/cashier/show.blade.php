@@ -94,8 +94,8 @@
                                                             </div>
                                                             @foreach ($pendingTransaction->pendingItems as $pending)
                                                                 <div class="d-flex justify-content-between mb-0">
-                                                                    <span class="items-name mb-0" data-item-id = "{{ $pending->item->id }}" data-size-id="{{ $pending->size->id ?? '' }}" >{{ $pending->item->items_name }} {{ $pending->size->size ?? '' }}</span>
-                                                                    <span class="items-price mb-0 text-right">{{ formatRupiah($pending->harga_items) }}</span>
+                                                                    <p class="items-name mb-0" data-item-id = "{{ $pending->item->id }}" data-size-id="{{ $pending->size->id ?? '' }}" >{{ $pending->item->items_name }} {{ $pending->size->size ?? '' }}</p>
+                                                                    <p class="items-price mb-0 text-right">{{ formatRupiah($pending->harga_items) }}</p>
                                                                 </div>
                                                             @endforeach
                                                         </div>
@@ -336,61 +336,50 @@
         });
 
     // Handle form submission for adding customer
-        $('#addCustomerForm').on('submit', function(event) {
-            event.preventDefault(); // Prevent the form from submitting normally
+    $('#addCustomerForm').on('submit', function(event) {
+    event.preventDefault(); // Prevent the form from submitting normally
 
+    var selectElement = $('#exampleSelect2');
+    var selectedOption = selectElement.find('option:selected');
+    var customerId = selectedOption.data('customer-id');
+    var plateNumber = selectedOption.val().toUpperCase();
 
+    // Debug statements
+    console.log('Selected Option:', selectedOption);
+    console.log('Customer ID:', customerId);
+    console.log('Plate Number:', plateNumber);
 
-            var selectElement = $('#exampleSelect2');
-            var selectedOption = selectElement.find('option:selected');
-            var customerId = selectedOption.data('customer-id');
-            var plateNumber = selectedOption.val().toUpperCase();
+    var existingCustomer = $('#selected-items .plate');
 
-            // Debug statements
-            console.log('Selected Option:', selectedOption);
-            console.log('Customer ID:', customerId);
-            console.log('Plate Number:', plateNumber);
+    if (existingCustomer.length > 0) {
+        alert('A customer is already added. You cannot add another one.');
+        return; // Stop the form submission
+    }
 
+    // Add the new customer entry
+    $('#selected-items').append(
+        '<div class="d-flex justify-content-between mb-2">' +
+            '<p class="mb-0">Plate Number</p>' +
+            '<p class="mb-0 plate" data-customer-id="' + customerId + '">' + plateNumber + '</p>' +
+        '</div>'
+    );
 
-
-            var isAlreadyAdded = false;
-            $('#selected-items .d-flex').each(function() {
-                var existingPlateNumber = $(this).find('p.mb-0').eq(1).text();
-                if (existingPlateNumber === plateNumber) {
-                    isAlreadyAdded = true;
-                    return false; // Break out of the each loop
-                }
-            });
-
-            if (!isAlreadyAdded) {
-                $('#selected-items').append(
-                    '<div class="d-flex justify-content-between mb-2">' +
-                        '<p class="mb-0">Plate Number</p>' +
-                        '<p class="mb-0 plate" data-customer-id="' + customerId + '">' + plateNumber + '</p>' +
-                    '</div>'
-                );
-            } else {
-                alert('This plate number has already been added.');
-            }
-
-            // Make AJAX request to submit the form data
-            $.ajax({
-                url: '{{ route("cashier.addcustomer") }}',
-                method: 'POST',
-                data: $(this).serialize(),
-                success: function(response) {
-                    console.log('Customer added successfully:', response);
-                    // Optionally, handle the response if needed
-                    var newOption = new Option(selectElement.value, selectElement.value, true, true);
-                    $('#exampleSelect2').append(newOption).trigger('change');
-
-                },
-                error: function(error) {
-                    console.log('Error adding customer:', error);
-                }
-            });
-
-        });
+    // Make AJAX request to submit the form data
+    $.ajax({
+        url: '{{ route("cashier.addcustomer") }}',
+        method: 'POST',
+        data: $(this).serialize(),
+        success: function(response) {
+            console.log('Customer added successfully:', response);
+            // Optionally, handle the response if needed
+            var newOption = new Option(selectElement.val(), selectElement.val(), true, true);
+            $('#exampleSelect2').append(newOption).trigger('change');
+        },
+        error: function(error) {
+            console.log('Error adding customer:', error);
+        }
+    });
+});
 
     // Handle form submission for transaction form
     $('#transactionForm').on('submit', function(event) {
@@ -402,13 +391,13 @@
 
         $('#selected-items .d-flex').each(function() {
             var itemId = $(this).find('p.items-name').data('item-id');
-            var itemPrice = $(this).find('p.items-price').data('item-price');
+            var itemPrice = $(this).find('p.items-price').text();
             var sizeId = $(this).find('p.items-name').data('size-id');
 
             if (itemId && itemPrice) {
                 var item = {
                     item_id: itemId,
-                    prices: itemPrice
+                    prices: itemPrice.trim().replace(/\D/g, '') // Assuming the price is formatted as currency and you want only the numeric part
                 };
                 if (sizeId) {
                     item.size_id = sizeId;
@@ -416,6 +405,10 @@
                 selectedItems.push(item);
             }
         });
+
+        // Debug statements
+        console.log('Selected Items:', selectedItems);
+        console.log('Selected Customer ID:', selectedCustomerId);
 
         // Set hidden input values
         $('#customer_id').val(selectedCustomerId);

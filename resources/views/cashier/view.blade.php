@@ -327,11 +327,20 @@
         });
 
     // Handle form submission for adding customer
-        $('#addCustomerForm').on('submit', function(event) {
-            event.preventDefault(); // Prevent the form from submitting normally
+    $('#addCustomerForm').on('submit', function(event) {
+        event.preventDefault(); // Prevent the form from submitting normally
 
+        var selectElement = $('#exampleSelect2');
+        var selectedOption = selectElement.find('option:selected');
+        var customerId = selectedOption.data('customer-id');
+        var plateNumber = selectedOption.val().toUpperCase();
 
+        // Debug statements
+        console.log('Selected Option:', selectedOption);
+        console.log('Customer ID:', customerId);
+        console.log('Plate Number:', plateNumber);
 
+<<<<<<< HEAD
             var selectElement = $('#exampleSelect2');
             var selectedOption = selectElement.find('option:selected');
             var customerId = selectedOption.data('customer-id');
@@ -383,8 +392,46 @@
                     console.log('Error adding customer:', error);
                 }
             });
+=======
+        var isAlreadyAdded = false;
+>>>>>>> aed678bcff39cd8a48e868cbada77ebfc36878bf
 
+        // Check if any customer is already added
+        $('#selected-items .plate').each(function() {
+            isAlreadyAdded = true;
+            return false; // Break out of the each loop
         });
+
+        if (isAlreadyAdded) {
+            alert('A customer is already added. You cannot add another one.');
+            return; // Stop the form submission
+        }
+
+        // Add the new customer entry
+        $('#selected-items').append(
+            '<div class="d-flex justify-content-between mb-2">' +
+                '<p class="mb-0">Plate Number</p>' +
+                '<p class="mb-0 plate" data-customer-id="' + customerId + '">' + plateNumber + '</p>' +
+            '</div>'
+        );
+
+        // Make AJAX request to submit the form data
+        $.ajax({
+            url: '{{ route("cashier.addcustomer") }}',
+            method: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                console.log('Customer added successfully:', response);
+                // Optionally, handle the response if needed
+                var newOption = new Option(selectElement.val(), selectElement.val(), true, true);
+                $('#exampleSelect2').append(newOption).trigger('change');
+            },
+            error: function(error) {
+                console.log('Error adding customer:', error);
+            }
+        });
+    });
+
 
     // Handle form submission for transaction form
     $('#transactionForm').on('submit', function(event) {

@@ -27,7 +27,6 @@ Route::post('login', [LoginController::class, 'post'])->name('login.post');
 
 Route::group(['middleware' => ['role:superadmin']], function(){
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-    Route::get('sales', [SalesController::class, 'index'])->name('sales.index');
 
     Route::get('items', [ItemsController::class, 'index'])->name('items.list.index');
     Route::get('items/add-items', [ItemsController::class, 'create'])->name('items.list.create');
@@ -54,6 +53,7 @@ Route::group(['middleware' => ['role:cashier']], function(){
     Route::post('cashier/pending-transaction', [PendingTransactionController::class, 'store'])->name('pending.transaction.store');
     Route::get('/cashier/pending-transaction/{id}', [PendingTransactionController::class, 'getPendingTransaction']);
     Route::get('/cashier/show-pending-transaction/{id}', [PendingTransactionController::class, 'show'])->name('pending.transaction.show');
+    Route::delete('/cashier/pending-transaction/{id}', [PendingTransactionController::class, 'destroy'])->name('pending.transaction.destroy');
     Route::get('cashier/expends', [ExpendsController::class, 'index'])->name('expends.index');
     Route::get('cashier/expends/add-expends', [ExpendsController::class, 'create'])->name('expends.create');
     Route::post('cashier/expends/add-expends', [ExpendsController::class, 'store'])->name('expends.store');
@@ -62,7 +62,7 @@ Route::group(['middleware' => ['role:cashier']], function(){
 
     Route::get('/receipt/{id}', [ReceiptController::class, 'showReceipt'])->name('receipt.show');
     Route::post('/sales/void', [SalesController::class, 'void'])->name('sales.void');
-    Route::delete('cashier/pending-transaction/{id}', [PendingTransactionController::class, 'destroy'])->name('pending.transaction.delete');
+    // Route::delete('cashier/pending-transaction/{id}', [PendingTransactionController::class, 'destroy'])->name('pending.transaction.delete');
     Route::get('cashier/close', [CashierController::class, 'close'])->name('cashier.close');
 
 });
