@@ -375,6 +375,9 @@
                     var newOption = new Option(selectElement.value, selectElement.value, true, true);
                     $('#exampleSelect2').append(newOption).trigger('change');
 
+
+
+
                 },
                 error: function(error) {
                     console.log('Error adding customer:', error);

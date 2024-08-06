@@ -167,6 +167,12 @@
                 <span class="items-price mb-0 text-right">{{ formatRupiah($remainingCash) }}</span>
             </div>
         </div>
+
+        <hr class="dashed-hr">
+
+        <div class="receipt-footer">
+            <p>Powered by Dirty 2 Clean</p>
+        </div>
     </div>
     {{--<div class="container">
         <div class="receipt-header">
