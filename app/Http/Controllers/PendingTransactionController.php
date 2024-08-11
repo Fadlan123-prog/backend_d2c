@@ -37,8 +37,8 @@ class PendingTransactionController extends Controller
             $pendingTransaction->date = now()->format('Y-m-d');
             $pendingTransaction->time = now()->format('H:i:s');
             $pendingTransaction->cashier_name = auth()->user()->name; // Assume cashier is the logged in user
-            $pendingTransaction->total_price = $request->subtotal;
-            $pendingTransaction->payment_method = $request->payment_type;
+            $pendingTransaction->total_price = $request->subtotal ?? null;
+            $pendingTransaction->payment_method = $request->payment_type ?? null;
             $pendingTransaction->save();
 
 
@@ -96,6 +96,6 @@ class PendingTransactionController extends Controller
     $pendingTransaction = PendingTransaction::findOrFail($id);
     $pendingTransaction->delete();
 
-    return response()->json(['message' => 'Pending transaction deleted successfully']);
+    return view('cashier.index');
 }
 }
