@@ -59,5 +59,9 @@ class SizeSeeder extends Seeder
         $data = new Size;
         $data->size = 'Full Coating';
         $data->save();
+
+        $data = new Size;
+        $data->size = 'Clean Wash';
+        $data->save();
     }
 }
