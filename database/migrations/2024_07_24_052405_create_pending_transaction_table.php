@@ -17,8 +17,8 @@ return new class extends Migration
             $table->date('date');
             $table->time('time');
             $table->string('cashier_name', 100);
-            $table->integer('total_price');
-            $table->string('payment_method', 100);
+            $table->integer('total_price')->nullable();
+            $table->string('payment_method', 100)->nullable();
             $table->string('status', 100)->nullable();
             $table->timestamps();
         });
