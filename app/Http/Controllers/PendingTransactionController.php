@@ -96,6 +96,8 @@ class PendingTransactionController extends Controller
     $pendingTransaction = PendingTransaction::findOrFail($id);
     $pendingTransaction->delete();
 
-    return view('cashier.index');
+    $dateTime = Carbon::now()->setTimezone('Asia/Jakarta');
+
+    return redirect()->route('cashier.index', compact('dateTime'))->with('success', 'Pending Transaction deleted successfully');
 }
 }
