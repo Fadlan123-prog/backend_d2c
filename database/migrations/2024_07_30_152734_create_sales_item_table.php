@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('sales_id');
             $table->unsignedBigInteger('item_id');
             $table->unsignedBigInteger('size_id')->nullable();
-            $table->decimal('harga_items', 8, 2);
+            $table->decimal('harga_items', 10, 2);
             $table->integer('quantity')->nullable();
             $table->timestamps();
 
