@@ -27,16 +27,33 @@ class CashierController extends Controller
     }
 
     public function addCustomer(Request $request){
-        $validatedData = $request->validate([
-            'plate_number' => 'required|string|max:255'
+        $validated = $request->validate([
+            'plate_number' => 'required|string|max:255',
+            'nama' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:15',
         ]);
 
-        Customer::updateOrCreate(
-            ['plate_number' => $validatedData['plate_number']],
-            ['plate_number' => $validatedData['plate_number']]
-        );
+        $customer = new Customer();
+        $customer->plate_number = $validated['plate_number'];
+        $customer->nama = $validated['nama'];
+        $customer->phone_number = $validated['phone_number'];
+        $customer->save();
 
-        return redirect()->back()->with('success', 'Customer saved successfully!');
+        return redirect()->back()->with('success', 'Customer added successfully!');
+    }
+
+    public function getCustomer($id){
+        $customer = Customer::findOrFail($id);
+
+        if ($customer) {
+            return response()->json([
+                'name' => $customer->name,
+                'plate_number' => $customer->plate_number,
+                'phone_number' => $customer->phone_number,
+            ]);
+        } else {
+            return response()->json(['error' => 'Customer not found'], 404);
+        }
     }
 
     public function getItemsByCategory($categoryId)
@@ -62,7 +79,6 @@ class CashierController extends Controller
         }
 
         // Debugging information
-        Log::info('Selected Date: ' . $parsedDate);
 
         // Filter the sales by the selected date and include only those with a null status
         $salesByCategory = SalesItem::select('items.category_id', DB::raw('COUNT(sales_item.item_id) as items_sold'), DB::raw('SUM(sales_item.harga_items) as total_amount'))
@@ -92,7 +108,6 @@ class CashierController extends Controller
             ->get();
 
         // Log the sales by item
-        Log::info('Sales by Item: ' . $salesByItem->toJson());
 
         // Filter total sales and payment methods by the selected date and include only those with a null status
         $totalSales = Sales::whereDate('date', $parsedDate)
@@ -116,11 +131,6 @@ class CashierController extends Controller
 
         $totalPaymentTypes = $totalCash + $totalTransfer + $totalTokopedia;
 
-        // Log total sales and payment methods
-        Log::info('Total Sales: ' . $totalSales);
-        Log::info('Total Cash: ' . $totalCash);
-        Log::info('Total Transfer: ' . $totalTransfer);
-        Log::info('Total Tokopedia: ' . $totalTokopedia);
 
         // Filter expenses by the selected date
         $expenses = Expends::whereDate('created_at', $parsedDate)->get();
@@ -128,9 +138,6 @@ class CashierController extends Controller
         $expensesDetails = $expenses->map(function ($expense) {
             return ['expend_name' => $expense->expend_name, 'expend_price' => $expense->expend_price];
         });
-
-        // Log expenses
-        Log::info('Expenses: ' . $expensesDetails->toJson());
 
         $dateTime = Carbon::now()->setTimezone('Asia/Jakarta');
         // Remaining cash after expenses

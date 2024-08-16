@@ -21,7 +21,7 @@
                 <li><a class="dropdown-item nav-link padding-nav-side {{ Route::is('dashboard.index') ? 'active' : '' }}" href="{{ route('dashboard.index') }}">Sales Summary</a></li>
                 <li><a class="dropdown-item nav-link padding-nav-side {{ Route::is('sales.index') ? 'active' : '' }}" href="{{ route('sales.index') }}">Sales data</a></li>
                 <li><a class="dropdown-item nav-link padding-nav-side" href="#">Receipts</a></li>
-                <li><a class="dropdown-item nav-link padding-nav-side" href="#">Discount</a></li>
+
             </ul>
         </li>
         <li class="nav-item dropdown">
@@ -37,6 +37,7 @@
           <ul class="navbar-nav drop-item" aria-labelledby="dropdownMenuLink4">
             <li><a class="dropdown-item nav-link padding-nav-side {{ Route::is('items.list.index') ? 'active' : ''}} " href="{{ route('items.list.index')}}">Item List</a></li>
             <li><a class="dropdown-item nav-link padding-nav-side {{ Route::is('items.category') ? 'active' : ''}} " href="{{ route('items.category') }}">Category</a></li>
+            <li><a class="dropdown-item nav-link padding-nav-side {{ Route::is('coupons.index') ? 'active' : '' }}" href="{{ route('coupons.index') }}">Discount</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">

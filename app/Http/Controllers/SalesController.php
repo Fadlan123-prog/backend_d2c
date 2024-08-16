@@ -14,8 +14,14 @@ use Auth;
 class SalesController extends Controller
 {
 
-    public function index(){
-        $sales = Sales::with(['customer', 'salesItems.item', 'salesItems.size'])->get();
+    public function index(Request $request){
+        $date = $request->input('date');
+
+        // Jika tanggal dipilih, ambil penjualan berdasarkan tanggal tersebut
+        $sales = Sales::whereDate('date', $date)
+            ->with(['customer', 'salesItems.item', 'salesItems.size'])
+            ->get();
+
         $dateTime = Carbon::now()->setTimezone('Asia/Jakarta');
 
         return view('page.sales-list.index', compact('sales', 'dateTime'));

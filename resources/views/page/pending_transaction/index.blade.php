@@ -9,6 +9,19 @@
             </a>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <form method="GET" action="{{ route('pending.transaction.index') }}">
+                <div class="form-group">
+                    <label for="date">Select Date</label>
+                    <input type="date" id="date" name="date" class="form-control" value="{{ old('date', $date ?? now()->format('Y-m-d')) }}">
+                </div>
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </form>
+        </div>
+    </div>
+
     <div class="row mt-4">
         <div class="col-lg-12">
             <div class="card">

@@ -29,7 +29,7 @@
             <hr>
 
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
 
@@ -55,7 +55,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
 
@@ -93,20 +93,18 @@
                             <table class="table table-responsive">
                                 <thead>
                                     <tr>
-                                        <th>Total Sales</th>
                                         <th>Total Cash</th>
                                         <th>Total Transfer</th>
                                         <th>Total Tokopedia</th>
-                                        <th>Total Payment Types</th>
+                                        <th>Total Sales</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{{ formatRupiah($totalSales) }}</td>
                                         <td>{{ formatRupiah($totalCash) }}</td>
                                         <td>{{ formatRupiah($totalTransfer) }}</td>
                                         <td>{{ formatRupiah($totalTokopedia) }}</td>
-                                        <td>{{ formatRupiah($totalPaymentTypes) }}</td>
+                                        <td>{{ formatRupiah($totalSales) }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -162,8 +160,8 @@
 
 <script>
     document.getElementById('print-receipt-btn').addEventListener('click', function() {
-    var date = "{{ $date }}";
-    window.open('{{ url("/cashier/closed/print/") }}/' + date, '_blank');
-});
+        var date = "{{ $date }}";
+        window.open('{{ url("/admin/cashier/closed/print/") }}/' + date, '_blank');
+    });
 </script>
 @endsection
