@@ -181,10 +181,7 @@ class CashierController extends Controller
         ->leftJoin('sizes', 'sales_item.size_id', '=', 'sizes.id') // Use leftJoin to include items without sizes
         ->join('sales', 'sales_item.sales_id', '=', 'sales.id')
         ->whereDate('sales.date', $parsedDate)
-        ->where(function ($query) {
-            $query->where('sales.status', '!=', 'voided')
-                  ->orWhereNull('sales.status');
-        })
+        ->whereNull('sales.status')
         ->groupBy('items.category_id', 'items.id', 'items.items_name', 'sizes.size')
         ->get();
 
@@ -197,34 +194,22 @@ class CashierController extends Controller
         }
 
         $totalSales = Sales::whereDate('date', $parsedDate)
-            ->where(function ($query) {
-                $query->where('status', '!=', 'voided')
-                      ->orWhereNull('status');
-            })
+            ->whereNull('status')
             ->sum('total_price');
 
         $totalCash = Sales::where('payment_method', 'cash')
             ->whereDate('date', $parsedDate)
-            ->where(function ($query) {
-                $query->where('status', '!=', 'voided')
-                      ->orWhereNull('status');
-            })
+            ->whereNull('status')
             ->sum('total_price');
 
         $totalTransfer = Sales::where('payment_method', 'transfer')
             ->whereDate('date', $parsedDate)
-            ->where(function ($query) {
-                $query->where('status', '!=', 'voided')
-                      ->orWhereNull('status');
-            })
+            ->whereNull('status')
             ->sum('total_price');
 
         $totalTokopedia = Sales::where('payment_method', 'tokopedia')
             ->whereDate('date', $parsedDate)
-            ->where(function ($query) {
-                $query->where('status', '!=', 'voided')
-                      ->orWhereNull('status');
-            })
+            ->whereNull('status')
             ->sum('total_price');
 
         $totalPaymentTypes = $totalCash + $totalTransfer + $totalTokopedia;
