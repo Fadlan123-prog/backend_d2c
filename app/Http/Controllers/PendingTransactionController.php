@@ -12,10 +12,14 @@ use Illuminate\Http\Request;
 
 class PendingTransactionController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
+        $date = $request->input('date');
+
         $categories = Categories::all();
         $customers = Customer::all();
-        $pendingTransaction = PendingTransaction::with('customer', 'pendingItems.item', 'pendingItems.size')->get();
+        $pendingTransaction = PendingTransaction::whereDate('date', $date)
+        ->with('customer', 'pendingItems.item', 'pendingItems.size')
+        ->get();
 
         $dateTime = Carbon::now()->setTimezone('Asia/Jakarta');
         return view('page.pending_transaction.index', compact('categories', 'customers', 'dateTime', 'pendingTransaction'));
