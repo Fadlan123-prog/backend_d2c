@@ -203,6 +203,10 @@
 
 <script>
     $(document).ready(function(){
+        $(function(){
+            $("#inputGroupSelect02").selectize();
+        });
+
         $('.owl-carousel').owlCarousel({
             loop: false,
             margin: 10,
