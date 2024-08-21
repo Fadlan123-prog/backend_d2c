@@ -204,8 +204,8 @@
 <script>
     $(document).ready(function(){
         $(function(){
-            $("#inputGroupSelect02").selectize();
-        });
+            $('#inputGroupSelect02').select2()
+        })
 
         $('.owl-carousel').owlCarousel({
             loop: false,
