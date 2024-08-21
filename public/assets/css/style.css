@@ -225,3 +225,7 @@ body {
     background-color: #38C0FF;
     color: white;
 }
+
+.input-group .form-select .selectize-input{
+    height: 46px !important;
+}
