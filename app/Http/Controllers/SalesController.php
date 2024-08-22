@@ -15,10 +15,12 @@ class SalesController extends Controller
 {
 
     public function index(Request $request){
-        $date = $request->input('date');
+        $date = $request->input('date', now()->format('Y-m-d'));
+
+        $parseDate = Carbon::parse($date)->format('Y-m-d');
 
         // Jika tanggal dipilih, ambil penjualan berdasarkan tanggal tersebut
-        $sales = Sales::whereDate('date', $date)
+        $sales = Sales::whereDate('date', $parseDate)
             ->with(['customer', 'salesItems.item', 'salesItems.size'])
             ->get();
 

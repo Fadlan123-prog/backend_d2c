@@ -47,24 +47,30 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @foreach ($categories as $category)
+                        @foreach ($coupons as $coupon)
                         <tr>
                             <td class="pl-3">
-                                <p class="text-xs font-weight-bold mb-0">{{ $category->categories_name }}</p>
+                                <p class="text-xs font-weight-bold mb-0">{{ $coupon->name }}</p>
                             </td>
                             <td>
-                                <p class="text-xs font-weight-bold mb-0">{{ $category->items_count }}</p>
+                                <p class="text-xs font-weight-bold mb-0">{{ $coupon->description }}</p>
                             </td>
                             <td>
-                                <a href="{{route('items.category.edit', $category->id)}}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                <p class="text-xs font-weight-bold mb-0">{{ $coupon->category->categories_name   }}</p>
+                            </td>
+                            <td>
+                                <p class="text-xs font-weight-bold mb-0">{{ $coupon->Item->items_name }}</p>
+                            </td>
+                            {{-- <td>
+                                <a href="{{route('items.coupon.edit', $coupon->id)}}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                     Edit
                                 </a>
-                                <button type="button" class="border-0 bg-transparent text-secondary font-weight-bold text-xs px-2" data-bs-toggle="modal" data-bs-target="#modal-notification-{{ $category->id }}">
+                                <button type="button" class="border-0 bg-transparent text-secondary font-weight-bold text-xs px-2" data-bs-toggle="modal" data-bs-target="#modal-notification-{{ $coupon->id }}">
                                     <svg width="32" height="32" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M37.125 8.25H30.9375V6.1875C30.9375 4.91115 30.4305 3.68707 29.528 2.78455C28.6254 1.88203 27.4014 1.375 26.125 1.375H17.875C16.5986 1.375 15.3746 1.88203 14.472 2.78455C13.5695 3.68707 13.0625 4.91115 13.0625 6.1875V8.25H6.875C6.32799 8.25 5.80339 8.4673 5.41659 8.85409C5.0298 9.24089 4.8125 9.76549 4.8125 10.3125C4.8125 10.8595 5.0298 11.3841 5.41659 11.7709C5.80339 12.1577 6.32799 12.375 6.875 12.375H7.5625V35.75C7.5625 36.6617 7.92466 37.536 8.56932 38.1807C9.21398 38.8253 10.0883 39.1875 11 39.1875H33C33.9117 39.1875 34.786 38.8253 35.4307 38.1807C36.0753 37.536 36.4375 36.6617 36.4375 35.75V12.375H37.125C37.672 12.375 38.1966 12.1577 38.5834 11.7709C38.9702 11.3841 39.1875 10.8595 39.1875 10.3125C39.1875 9.76549 38.9702 9.24089 38.5834 8.85409C38.1966 8.4673 37.672 8.25 37.125 8.25ZM17.1875 6.1875C17.1875 6.00516 17.2599 5.8303 17.3889 5.70136C17.5178 5.57243 17.6927 5.5 17.875 5.5H26.125C26.3073 5.5 26.4822 5.57243 26.6111 5.70136C26.7401 5.8303 26.8125 6.00516 26.8125 6.1875V8.25H17.1875V6.1875ZM32.3125 35.0625H11.6875V12.375H32.3125V35.0625ZM19.9375 17.875V28.875C19.9375 29.422 19.7202 29.9466 19.3334 30.3334C18.9466 30.7202 18.422 30.9375 17.875 30.9375C17.328 30.9375 16.8034 30.7202 16.4166 30.3334C16.0298 29.9466 15.8125 29.422 15.8125 28.875V17.875C15.8125 17.328 16.0298 16.8034 16.4166 16.4166C16.8034 16.0298 17.328 15.8125 17.875 15.8125C18.422 15.8125 18.9466 16.0298 19.3334 16.4166C19.7202 16.8034 19.9375 17.328 19.9375 17.875ZM28.1875 17.875V28.875C28.1875 29.422 27.9702 29.9466 27.5834 30.3334C27.1966 30.7202 26.672 30.9375 26.125 30.9375C25.578 30.9375 25.0534 30.7202 24.6666 30.3334C24.2798 29.9466 24.0625 29.422 24.0625 28.875V17.875C24.0625 17.328 24.2798 16.8034 24.6666 16.4166C25.0534 16.0298 25.578 15.8125 26.125 15.8125C26.672 15.8125 27.1966 16.0298 27.5834 16.4166C27.9702 16.8034 28.1875 17.328 28.1875 17.875Z" fill="#F24E1E"/>
                                     </svg>
                                 </button>
-                                <div class="modal fade" id="modal-notification-{{ $category->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-notification" aria-hidden="true">
+                                <div class="modal fade" id="modal-notification-{{ $coupon->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-notification" aria-hidden="true">
                                     <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -90,7 +96,7 @@
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <form method="POST" action="{{ route('items.category.destroy', $category->id) }}">
+                                                <form method="POST" action="{{ route('items.coupon.destroy', $coupon->id) }}">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-white">Ok, Got it</button>
@@ -100,9 +106,9 @@
                                         </div>
                                     </div>
                                 </div>
-                            </td>
+                            </td> --}}
                         </tr>
-                        @endforeach --}}
+                        @endforeach
                     </tbody>
                 </table>
             </div>

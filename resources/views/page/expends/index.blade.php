@@ -11,10 +11,27 @@
             </div>
         </div>
         <div class="row mt-4">
-            <div class="col-xl-3 col-sm-3">
-                <a href="{{ route('expends.create') }}">
-                    <button type="button" class="btn bg-black">Add Expends Item</button>
-                </a>
+            <div class="col-lg-12 ">
+                <div class="row justify-content-between">
+                    <div class="col-xl-3 col-sm-3 col-lg-3">
+                        <a href="{{ route('expends.create') }}">
+                            <button type="button" class="btn bg-black">Add Expends Item</button>
+                        </a>
+                    </div>
+                    <div class="col-lg-6">
+                        <label for="date">Select Date</label>
+                        <form method="GET" action="{{ route('expends.index') }}">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="date" id="date" name="date" class="form-control" value="{{ old('date', $date ?? now()->format('Y-m-d')) }}">
+
+                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
             </div>
         </div>
         <div class="row mt-4">

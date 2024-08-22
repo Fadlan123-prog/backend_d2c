@@ -13,11 +13,13 @@ use Illuminate\Http\Request;
 class PendingTransactionController extends Controller
 {
     public function index(Request $request){
-        $date = $request->input('date');
+        $date = $request->input('date', now()->format('Y-m-d'));
+
+        $parseDate = Carbon::parse($date)->format('Y-m-d');
 
         $categories = Categories::all();
         $customers = Customer::all();
-        $pendingTransaction = PendingTransaction::whereDate('date', $date)
+        $pendingTransaction = PendingTransaction::whereDate('date', $parseDate)
         ->with('customer', 'pendingItems.item', 'pendingItems.size')
         ->get();
 
