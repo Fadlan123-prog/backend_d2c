@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Categories;
 use App\Models\CouponItems;
 use App\Models\Item;
+use Illuminate\Support\Facades\Log;
 
 class CouponController extends Controller
 {
@@ -28,6 +29,7 @@ class CouponController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request->all());
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -35,39 +37,54 @@ class CouponController extends Controller
             'discount_amount' => 'nullable|numeric',
             'discount_percentage' => 'nullable|numeric',
             'expired_date' => 'required|date',
-            'items' => 'required|array',
+            'items' => 'required',
             'items.*' => 'exists:items,id',
+            'size_id' => 'nullable|exists:sizes,id',
+            'final_price' => 'numeric',
         ]);
 
         if ($validated['discount_amount'] && $validated['discount_percentage']) {
             return redirect()->back()->withErrors('Only one of discount amount or percentage should be filled.');
         }
 
-        $coupon = Coupon::create([
-            'name' => $validated['name'],
-            'description' => $validated['description'],
-            'category_id' => $validated['category_id'],
-            'discount_amount' => $validated['discount_amount'],
-            'discount_percentage' => $validated['discount_percentage'],
-            'expired_date' => $validated['expired_date'],
-        ]);
+        try {
+            Log::info('Validated data:', $validated);
 
-        foreach ($validated['items'] as $item_id) {
-            CouponItems::create([
-                'coupon_id' => $coupon->id,
-                'item_id' => $item_id,
+            $coupon = Coupon::create([
+                'name' => $validated['name'],
+                'description' => $validated['description'],
+                'category_id' => $validated['category_id'],
+                'discount_amount' => $validated['discount_amount'],
+                'discount_percentage' => $validated['discount_percentage'],
+                'expired_date' => $validated['expired_date'],
             ]);
-        }
 
-        return redirect()->route('coupon.index')->with('success', 'Coupon created successfully.');
+            foreach ($validated['items'] as $item_id) {
+                CouponItems::create([
+                    'coupon_id' => $coupon->id,
+                    'item_id' => $item_id,
+                    'size_id' => $validated['size_id'] ?? null,
+                    'final_price' => $validated['final_price'], // Fixing final_price assignment
+                ]);
+            }
+
+            Log::info('Coupon created successfully:', ['coupon_id' => $coupon->id]);
+
+            return redirect()->route('coupons.index')->with('success', 'Coupon created successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error creating coupon:', ['error' => $e->getMessage()]);
+            return redirect()->back()->withErrors('System error: ' . $e->getMessage());
+        }
     }
 
-    public function getItemsByCategory(Request $request)
+    public function getItemsByCategory($categoryId)
     {
-        $categoryId = $request->category_id;
-
-        // Fetch items based on the selected category
-        $items = Item::where('category_id', $categoryId)->get();
+        // Fetch items based on the categoryId
+        $items = Item::where('category_id', $categoryId)
+        ->with(['sizes' => function($query) {
+            $query->withPivot('price');
+        }])
+        ->get();
 
         return response()->json(['items' => $items]);
     }

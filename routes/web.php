@@ -50,7 +50,8 @@ Route::prefix('admin')->group(function () {
         Route::get('coupons', [CouponController::class, 'index'])->name('coupons.index');
         Route::get('coupons/add-coupons', [CouponController::class, 'create'])->name('coupons.create');
         Route::post('coupons/add-coupons', [CouponController::class, 'store'])->name('coupons.store');
-        Route::get('/coupons/get-items-by-category/{category}', [CouponController::class, 'getItemsByCategory'])->name('coupons.getItemsByCategory');
+        Route::get('/coupons/get-items-by-category/{categoryId}', [CouponController::class, 'getItemsByCategory']);
+
     });
 
     Route::group(['middleware' => ['role:cashier']], function(){

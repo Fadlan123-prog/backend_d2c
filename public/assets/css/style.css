@@ -226,6 +226,10 @@ body {
     color: white;
 }
 
-.input-group .form-select .selectize-input{
+.input-group .form-select .select2 .select2-selection{
     height: 46px !important;
+}
+
+.input-group .form-select .select2 .selection .select2-selection__rendered{
+    padding-top: 8px !important;
 }

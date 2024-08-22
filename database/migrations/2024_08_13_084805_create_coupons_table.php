@@ -12,19 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('coupons', function (Blueprint $table) {
-            $table->uuid('id')->primary()->unique();
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->unsignedBigInteger('category_id')->nullable();
-            $table->unsignedBigInteger('item_id')->nullable();
-            $table->date('expired_date');
-            $table->decimal('discount_value', 8, 2)->nullable(); // Nominal value for discount
-            $table->enum('discount_type', ['percentage', 'fixed'])->nullable(); // To specify discount type
-
-            // Foreign keys
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
-
+            $table->uuid('id')->primary();
+            $table->string('name'); // Coupon name
+            $table->text('description')->nullable(); // Description, can be null
+            $table->foreignId('category_id')->constrained()->onDelete('cascade'); // Reference to categories table
+            $table->decimal('discount_amount', 10, 2)->nullable(); // Fixed discount amount, nullable
+            $table->decimal('discount_percentage', 5, 2)->nullable(); // Discount percentage, nullable
+            $table->date('expired_date'); // Expiration date
             $table->timestamps();
         });
     }

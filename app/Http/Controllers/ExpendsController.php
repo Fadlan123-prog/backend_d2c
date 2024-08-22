@@ -11,9 +11,13 @@ class ExpendsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $expends = Expends::all();
+        $date = $request->input('date', now()->format('Y-m-d'));
+
+        $parseDate = Carbon::parse($date)->format('Y-m-d');
+
+        $expends = Expends::whereDate('date', $date)->get();
 
         $dateTime = Carbon::now()->setTimezone('Asia/Jakarta');
         return view('page.expends.index', compact('dateTime', 'expends'));
