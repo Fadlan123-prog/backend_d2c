@@ -86,6 +86,7 @@
                                                     <input type="hidden" name="items_id" id="items_hidden">
                                                     <input type="hidden" name="sizes" id="sizes_hidden">
                                                     <input type="hidden" id="prices_hidden" name="prices"><!-- This will be populated dynamically -->
+                                                    <input type="hidden" name="coupon_id" id="coupons_hidden">
 
                                                     <div id="receipt">
 
@@ -104,11 +105,26 @@
                                                             <p class="mb-2" id="subtotal" data-subtotal="0">Rp 0</p>
                                                         </div>
 
+                                                        <div class="d-flex justify-content-between">
+                                                            <p class="mb-2">Diskon</p>
+                                                            <p class="mb-2" id="coupons" data-coupons="0">Rp 0</p>
+                                                        </div>
+
                                                         <div id="change">
 
                                                         </div>
                                                     </div>
                                                     <hr class="my-2">
+                                                    <div class="form-outline form-white mb-2">
+                                                        <select class="form-select" id="coupon-select" name="diskon">
+                                                            <option value="">Select Diskon</option>
+                                                            @foreach($coupons as $coupon)
+                                                                <option value="{{ $coupon->id }}" {{ $coupon->coupon_id == $coupon->id ? 'selected' : '' }}>{{ $coupon->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        <label class="form-label" for="coupon-select">Diskon</label>
+                                                    </div>
+
                                                     <div class="form-outline form-white mb-4">
                                                         <input type="text" id="nominal" class="form-control form-control-lg" size="17" placeholder="Input Nominal" />
                                                         <label class="form-label" for="nominal">Input Nominal</label>
@@ -204,7 +220,7 @@
 <script>
     $(document).ready(function(){
         $(function(){
-            $('#inputGroupSelect02').select2()
+            $('#inputGroupSelect02').select2(   )
         })
 
         $('.owl-carousel').owlCarousel({
@@ -238,99 +254,132 @@
         });
 
     // Handle category button click
-        $('.category-btn').click(function() {
-            var categoryId = $(this).data('category-id');
+    $('.category-btn').click(function () {
+        var categoryId = $(this).data('category-id');
 
-            // Make AJAX request to fetch items for the selected category
-            $.ajax({
-    url: 'cashier/items/' + categoryId,
-    method: 'GET',
-    success: function(data) {
-        // Clear previous items
-        $('#items-container').empty();
+        // Make AJAX request to fetch items for the selected category
+        $.ajax({
+            url: 'cashier/items/' + categoryId,
+            method: 'GET',
+            success: function (data) {
+                // Clear previous items
+                $('#items-container').empty();
 
-        // Check if there are items to display
-        if (data.length > 0) {
-            $('#items-section').show();
-            // Append items to the container
-            $.each(data, function(index, item) {
-                // Check if item has sizes
-                if (item.sizes && item.sizes.length > 0) {
-                    $.each(item.sizes, function(sizeIndex, size) {
-                        $('#items-container').append(
-                            '<div class="col-md-4 col-lg-6 item-card" data-size-name="' + size.size + '" data-size-item="' + size.id + '" data-item-id="' + item.id + '" data-item-name="' + item.items_name + '" data-item-price="' + size.pivot.price + '">' +
-                                '<div class="card mb-3 mb-lg-0">' +
-                                    '<div class="card-body">' +
-                                        '<span class="card-title">' + item.items_name + ' (' + size.size + ')</span>' +
-                                        '<p class="mb-0">' + formatRupiah(size.pivot.price) + '</p>' +
-                                    '</div>' +
-                                '</div>' +
-                            '</div>'
-                        );
+                // Check if there are items to display
+                if (data.length > 0) {
+                    $('#items-section').show();
+                    // Append items to the container
+                    $.each(data, function (index, item) {
+                        // Check if item has sizes
+                        if (item.sizes && item.sizes.length > 0) {
+                            $.each(item.sizes, function (sizeIndex, size) {
+                                appendItemCard(item, size);
+                            });
+                        } else {
+                            // Default case if no sizes are available
+                            appendItemCard(item);
+                        }
                     });
                 } else {
-                    // Default case if no sizes are available
-                    $('#items-container').append(
-                        '<div class="col-md-4 col-lg-6 item-card" data-item-id="' + item.id + '" data-item-name="' + item.items_name + '" data-item-price="' + item.harga_item + '">' +
-                            '<div class="card mb-3 mb-lg-0">' +
-                                '<div class="card-body">' +
-                                    '<span class="card-title">' + item.items_name + '</span>' +
-                                    '<p class="mb-0">' + formatRupiah(item.harga_item) + '</p>' +
-                                '</div>' +
-                            '</div>' +
-                        '</div>'
-                    );
+                    $('#items-container').append('<p>No items found for this category.</p>');
                 }
-            });
-        } else {
-            $('#items-container').append('<p>No items found for this category.</p>');
-        }
-    },
-    error: function(error) {
-        console.log('Error fetching items:', error);
+            },
+            error: function (error) {
+                console.log('Error fetching items:', error);
+            }
+        });
+    });
+
+    // Function to append an item card
+    function appendItemCard(item, size = null) {
+        let itemId = item.id;
+        let itemName = item.items_name;
+        let itemPrice = size ? size.pivot.price : item.harga_item;
+        let sizeId = size ? size.id : null;
+        let sizeName = size ? size.size : null;
+
+        // Create the item card
+        $('#items-container').append(
+            '<div class="col-md-4 col-lg-6 item-card" data-size-name="' + (sizeName || '') + '" data-size-item="' + (sizeId || '') + '" data-item-id="' + itemId + '" data-item-name="' + itemName + '" data-item-price="' + itemPrice + '">' +
+                '<div class="card mb-3 mb-lg-0">' +
+                    '<div class="card-body">' +
+                        '<span class="card-title">' + itemName + (sizeName ? ' (' + sizeName + ')' : '') + '</span>' +
+                        '<p class="mb-0">' + formatRupiah(itemPrice) + '</p>' +
+                    '</div>' +
+                '</div>' +
+            '</div>'
+        );
     }
-});
+
+    // Handle item card click to add item to selected-items
+    $('#items-container').on('click', '.item-card', function() {
+        var itemId = $(this).data('item-id');
+        var itemName = $(this).data('item-name');
+        var itemPrice = parseFloat($(this).data('item-price'));
+        var sizeItem = $(this).data('size-item');
+        var sizeName = $(this).data('size-name');
+
+        var existingItem = $('#selected-items').find('[data-item-id="' + itemId + '"][data-size-id="' + sizeItem + '"]');
+
+        if (existingItem.length > 0) {
+            // Update quantity if the item is already in the list
+            var quantityInput = existingItem.closest('.item-row').find('.quantity-input');
+            var newQuantity = parseInt(quantityInput.val()) + 1;
+            quantityInput.val(newQuantity);
+
+            updateSubtotal();
+        } else {
+            // Append the new item with quantity controls
+            var itemHTML = '<div class="d-flex justify-content-between align-items-center mb-2 item-row">' +
+                '<p class="items-name mb-0" data-item-id="' + itemId + '" data-size-id="' + sizeItem + '">' + itemName + (sizeName ? ' (' + sizeName + ')' : '') + '</p>' +
+                '<div class="quantity-controls d-flex align-items-center">' +
+                    '<button type="button" class="quantity-left-minus btn btn-danger btn-sm mx-1" data-type="minus">-</button>' +
+                    '<input type="text" class="quantity-input form-control form-control-sm text-center" value="1" min="1">' +
+                    '<button type="button" class="quantity-right-plus btn btn-success btn-sm mx-1" data-type="plus">+</button>' +
+                '</div>' +
+                '<p class="items-price mb-0" data-item-price="' + itemPrice + '">' + formatRupiah(itemPrice) + '</p>' +
+            '</div>';
+
+            $('#selected-items').append(itemHTML);
+
+            updateSubtotal();
+        }
+    });
+
+    // Function to update subtotal
+    function updateSubtotal() {
+        var subtotal = 0;
+        $('#selected-items .item-row').each(function() {
+            var itemPrice = parseFloat($(this).find('.items-price').data('item-price'));
+            var quantity = parseInt($(this).find('.quantity-input').val());
+            subtotal += itemPrice * quantity;
         });
 
-    // Handle item card click
-        $('#items-container').on('click', '.item-card', function() {
-            // Check if item has already been clicked
-            if ($(this).hasClass('selected')) {
-                return;
-            }
+        $('#subtotal').text(formatRupiah(subtotal));
+    }
 
-            var itemName = $(this).data('item-name');
-            var itemPrice = parseFloat($(this).data('item-price'));
-            var itemId = $(this).data('item-id');
-            var sizeItem = $(this).data('size-item');
-            var sizeName = $(this).data('size-name');
+    // Event listeners for quantity buttons
+    $('#selected-items').on('click', '.quantity-right-plus', function(e) {
+        e.preventDefault();
+        var quantityInput = $(this).closest('.quantity-controls').find('.quantity-input');
+        var currentVal = parseInt(quantityInput.val());
+        quantityInput.val(currentVal + 1);
+        updateSubtotal();
+    });
 
-            // Append the selected item to the selected-items section
-            if(sizeItem) {
-                $('#selected-items').append(
-                    '<div class="d-flex justify-content-between mb-2">' +
-                        '<p class="items-name mb-0" data-item-id="' + itemId + '"  data-size-id="' + sizeItem + '">' + itemName + ' (' + sizeName + ')</p>' +
-                        '<p class="items-price mb-0" data-item-price="' + itemPrice + '">' + formatRupiah(itemPrice) + '</p>' +
-                    '</div>'
-                );
-            } else {
-                $('#selected-items').append(
-                    '<div class="d-flex justify-content-between mb-2">' +
-                        '<p class="items-name mb-0" data-item-id="' + itemId + '">' + itemName + '</p>' +
-                        '<p class="items-price mb-0" data-item-price="' + itemPrice + '">' + formatRupiah(itemPrice) + '</p>' +
-                    '</div>'
-                );
-            }
+    $('#selected-items').on('click', '.quantity-left-minus', function(e) {
+        e.preventDefault();
+        var quantityInput = $(this).closest('.quantity-controls').find('.quantity-input');
+        var currentVal = parseInt(quantityInput.val());
 
-            // Update the subtotal
-            var currentSubtotal = parseFloat($('#subtotal').data('subtotal')) || 0;
-            var newSubtotal = currentSubtotal + itemPrice;
-            $('#subtotal').data('subtotal', newSubtotal);
-            $('#subtotal').text(formatRupiah(newSubtotal));
+        if (currentVal > 1) {
+            quantityInput.val(currentVal - 1);
+        } else {
+            $(this).closest('.item-row').remove();
+        }
 
-            // Mark the item as selected
-            $(this).addClass('selected');
-        });
+        updateSubtotal();
+    });
 
     // Handle numeric button click
         $('.btn-group button').click(function() {
@@ -370,6 +419,8 @@
             }
         });
 
+
+
     // Handle form submission for adding customer
     $('#inputGroupSelect02').on('change', function() {
         var customerId = $(this).find(':selected').data('customer-id'); // Get selected customer ID
@@ -397,69 +448,192 @@
         }
     });
 
+    $('#coupon-select').change(function() {
+    var couponId = $(this).val();
+
+    var currentSubtotal = parseFloat($('#subtotal').data('subtotal')) || 0;
+    var totalDiscount = 0;
+
+    if (couponId) {
+    $.ajax({
+        url: `cashier/coupons/${couponId}`,
+        method: 'GET',
+        success: function(coupon) {
+            console.log('Coupon:', coupon);
+
+            var totalDiscount = 0;
+            var currentSubtotal = 0;
+
+            $('#selected-items .item-row').each(function() {
+                var selectedItemId = $(this).find('.items-name').data('item-id');
+                var originalPrice = parseFloat($(this).find('.items-price').data('item-price'));
+                var quantity = parseInt($(this).find('.quantity-input').val());
+
+                console.log('Selected Item ID:', selectedItemId);
+                console.log('Original Price:', originalPrice);
+
+                if (isNaN(originalPrice)) {
+                    console.error('Original Price is NaN! Check the data-item-price attribute.');
+                    return;
+                }
+
+                var discountedPrice = originalPrice;
+
+                // Check if the selectedItemId is in the coupon items
+                var couponItem = coupon.items.find(function(item) {
+                    return item.id === selectedItemId;
+                });
+
+                console.log('Coupon Item:', couponItem);
+
+                if (couponItem) {
+                    if (coupon.discount_amount) {
+                        discountedPrice -= parseFloat(coupon.discount_amount);
+                        totalDiscount += parseFloat(coupon.discount_amount) * quantity;
+                        console.log('Discount Amount:', coupon.discount_amount);
+                    } else if (coupon.discount_percentage) {
+                        var discount = originalPrice * (parseFloat(coupon.discount_percentage) / 100);
+                        discountedPrice -= discount;
+                        totalDiscount += discount * quantity;
+                        console.log('Discount Percentage:', coupon.discount_percentage);
+                    }
+
+                    discountedPrice = Math.round(discountedPrice);
+                    console.log('Discounted Price:', discountedPrice);
+
+                    if (isNaN(discountedPrice)) {
+                        console.error('Discounted Price is NaN! Something went wrong with the calculation.');
+                        return;
+                    }
+
+                    // Update the price displayed in the item row (single item price, not quantity-adjusted)
+                    $(this).find('.items-price').html(formatRupiah(discountedPrice));
+                    $(this).find('.items-price').data('item-price', discountedPrice);
+                    $(this).find('.items-price').attr('data-item-price', discountedPrice);
+                } else {
+                    // If no match, show the original price
+                    $(this).find('.items-price').html(formatRupiah(originalPrice));
+                    $(this).find('.items-price').data('item-price', originalPrice);
+                    $(this).find('.items-price').attr('data-item-price', originalPrice);
+                }
+
+                // Update the subtotal, taking quantity into account
+                currentSubtotal += discountedPrice * quantity;
+            });
+
+            // Update coupon total value
+            $('#coupons').data('coupons', Math.round(totalDiscount));
+            $('#coupons').text(formatRupiah(totalDiscount));
+            console.log('Total Discount:', totalDiscount);
+
+            // Update subtotal with discounted prices
+            $('#subtotal').data('subtotal', currentSubtotal);
+            $('#subtotal').text(formatRupiah(currentSubtotal));
+            console.log('New Subtotal:', currentSubtotal);
+        }
+    });
+} else {
+    // If no coupon is selected, reset all prices to original
+    var currentSubtotal = 0;
+
+    $('#selected-items .item-row').each(function() {
+        var selectedItem = $(this);
+        var originalPrice = parseFloat(selectedItem.find('.items-price').data('item-price'));
+        var quantity = parseInt(selectedItem.find('.quantity-input').val());
+
+        selectedItem.find('.items-price').html(formatRupiah(originalPrice));
+
+        // Calculate the subtotal without discounts
+        currentSubtotal += originalPrice * quantity;
+    });
+
+    // Reset subtotal and coupons
+    $('#subtotal').data('subtotal', currentSubtotal);
+    $('#subtotal').text(formatRupiah(currentSubtotal));
+    $('#coupons').data('coupons', 0);
+    $('#coupons').text(formatRupiah(0));
+}
+});
+
+
 
     // Handle form submission for transaction form
     $('#transactionForm').on('submit', function(event) {
-        event.preventDefault(); // Prevent normal form submission
+    event.preventDefault(); // Prevent normal form submission
 
-        // Collect selected items
-        var selectedItems = [];
-        var selectedCustomerId = $('#selected-items').find('p.plate').data('customer-id');
+    // Collect selected items
+    var selectedItems = [];
+    var selectedCustomerId = $('#selected-items').find('p.plate').data('customer-id');
+    var couponId = $('#coupon-select').val();
+    console.log('selected coupon:', couponId);
 
-        $('#selected-items .d-flex').each(function() {
-            var itemId = $(this).find('p.items-name').data('item-id');
-            var itemPrice = $(this).find('p.items-price').data('item-price');
-            var sizeId = $(this).find('p.items-name').data('size-id');
+    $('#selected-items .d-flex').each(function() {
+        var itemId = $(this).find('p.items-name').data('item-id');
+        var itemPrice = $(this).find('p.items-price').data('item-price');
+        var sizeId = $(this).find('p.items-name').data('size-id');
 
-            if (itemId && itemPrice) {
-                var item = {
-                    item_id: itemId,
-                    prices: itemPrice
-                };
-                if (sizeId) {
-                    item.size_id = sizeId;
-                }
-                selectedItems.push(item);
+        // Debugging: Log the quantity input before parsing
+        var quantityValue = $(this).find('.quantity-input').val();
+        console.log('Quantity input value:', quantityValue);
+
+        // Parse the quantity value
+        var quantity = parseInt(quantityValue);
+
+        // Debugging: Log the parsed quantity
+        console.log('Parsed quantity:', quantity);
+
+        if (itemId && itemPrice && quantity > 0) {
+            var item = {
+                item_id: itemId,
+                prices: itemPrice,
+                quantity: quantity // Add quantity to the item
+            };
+            if (sizeId) {
+                item.size_id = sizeId;
             }
-        });
-
-        // Set hidden input values
-        $('#customer_id').val(selectedCustomerId);
-        $('#subtotal_hidden').val($('#subtotal').data('subtotal'));
-        $('#items_hidden').val(JSON.stringify(selectedItems));
-
-        // Determine form action based on clicked button
-        var formAction = $('#transactionForm').data('form-action');
-
-        // Create a FormData object
-        var formData = new FormData(this);
-        formData.append('items_id', JSON.stringify(selectedItems));
-        formData.append('customer_id', selectedCustomerId);
-
-        // Submit form via AJAX
-        $.ajax({
-            url: formAction,
-            method: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                console.log('Form submitted successfully:', response);
-
-                if (formAction === '{{ route("pending.transaction.store") }}') {
-                    window.location.href = '{{ route("pending.transaction.index") }}';
-                }
-
-                if (formAction === '{{ route("sales.store") }}') {
-                    // Call printReceipt function only for checkout
-                    window.location.href = '{{ route("sales.index") }}';
-                }
-            },
-            error: function(error) {
-                console.log('Error submitting form:', error);
-            }
-        });
+            selectedItems.push(item);
+        }
     });
+
+    // Set hidden input values
+    $('#customer_id').val(selectedCustomerId);
+    $('#subtotal_hidden').val($('#subtotal').data('subtotal'));
+    $('#items_hidden').val(JSON.stringify(selectedItems));
+    $('#coupons_hidden').val(couponId);
+
+    // Determine form action based on clicked button
+    var formAction = $('#transactionForm').data('form-action');
+
+    // Create a FormData object
+    var formData = new FormData(this);
+    formData.append('items_id', JSON.stringify(selectedItems));
+    formData.append('customer_id', selectedCustomerId);
+    formData.append('coupon_id', couponId);
+
+    // Submit form via AJAX
+    $.ajax({
+        url: formAction,
+        method: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            console.log('Form submitted successfully:', response);
+
+            if (formAction === '{{ route("pending.transaction.store") }}') {
+                window.location.href = '{{ route("pending.transaction.index") }}';
+            }
+
+            if (formAction === '{{ route("sales.store") }}') {
+                // Call printReceipt function only for checkout
+                window.location.href = '{{ route("sales.index") }}';
+            }
+        },
+        error: function(error) {
+            console.log('Error submitting form:', error);
+        }
+    });
+});
 
     // Set form action based on button click
         $('button[type="submit"]').click(function() {
@@ -558,7 +732,7 @@ function printReceipt() {
         <body>
             <div id="receipt" class="receipt">
                 <div class="receipt-header">
-                    <img src="{{ asset('assets/img/content/logo-receipt.png') }}" alt="logo">
+                    <img src="{{ url('assets/img/content/logo-receipt.png') }}" alt="logo">
                     <h2>Dirty 2 Clean Tanjung Barat</h2>
                     <p>Jl. Tanjung Barat No, 2B, Lenteng Agung, Jagakarsa, RT.5/RW.1, Jakarta Selatan</p>
                     <p>{{ \Carbon\Carbon::now()->format('d/m/Y H:i') }}</p>

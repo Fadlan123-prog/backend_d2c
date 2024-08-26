@@ -51,6 +51,9 @@ Route::prefix('admin')->group(function () {
         Route::get('coupons/add-coupons', [CouponController::class, 'create'])->name('coupons.create');
         Route::post('coupons/add-coupons', [CouponController::class, 'store'])->name('coupons.store');
         Route::get('/coupons/get-items-by-category/{categoryId}', [CouponController::class, 'getItemsByCategory']);
+        Route::get('/coupons/{coupons}/edit', [CouponController::class, 'edit'])->name('coupons.edit');
+        Route::post('/coupons/{coupons}/update', [CouponController::class, 'update'])->name('coupons.update');
+        Route::delete('/coupons/{coupons}', [CouponController::class, 'destroy'])->name('coupons.destroy');
 
     });
 
@@ -65,12 +68,15 @@ Route::prefix('admin')->group(function () {
         Route::post('cashier/pending-transaction', [PendingTransactionController::class, 'store'])->name('pending.transaction.store');
         Route::get('/cashier/pending-transaction/{id}', [PendingTransactionController::class, 'getPendingTransaction']);
         Route::get('/cashier/show-pending-transaction/{id}', [PendingTransactionController::class, 'show'])->name('pending.transaction.show');
+        Route::get('/cashier/show-pending-transaction/coupon/{coupon}', [PendingTransactionController::class, 'getCoupon']);
+        Route::get('/cashier/show-pending-transaction/item/{item}', [PendingTransactionController::class, 'getItem']);
         Route::delete('/cashier/pending-transaction/{id}', [PendingTransactionController::class, 'destroy'])->name('pending.transaction.destroy');
         Route::get('cashier/expends', [ExpendsController::class, 'index'])->name('expends.index');
         Route::get('cashier/expends/add-expends', [ExpendsController::class, 'create'])->name('expends.create');
         Route::post('cashier/expends/add-expends', [ExpendsController::class, 'store'])->name('expends.store');
         Route::get('/cashier/expends/{expends}/edit', [ExpendsController::class, 'edit'])->name('expends.edit');
         Route::get('/cashier/closed/print/{date}', [CashierController::class, 'printReceipt'])->name('cashier.printReceipt');
+        Route::get('/cashier/coupons/{coupons}',[CouponController::class, 'getCoupons'])->name('coupons.get');
 
         Route::get('/receipt/{id}', [ReceiptController::class, 'showReceipt'])->name('receipt.show');
         Route::post('/sales/void', [SalesController::class, 'void'])->name('sales.void');

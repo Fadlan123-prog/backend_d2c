@@ -11,6 +11,7 @@ use App\Models\Customer;
 use App\Models\Sales;
 use App\Models\SalesItem;
 use App\Models\Expends;
+use App\Models\Coupon;
 use DB, Log, Auth;
 
 class CashierController extends Controller
@@ -21,9 +22,10 @@ class CashierController extends Controller
     {
         $categories = Categories::all();
         $customers = Customer::all();
+        $coupons = Coupon::all();
 
         $dateTime = Carbon::now()->setTimezone('Asia/Jakarta');
-        return view('cashier.view', compact('dateTime', 'categories', 'customers'));
+        return view('cashier.view', compact('dateTime', 'categories', 'customers', 'coupons'));
     }
 
     public function addCustomer(Request $request){

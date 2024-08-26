@@ -11,7 +11,7 @@ class PendingItem extends Model
 
     protected $table = 'pending_items';
 
-    protected $fillable = ['pending_transaction_id', 'item_id', 'size_id', 'harga_items'];
+    protected $fillable = ['pending_transaction_id', 'item_id', 'size_id', 'harga_items', 'coupon_id', 'quantity'];
 
 
     public function customers(){
@@ -31,5 +31,10 @@ class PendingItem extends Model
     public function size()
     {
         return $this->belongsTo(Size::class);
+    }
+
+    public function coupon()
+    {
+        return $this->belongsTo(Coupon::class);
     }
 }
