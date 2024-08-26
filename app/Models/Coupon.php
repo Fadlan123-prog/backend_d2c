@@ -36,14 +36,25 @@ class Coupon extends Model
         'expired_date',
     ];
 
+    public function calculateDiscount($itemPrice)
+    {
+        // Calculate the discount based on the discount type (amount or percentage)
+        if ($this->discount_percentage) {
+            return $itemPrice * ($this->discount_percentage / 100);
+        } elseif ($this->discount_amount) {
+            return min($this->discount_amount, $itemPrice);
+        }
+        return 0;
+    }
+
     public function category()
     {
         return $this->belongsTo(Categories::class);
     }
 
-    public function item()
+    public function items()
     {
-        return $this->belongsTo(Item::class);
+        return $this->belongsToMany(Item::class, 'coupons_items')->withPivot('size_id', 'final_price');
     }
 
     public function couponItems()

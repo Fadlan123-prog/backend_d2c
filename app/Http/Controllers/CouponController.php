@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Categories;
 use App\Models\CouponItems;
 use App\Models\Item;
+use App\Models\Size;
 use Illuminate\Support\Facades\Log;
 
 class CouponController extends Controller
@@ -17,7 +18,7 @@ class CouponController extends Controller
      */
     public function index()
     {
-        $coupons = Coupon::all();
+        $coupons = Coupon::with('items', 'category')->get();
         return view('page.coupon.index', compact('coupons'));
     }
 
@@ -40,6 +41,7 @@ class CouponController extends Controller
             'items' => 'required',
             'items.*' => 'exists:items,id',
             'size_id' => 'nullable|exists:sizes,id',
+            'original_price' => 'numeric', // Added 'original_price'
             'final_price' => 'numeric',
         ]);
 
@@ -64,6 +66,7 @@ class CouponController extends Controller
                     'coupon_id' => $coupon->id,
                     'item_id' => $item_id,
                     'size_id' => $validated['size_id'] ?? null,
+                    'original_price' => $validated['original_price'], // Added 'original_price'
                     'final_price' => $validated['final_price'], // Fixing final_price assignment
                 ]);
             }
@@ -77,6 +80,20 @@ class CouponController extends Controller
         }
     }
 
+    public function getCoupon($coupon)
+{
+    // Find the coupon by its ID
+    $coupon = Coupon::findOrFail($coupon);
+
+    // Return response in JSON format
+    return response()->json([
+        'id' => $coupon->id,
+        'name' => $coupon->name,
+        'discount_amount' => $coupon->discount_amount,
+        'discount_percentage' => $coupon->discount_percentage,
+    ]);
+}
+
     public function getItemsByCategory($categoryId)
     {
         // Fetch items based on the categoryId
@@ -89,30 +106,60 @@ class CouponController extends Controller
         return response()->json(['items' => $items]);
     }
 
-    public function edit(Coupon $coupon)
+    public function edit($id)
     {
-        return view('coupons.edit', compact('coupon'));
+        $coupon = Coupon::with('items')->findOrFail($id);
+        $categories = Categories::all();
+        $items = Item::all();
+        $sizes = Size::all();
+
+        return view('page.coupon.edit', compact('coupon', 'categories', 'items', 'sizes'));
     }
 
-    public function update(Request $request, Coupon $coupon)
+    public function update(Request $request, $id)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'category_id' => 'nullable|exists:categories,id',
-            'item_id' => 'nullable|exists:items,id',
+            'category_id' => 'required|exists:categories,id',
+            'discount_amount' => 'nullable|numeric',
+            'discount_percentage' => 'nullable|numeric',
             'expired_date' => 'required|date',
-            'discount_value' => 'required|numeric',
-            'discount_type' => 'required|in:percentage,fixed',
+            'items' => 'required|array',
+            'items.*' => 'exists:items,id',
+            'size_id' => 'nullable|exists:sizes,id',
+            'final_price' => 'numeric|nullable',
         ]);
 
-        $coupon->update($request->all());
+        if ($validated['discount_amount'] && $validated['discount_percentage']) {
+            return redirect()->back()->withErrors('Only one of discount amount or percentage should be filled.');
+        }
+
+        $coupon = Coupon::findOrFail($id);
+        $coupon->update([
+            'name' => $validated['name'],
+            'description' => $validated['description'],
+            'category_id' => $validated['category_id'],
+            'discount_amount' => $validated['discount_amount'],
+            'discount_percentage' => $validated['discount_percentage'],
+            'expired_date' => $validated['expired_date'],
+        ]);
+
+        $coupon->items()->sync([]);
+        foreach ($validated['items'] as $item_id) {
+            $coupon->items()->attach($item_id, [
+                'size_id' => $validated['size_id'] ?? null,
+                'final_price' => $validated['final_price'] ?? null,
+            ]);
+        }
 
         return redirect()->route('coupons.index')->with('success', 'Coupon updated successfully.');
     }
 
-    public function destroy(Coupon $coupon)
+    public function destroy($id)
     {
+        $coupon = Coupon::findOrFail($id);
+        $coupon->items()->detach();
         $coupon->delete();
 
         return redirect()->route('coupons.index')->with('success', 'Coupon deleted successfully.');

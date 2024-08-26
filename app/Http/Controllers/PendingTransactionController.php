@@ -6,6 +6,8 @@ use App\Models\Customer;
 use Carbon\Carbon;
 use App\Models\PendingTransaction;
 use App\Models\PendingItem;
+use App\Models\Coupon;
+use App\Models\Item;
 use Log;
 
 use Illuminate\Http\Request;
@@ -31,6 +33,8 @@ class PendingTransactionController extends Controller
     {
             // Decode the JSON data
             $items = json_decode($request->items_id, true);
+            $coupons = $request->coupon_id;
+
 
             if (json_last_error() !== JSON_ERROR_NONE) {
                 Log::error('JSON decoding error: ' . json_last_error_msg());
@@ -65,12 +69,23 @@ class PendingTransactionController extends Controller
                         'item_id' => $item['item_id'],
                         'size_id' => $item['size_id'] ?? null, // Use null if size_id is not provided
                         'harga_items' => $item['prices'],
+                        'coupon_id' => $coupons, // Use null if coupon_id is not provided
+                        'quantity' => $item['quantity'] ?? 1, // Use null if quantity is not provided
                     ]);
                 }
             }
             // Create pending_transaction_item entries
 
             return response()->json(['success' => true, 'pending_transaction_id' => $pendingTransaction->id]);
+    }
+
+    public function getItem($categoryId)
+    {
+        // Fetch items based on category ID
+        $items = Item::where('category_id', $categoryId)->with('sizes')->get();
+
+        // Return items as JSON response
+        return response()->json($items);
     }
 
     public function getPendingTransaction($id)
@@ -88,15 +103,38 @@ class PendingTransactionController extends Controller
         }
     }
 
-    public function show($id){
-        $customers = Customer::all();
-        $pendingTransaction = PendingTransaction::with('customer', 'pendingItems.item', 'pendingItems.size')->findOrFail($id);
-        $categories = Categories::all();
-        $dateTime = Carbon::now()->setTimezone('Asia/Jakarta');
+    public function getCoupon($id){
+        $coupon = Coupon::with('items')->findOrFail($id);
 
-        return view('cashier.show', compact('pendingTransaction', 'customers', 'categories', 'dateTime'));
+        return response()->json($coupon);
     }
 
+    public function show($id)
+{
+    $customers = Customer::all();
+    $pendingTransaction = PendingTransaction::with('customer', 'pendingItems.item', 'pendingItems.size', 'pendingItems.coupon')->findOrFail($id);
+    $categories = Categories::all();
+    $coupons = Coupon::all();
+    $dateTime = Carbon::now()->setTimezone('Asia/Jakarta');
+
+    // Calculate discounts based on the pending items and associated coupons
+    $discountDetails = [];
+    $totalDiscount = 0;
+
+    foreach ($pendingTransaction->pendingItems as $pending) {
+        if ($pending->coupon) {
+
+            $discountAmount = $pending->coupon->discount_amount;
+            $totalDiscount += $discountAmount;
+            $discountDetails[] = [
+                'coupon_name' => $pending->coupon->name,
+                'discount' => $discountAmount,
+            ];
+        }
+    }
+
+    return view('cashier.show', compact('pendingTransaction', 'customers', 'categories', 'dateTime', 'coupons', 'discountDetails', 'totalDiscount'));
+}
     public function destroy($id)
 {
     $pendingTransaction = PendingTransaction::findOrFail($id);

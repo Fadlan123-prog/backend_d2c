@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('item_id');
             $table->unsignedBigInteger('size_id')->nullable();
+            $table->decimal('original_price');
             $table->decimal('final_price');
             $table->timestamps();
 

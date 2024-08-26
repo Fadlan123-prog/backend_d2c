@@ -32,7 +32,9 @@ class SalesController extends Controller
     public function store(Request $request)
     {
         $items = json_decode($request->items_id, true);
+        $couponId = $request->coupon_id;
 
+        Log::info('Coupon ID:', [$request->coupon_id]);
         // Create the Sale record
         $sale = Sales::create([
             'customer_id' => $request->customer_id,
@@ -61,7 +63,9 @@ class SalesController extends Controller
                     'sales_id' => $sale->id,
                     'item_id' => $item['item_id'],
                     'size_id' => $item['size_id'] ?? null, // Use null if size_id is not provided
+                    'coupon_id' => $couponId, // Use null if coupons_id is not provided
                     'harga_items' => $item['prices'],
+                    'quantity' => $item['quantity'] ?? 1, // Use 1 if quantity is not provided
                 ]);
             }
         }

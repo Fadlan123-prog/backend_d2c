@@ -84,7 +84,7 @@
             <div class="col-md-12">
                 @foreach ($sales->salesItems as $salesItem)
                     <div class="d-flex justify-content-between mb-0" style="display: flex; justify-content:space-between;">
-                        <span class="items-name mb-0">{{ $salesItem->item->items_name }} {{ $salesItem->size->size ?? '' }}</span>
+                        <span class="items-name mb-0">{{ $salesItem->item->items_name }} {{ $salesItem->size->size ?? '' }} {{ $salesItem->quantity }}</span>
                         <span class="items-price mb-0 text-right">{{ formatRupiah($salesItem->harga_items) }}</span>
                     </div>
                 @endforeach
@@ -94,12 +94,35 @@
 
     <hr class="dashed-hr">
 
+    @php
+        $appliedCoupons = [];
+    @endphp
+
+    @foreach ($sales->salesItems as $salesItem)
+        @if($salesItem->coupon && !in_array($salesItem->coupon->id, $appliedCoupons))
+            @php
+                $appliedCoupons[] = $salesItem->coupon->id;
+            @endphp
+            <div class="receipt-total">
+                <span>Diskon</span>
+                <div class="d-flex justify-content-between" style="display: flex; justify-content:space-between;">
+                    <span>({{ $salesItem->coupon->name }})</span><br>
+                    <span>{{ formatRupiah($salesItem->coupon->discount_amount) }}</span>
+                </div>
+            </div>
+        @endif
+    @endforeach
+
+    <hr class="dashed-hr">
+
     <div class="receipt-total">
         <div class="d-flex justify-content-between" style="display: flex; justify-content:space-between;">
             <span>Total :</span>
             <span>{{ formatRupiah($sales->total_price) }}</span>
         </div>
     </div>
+
+
 
     <hr class="dashed-hr">
 

@@ -12,7 +12,7 @@ class ReceiptController extends Controller
     public function showReceipt($id)
     {
         // Fetch the sales record along with related salesItems and customer
-        $sales = Sales::with(['salesItems.item', 'salesItems.size', 'customer'])->findOrFail($id);
+        $sales = Sales::with(['salesItems.item', 'salesItems.size', 'customer','salesItems.coupon'])->findOrFail($id);
 
         // Get the current date and time in the Asia/Jakarta timezone
         $dateTime = Carbon::now()->setTimezone('Asia/Jakarta');
