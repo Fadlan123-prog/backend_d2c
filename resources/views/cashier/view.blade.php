@@ -632,6 +632,7 @@
         },
         error: function(error) {
             console.log('Error submitting form:', error);
+            alert('An error occurred while submitting the form. Please try again.');
         }
     });
 });
