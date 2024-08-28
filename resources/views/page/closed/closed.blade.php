@@ -46,7 +46,7 @@
                                     @foreach($salesByCategory as $sale)
                                     <tr>
                                         <td>{{ $sale->category_name }}</td>
-                                        <td>{{ $sale->items_sold }}</td>
+                                        <td>{{ $sale->total_quantity }}</td>
                                         <td>{{ formatRupiah($sale->total_amount) }}</td>
                                     </tr>
                                     @endforeach
@@ -72,7 +72,7 @@
                                     @foreach($salesByItem as $sale)
                                     <tr>
                                         <td>{{ $sale->items_name }} - {{ $sale->size_name ? $sale->size_name : '' }}</td>
-                                        <td>{{ $sale->items_sold }}</td>
+                                        <td>{{ $sale->total_quantity }}</td>
                                         <td>{{ formatRupiah($sale->total_amount) }}</td>
                                     </tr>
                                     @endforeach

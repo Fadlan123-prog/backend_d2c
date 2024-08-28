@@ -83,31 +83,41 @@ class CashierController extends Controller
         // Debugging information
 
         // Filter the sales by the selected date and include only those with a null status
-        $salesByCategory = SalesItem::select('items.category_id', DB::raw('COUNT(sales_item.item_id) as items_sold'), DB::raw('SUM(sales_item.harga_items) as total_amount'))
-            ->join('items', 'sales_item.item_id', '=', 'items.id')
-            ->join('sales', 'sales_item.sales_id', '=', 'sales.id')
-            ->whereDate('sales.date', $parsedDate)
-            ->whereNull('sales.status') // Include only sales with null status
-            ->groupBy('items.category_id')
-            ->get()
-            ->map(function ($sale) {
-                $category = Categories::find($sale->category_id);
-                $sale->category_name = $category ? $category->categories_name : 'Unknown Category';
-                return $sale;
-            });
+        $salesByCategory = SalesItem::select(
+            'items.category_id',
+            DB::raw('SUM(sales_item.quantity) as total_quantity'),
+            DB::raw('SUM(sales_item.quantity * sales_item.harga_items) as total_amount')
+        )
+        ->join('items', 'sales_item.item_id', '=', 'items.id')
+        ->join('sales', 'sales_item.sales_id', '=', 'sales.id')
+        ->whereDate('sales.date', $parsedDate)
+        ->whereNull('sales.status') // Include only sales with null status
+        ->groupBy('items.category_id')
+        ->get()
+        ->map(function ($sale) {
+            $category = Categories::find($sale->category_id);
+            $sale->category_name = $category ? $category->categories_name : 'Unknown Category';
+            return $sale;
+        });
 
-        // Log the sales by category
-        Log::info('Sales by Category: ' . $salesByCategory->toJson());
+    // Log the sales by category
+    Log::info('Sales by Category: ' . $salesByCategory->toJson());
 
         // Filter the sales by the selected date and include only those with a null status
-        $salesByItem = SalesItem::select('items.id', 'items.items_name', DB::raw('COUNT(sales_item.item_id) as items_sold'), DB::raw('IFNULL(sizes.size, "") as size_name'), DB::raw('SUM(sales_item.harga_items) as total_amount'))
-            ->join('items', 'sales_item.item_id', '=', 'items.id')
-            ->leftJoin('sizes', 'sales_item.size_id', '=', 'sizes.id')
-            ->join('sales', 'sales_item.sales_id', '=', 'sales.id')
-            ->whereDate('sales.date', $parsedDate)
-            ->whereNull('sales.status') // Include only sales with null status
-            ->groupBy('items.id', 'items.items_name', 'sizes.size')
-            ->get();
+        $salesByItem = SalesItem::select(
+            'items.id',
+            'items.items_name',
+            DB::raw('SUM(sales_item.quantity) as total_quantity'),
+            DB::raw('IFNULL(sizes.size, "") as size_name'),
+            DB::raw('SUM(sales_item.quantity * sales_item.harga_items) as total_amount')
+        )
+        ->join('items', 'sales_item.item_id', '=', 'items.id')
+        ->leftJoin('sizes', 'sales_item.size_id', '=', 'sizes.id')
+        ->join('sales', 'sales_item.sales_id', '=', 'sales.id')
+        ->whereDate('sales.date', $parsedDate)
+        ->whereNull('sales.status') // Include only sales with null status
+        ->groupBy('items.id', 'items.items_name', 'sizes.size')
+        ->get();
 
         // Log the sales by item
 
