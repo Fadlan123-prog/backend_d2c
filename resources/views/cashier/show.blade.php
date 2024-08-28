@@ -376,6 +376,7 @@
         });
 
         $('#subtotal').text(formatRupiah(subtotal));
+        $('#subtotal').attr('data-subtotal', subtotal);
     }
 
     // Event listeners for quantity buttons
