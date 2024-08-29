@@ -117,7 +117,7 @@
 
                                                         <div class="d-flex justify-content-between">
                                                             <p class="mb-2">Subtotal</p>
-                                                            <p class="mb-2" id="subtotal" data-subtotal="0">{{ formatRupiah($pendingTransaction->total_price) }}</p>
+                                                            <p class="mb-2" id="subtotal" data-subtotal="{{ $pendingTransaction->total_price }}">{{ formatRupiah($pendingTransaction->total_price) }}</p>
                                                         </div>
 
                                                         <div class="d-flex justify-content-between">
@@ -300,7 +300,7 @@
                             appendItemCard(item);
                         }
                     });
-                } else {
+            } else {
                     $('#items-container').append('<p>No items found for this category.</p>');
                 }
             },
