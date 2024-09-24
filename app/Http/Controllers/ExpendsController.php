@@ -66,9 +66,11 @@ class ExpendsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(expends $expends)
+    public function edit($id)
     {
-        //
+        $expends = Expends::findOrFail($id);
+
+        return view('page.expends.edit', compact('expends'));
     }
 
     /**
