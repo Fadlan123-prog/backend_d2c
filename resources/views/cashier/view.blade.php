@@ -153,7 +153,7 @@
 
                                                     <div class="row d-flex justify-content-between">
                                                         <div class="col-lg-6 col-6">
-                                                            <button type="submit" class="btn btn-info btn-block btn-md" data-form-action="{{ route('sales.store') }}" onclick="printReceipt()">
+                                                            <button type="submit" class="btn btn-info btn-block btn-md" data-form-action="{{ route('sales.store') }}">
                                                                 <div class="d-flex justify-content-between">
                                                                     <span>Checkout</span>
                                                                 </div>
@@ -332,7 +332,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="printReceiptButton">Print</button>
+                    <button type="button" class="btn btn-primary" onclick="printReceipt()">Print</button>
                 </div>
             </div>
         </div>
