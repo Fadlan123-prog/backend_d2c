@@ -73,6 +73,30 @@ class SalesController extends Controller
 
         return response()->json(['success' => true, 'sale_id' => $sale->id]);
     }
+    public function getReceipt($saleId)
+    {
+        $sale = Sales::with('salesItems.item', 'salesItems.size', 'customer')->findOrFail($saleId);
+
+        $salesItems = $sale->salesItems->map(function ($salesItem) {
+            return [
+                'name' => $salesItem->item->items_name,
+                'size' => $salesItem->size->size ?? '',
+                'quantity' => $salesItem->quantity,
+                'price' => $salesItem->harga_items,
+            ];
+        });
+
+        return response()->json([
+            'date' => $sale->date,
+            'time' => $sale->time,
+            'customer_plate' => $sale->customer->plate_number,
+            'cashier' => $sale->cashier_name,
+            'items' => $salesItems,
+            'subtotal' => $sale->subtotal,
+            'discount' => $sale->discount,
+            'total' => $sale->total_price,
+        ]);
+    }
 
     public function void(Request $request)
     {

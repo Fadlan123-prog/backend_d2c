@@ -19,8 +19,8 @@
             </a>
             <ul class="navbar-nav drop-item" aria-labelledby="dropdownMenuLink3">
                 <li><a class="dropdown-item nav-link padding-nav-side {{ Route::is('dashboard.index') ? 'active' : '' }}" href="{{ route('dashboard.index') }}">Sales Summary</a></li>
-                <li><a class="dropdown-item nav-link padding-nav-side {{ Route::is('sales.index') ? 'active' : '' }}" href="{{ route('sales.index') }}">Sales data</a></li>
-                <li><a class="dropdown-item nav-link padding-nav-side" href="#">Receipts</a></li>
+                <li><a class="dropdown-item nav-link padding-nav-side {{ Route::is('sales.summary') ? 'active' : '' }}" href="{{ route('sales.summary') }}">Sales data</a></li>
+                <li><a class="dropdown-item nav-link padding-nav-side {{ Route::is('sales.receipts.index' ? 'active' : '')}}" href="{{ route('sales.receipts.index')}}">Receipts</a></li>
 
             </ul>
         </li>

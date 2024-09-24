@@ -46,6 +46,30 @@
   <script src="{{asset('assets/js/plugins/smooth-scrollbar.min.js')}}"></script>
 
   <script>
+    let inactivityTime = function () {
+        let time;
+        let logoutTime = 10 * 60 * 1000; // 10 minutes in milliseconds
+
+        // Reset the timer on user activity
+        window.onload = resetTimer;
+        document.onmousemove = resetTimer;
+        document.onkeypress = resetTimer;
+
+        function logout() {
+            // Redirect to login page
+            window.location.href = "{{ route('index.logout') }}";
+        }
+
+        function resetTimer() {
+            clearTimeout(time);
+            time = setTimeout(logout, logoutTime);  // Set timeout to logout after inactivity
+        }
+    };
+
+    // Initialize the inactivity timer
+    inactivityTime();
+  </script>
+  <script>
     var win = navigator.platform.indexOf('Win') > -1;
     if (win && document.querySelector('#sidenav-scrollbar')) {
       var options = {

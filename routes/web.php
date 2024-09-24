@@ -14,9 +14,11 @@ use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\ExpendsController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\CouponController;
-use Carbon\Carbon;
-use App\Models\Categories;
-use App\Models\Customer;
+use App\Http\Controllers\SalesReceiptController;
+use App\Http\Livewire\SalesReceipt;
+use App\Http\Controllers\SalesSummaryController;
+use App\Exports\TransactionsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -31,7 +33,17 @@ Route::prefix('admin')->group(function () {
     Route::post('login', [LoginController::class, 'post'])->name('login.post');
 
     Route::group(['middleware' => ['role:superadmin']], function(){
-        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+        Route::post('/dashboard/fetch-data', [DashboardController::class, 'fetchData'])->name('dashboard.fetchData');
+        Route::post('/dashboard/export-excel', [DashboardController::class, 'exportExcel'])->name('dashboard.exportExcel');
+
+        Route::get('/sales-summary', [DashboardController::class, 'salesSummary'])->name('sales.summary');
+        Route::get('/sales-summary/filter', [DashboardController::class, 'getSalesByDate'])->name('sales.summary.getCategories');
+        Route::get('/sales-summary/export', [DashboardController::class, 'exportSalesToExcel'])->name('sales.summary.export');
+
+        Route::get('/receipts', [SalesReceiptController::class, 'index'])->name('sales.receipts.index');
+        Route::get('/receipts/search', [SalesReceiptController::class, 'search'])->name('sales.receipts.search');
+        Route::get('/receipts/{id}', [SalesReceiptController::class, 'show'])->name('sales.receipts.show');
 
         Route::get('items', [ItemsController::class, 'index'])->name('items.list.index');
         Route::get('items/add-items', [ItemsController::class, 'create'])->name('items.list.create');
@@ -62,8 +74,14 @@ Route::prefix('admin')->group(function () {
         Route::post('cashier/add-customer', [CashierController::class, 'addCustomer'])->name('cashier.addcustomer');
         Route::get('cashier/get-customer/{id}', [CashierController::class, 'getCustomer'])->name('cashier.getcustomer');
         Route::get('cashier/items/{category}', [CashierController::class, 'getItemsByCategory']);
+        Route::get('/cashier/closed/print/{date}', [CashierController::class, 'printReceipt'])->name('cashier.printReceipt');
+        Route::get('cashier/close', [CashierController::class, 'close'])->name('cashier.close');
+
         Route::get('cashier/sales', [SalesController::class, 'index'])->name('sales.index');
         Route::post('cashier/sales', [SalesController::class, 'store'])->name('sales.store');
+        Route::get('/cashier/sales/{saleId}/receipt', [SalesController::class, 'getReceipt'])->name('sales.receipt');
+        Route::post('/sales/void', [SalesController::class, 'void'])->name('sales.void');
+
         Route::get('cashier/pending-transaction', [PendingTransactionController::class, 'index'])->name('pending.transaction.index');
         Route::post('cashier/pending-transaction', [PendingTransactionController::class, 'store'])->name('pending.transaction.store');
         Route::get('/cashier/pending-transaction/{id}', [PendingTransactionController::class, 'getPendingTransaction']);
@@ -71,17 +89,16 @@ Route::prefix('admin')->group(function () {
         Route::get('/cashier/show-pending-transaction/coupon/{coupon}', [PendingTransactionController::class, 'getCoupon']);
         Route::get('/cashier/show-pending-transaction/item/{item}', [PendingTransactionController::class, 'getItem']);
         Route::delete('/cashier/pending-transaction/{id}', [PendingTransactionController::class, 'destroy'])->name('pending.transaction.destroy');
+
         Route::get('cashier/expends', [ExpendsController::class, 'index'])->name('expends.index');
         Route::get('cashier/expends/add-expends', [ExpendsController::class, 'create'])->name('expends.create');
         Route::post('cashier/expends/add-expends', [ExpendsController::class, 'store'])->name('expends.store');
         Route::get('/cashier/expends/{expends}/edit', [ExpendsController::class, 'edit'])->name('expends.edit');
-        Route::get('/cashier/closed/print/{date}', [CashierController::class, 'printReceipt'])->name('cashier.printReceipt');
+
         Route::get('/cashier/coupons/{coupons}',[CouponController::class, 'getCoupons'])->name('coupons.get');
 
         Route::get('/receipt/{id}', [ReceiptController::class, 'showReceipt'])->name('receipt.show');
-        Route::post('/sales/void', [SalesController::class, 'void'])->name('sales.void');
         // Route::delete('cashier/pending-transaction/{id}', [PendingTransactionController::class, 'destroy'])->name('pending.transaction.delete');
-        Route::get('cashier/close', [CashierController::class, 'close'])->name('cashier.close');
 
     });
 

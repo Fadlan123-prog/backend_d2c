@@ -8,7 +8,7 @@
     <style>
         .dashed-hr {
             border: none;
-            border-top: 1px dashed #000;
+            border-top: 1px dashed #000 !important;
             margin: 20px 0;
         }
         .receipt {

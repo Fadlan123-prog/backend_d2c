@@ -211,6 +211,132 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="receiptModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="receiptModalLabel">Receipt</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Alfamart Style Receipt -->
+                    <style>
+                        .dashed-hr {
+                            border: none;
+                            border-top: 1px dashed #000 !important;
+                            margin: 10px 0;
+                        }
+                        .receipt {
+                            max-width: 58mm;
+                            margin: auto;
+                            padding: 15px 10px;
+                            border: 1px solid #eee;
+                            border-radius: 5px;
+                            font-size: 10px;
+                            line-height: 1.4;
+                        }
+                        .receipt-header {
+                            text-align: center;
+                            margin-bottom: 10px;
+                        }
+                        .receipt-header img {
+                            max-width: 100px;
+                            margin-bottom: 5px;
+                        }
+                        .receipt-header h2 {
+                            font-size: 16px;
+                            margin: 0;
+                        }
+                        .receipt-header p {
+                            font-size: 10px;
+                            margin: 2px 0;
+                        }
+                        .receipt-details p {
+                            font-size: 10px;
+                            margin: 2px 0;
+                        }
+                        .receipt-items {
+                            width: 100%;
+                        }
+                        .receipt-items span {
+                            font-size: 10px;
+                            display: block;
+                        }
+                        .receipt-items .d-flex {
+                            display: flex;
+                            justify-content: space-between;
+                        }
+                        .receipt-total {
+                            margin-top: 10px;
+                        }
+                        .receipt-total .d-flex {
+                            display: flex;
+                            justify-content: space-between;
+                        }
+                        .receipt-footer {
+                            text-align: center;
+                            font-size: 10px;
+                            margin-top: 10px;
+                        }
+                    </style>
+
+                    <div id="receipt-view" class="receipt">
+                        <!-- Header with logo and store information -->
+                        <div class="receipt-header">
+                            <img id="print-logo" src="{{ asset('assets/img/content/logo-receipt.png') }}" alt="logo">
+                            <p>Jl. Tanjung Barat No, 2B</p>
+                            <p>Lenteng Agung, Jakarta Selatan</p>
+                            <p>08521713106</p>
+                        </div>
+
+                        <hr class="dasher-hr">
+
+                        <!-- Transaction details -->
+                        <div class="receipt-details">
+                            <p>Tanggal: <span id="receiptDate"></span></p>
+                            <p>Jam: <span id="receiptTime"></span></p>
+                            <p>Kasir: <span id="receiptCashier"></span></p>
+                        </div>
+
+                        <!-- Items -->
+                        <hr class="dashed-hr">
+                        <div id="receiptItems" class="receipt-items">
+                            <!-- Items will be dynamically inserted here -->
+                        </div>
+                        <hr class="dashed-hr">
+
+                        <!-- Total details -->
+                        <div class="receipt-total">
+                            <div class="d-flex justify-content-between">
+                                <span>Subtotal:</span>
+                                <span id="receiptSubtotal">Rp 0</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Diskon:</span>
+                                <span id="receiptDiscount">Rp 0</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Total:</span>
+                                <span id="receiptTotal">Rp 0</span>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <hr class="dashed-hr">
+                        <div class="receipt-footer">
+                            <p>Powered by Dirty 2 Clean</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="printReceiptButton">Print</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 <!-- Include jQuery -->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
@@ -559,83 +685,85 @@
 
 
     // Handle form submission for transaction form
-    $('#transactionForm').on('submit', function(event) {
-    event.preventDefault(); // Prevent normal form submission
+    $('#transactionForm').on('submit', function (event) {
+        event.preventDefault(); // Prevent normal form submission
 
-    // Collect selected items
-    var selectedItems = [];
-    var selectedCustomerId = $('#selected-items').find('p.plate').data('customer-id');
-    var couponId = $('#coupon-select').val();
-    console.log('selected coupon:', couponId);
+        // Collect selected items
+        var selectedItems = [];
+        var selectedCustomerId = $('#selected-items').find('p.plate').data('customer-id');
+        var couponId = $('#coupon-select').val();
+        console.log('Selected coupon:', couponId);
 
-    $('#selected-items .d-flex').each(function() {
-        var itemId = $(this).find('p.items-name').data('item-id');
-        var itemPrice = $(this).find('p.items-price').data('item-price');
-        var sizeId = $(this).find('p.items-name').data('size-id');
+        // Iterate through selected items
+        $('#selected-items .d-flex').each(function () {
+            var itemId = $(this).find('p.items-name').data('item-id');
+            var itemPrice = $(this).find('p.items-price').data('item-price');
+            var sizeId = $(this).find('p.items-name').data('size-id');
 
-        // Debugging: Log the quantity input before parsing
-        var quantityValue = $(this).find('.quantity-input').val();
-        console.log('Quantity input value:', quantityValue);
+            // Retrieve and parse quantity
+            var quantityValue = $(this).find('.quantity-input').val();
+            var quantity = parseInt(quantityValue);
+            console.log('Parsed quantity:', quantity);
 
-        // Parse the quantity value
-        var quantity = parseInt(quantityValue);
-
-        // Debugging: Log the parsed quantity
-        console.log('Parsed quantity:', quantity);
-
-        if (itemId && itemPrice && quantity > 0) {
-            var item = {
-                item_id: itemId,
-                prices: itemPrice,
-                quantity: quantity // Add quantity to the item
-            };
-            if (sizeId) {
-                item.size_id = sizeId;
+            // Ensure item details are valid before adding to the list
+            if (itemId && itemPrice && quantity > 0) {
+                var item = {
+                    item_id: itemId,
+                    prices: itemPrice,
+                    quantity: quantity,
+                    category_id: $(this).data('category-id') // Capture category ID
+                };
+                if (sizeId) {
+                    item.size_id = sizeId;
+                }
+                selectedItems.push(item);
             }
-            selectedItems.push(item);
+        });
+
+        // Check if items were selected
+        if (selectedItems.length === 0) {
+            alert('Please select at least one item to proceed.');
+            return;
         }
-    });
 
-    // Set hidden input values
-    $('#customer_id').val(selectedCustomerId);
-    $('#subtotal_hidden').val($('#subtotal').data('subtotal'));
-    $('#items_hidden').val(JSON.stringify(selectedItems));
-    $('#coupons_hidden').val(couponId);
+        // Set hidden input values before submitting
+        $('#customer_id').val(selectedCustomerId);
+        $('#subtotal_hidden').val($('#subtotal').data('subtotal'));
+        $('#items_hidden').val(JSON.stringify(selectedItems));
+        $('#coupons_hidden').val(couponId);
 
-    // Determine form action based on clicked button
-    var formAction = $('#transactionForm').data('form-action');
+        // Determine form action based on the button clicked
+        var formAction = $('#transactionForm').data('form-action');
 
-    // Create a FormData object
-    var formData = new FormData(this);
-    formData.append('items_id', JSON.stringify(selectedItems));
-    formData.append('customer_id', selectedCustomerId);
-    formData.append('coupon_id', couponId);
+        // Create FormData object
+        var formData = new FormData(this);
+        formData.append('items_id', JSON.stringify(selectedItems));
+        formData.append('customer_id', selectedCustomerId);
+        formData.append('coupon_id', couponId);
 
-    // Submit form via AJAX
-    $.ajax({
-        url: formAction,
-        method: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(response) {
-            console.log('Form submitted successfully:', response);
+        // AJAX submission
+        $.ajax({
+            url: formAction,  // Use the correct form action route
+            method: 'POST',
+            data: formData,
+            processData: false,  // Ensure that jQuery does not process the data
+            contentType: false,  // Do not set content type header automatically
+            success: function (response) {
+                console.log('Form submitted successfully:', response);
 
-            if (formAction === '{{ route("pending.transaction.store") }}') {
-                window.location.href = '{{ route("pending.transaction.index") }}';
+                if (response.success) {
+                    // After successful submission, retrieve detailed sale data
+                    fetchReceiptData(response.sale_id);
+                } else {
+                    alert('There was a problem processing the sale.');
+                }
+            },
+            error: function (error) {
+                console.log('Error submitting form:', error);
+                alert('An error occurred while submitting the form. Please try again.');
             }
-
-            if (formAction === '{{ route("sales.store") }}') {
-                // Call printReceipt function only for checkout
-                window.location.href = '{{ route("sales.index") }}';
-            }
-        },
-        error: function(error) {
-            console.log('Error submitting form:', error);
-            alert('An error occurred while submitting the form. Please try again.');
-        }
+        });
     });
-});
 
     // Set form action based on button click
         $('button[type="submit"]').click(function() {
@@ -644,23 +772,58 @@
         });
     });
 
+    function fetchReceiptData(saleId) {
+        $.ajax({
+            url: '/admin/cashier/sales/' + saleId + '/receipt',  // URL matches the prefixed route
+            method: 'GET',
+            success: function (response) {
+                // Populate the receipt modal with the data
+                populateReceiptModal(response);
+
+                // Show the receipt modal
+                $('#receiptModal').modal('show');
+            },
+            error: function (error) {
+                console.log('Error fetching receipt data:', error);
+            }
+        });
+    }
+
+    function populateReceiptModal(data) {
+        // Set receipt details (like date, time, customer plate, cashier, etc.)
+        $('#receiptDate').text(data.date);
+        $('#receiptTime').text(data.time);
+        $('#receiptPlateNumber').text(data.customer_plate);
+        $('#receiptCashier').text(data.cashier);
+
+        // Populate receipt items
+        $('#receiptItems').empty();  // Clear previous items
+        data.items.forEach(function (item) {
+            var itemHTML = '<div class="d-flex justify-content-between mb-0">' +
+                '<span class="items-name">' + item.name + ' ' + item.size + ' x' + item.quantity + '</span>' +
+                '<span class="items-price text-right">' + formatRupiah(item.price) + '</span>' +
+                '</div>';
+            $('#receiptItems').append(itemHTML);
+        });
+
+        // Subtotal, discount, and total
+        $('#receiptSubtotal').text(formatRupiah(data.subtotal));
+        $('#receiptDiscount').text(formatRupiah(data.discount));
+        $('#receiptTotal').text(formatRupiah(data.total));
+    }
+
+
 // Function to format number as Rupiah
 function formatRupiah(amount) {
     if (!amount) return '';
+
+    // Round the amount to remove any decimals
+    amount = Math.round(amount);
+
+    // Convert to string and format as Rupiah
     return 'Rp ' + amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
-function printReceipt() {
-    var printContents = document.getElementById('receipt').innerHTML;
-    var originalContents = document.body.innerHTML;
-
-    document.body.innerHTML = '<html><head><title>Receipt</title></head><body>' + printContents + '</body></html>';
-
-    window.print();
-
-    document.body.innerHTML = originalContents;
-    location.reload();
-}
 
 $(document).ready(function() {
     $('#exampleSelect2').select2({
@@ -675,99 +838,95 @@ function convertToUpper() {
     selectElement.value = selectElement.value.toUpperCase();
 }
 
-function printReceipt() {
-            var printWindow = window.open('', '_blank', 'width=800,height=600');
-            var printContents = `
-                <html>
-        <head>
-            <style>
-                .dashed-hr {
-                border: none;
-                border-top: 1px dashed #000;
-                margin: 20px 0;
-                }
-                .receipt {
-                    max-width: 58mm;
-                    margin: auto;
-                    padding: 20px 10px;
-                    border: 1px solid #eee;
-                    border-radius: 10px;
-                    font-size: 12px;
-                }
-                .receipt-header {
-                    text-align: center;
-                    margin-bottom: 10px;
-                }
-                .receipt-header img {
-                    max-width: 100%;
-                    width: 100px;
-                }
-                .receipt-header h2 {
-                    font-size: 16px;
-                }
-                .receipt-header p {
-                    font-size: 10px;
-                }
-                .receipt-details {
-                    margin-bottom: 10px;
-                }
-                .receipt-details p {
-                    margin-bottom: 0;
-                    font-size: 10px;
-                }
-                .receipt-items span {
-                    font-size: 10px;
-                }
-                .receipt-footer {
-                    text-align: center;
-                    margin-top: 20px;
-                    font-size: 10px;
-                }
-                .receipt-total span {
-                    font-size: 10px;
-                }
-                .table th, .table td {
-                    vertical-align: middle;
-                }
-            </style>
-        </head>
-        <body>
-            <div id="receipt" class="receipt">
-                <div class="receipt-header">
-                    <img src="{{ url('assets/img/content/logo-receipt.png') }}" alt="logo">
-                    <h2>Dirty 2 Clean Tanjung Barat</h2>
-                    <p>Jl. Tanjung Barat No, 2B, Lenteng Agung, Jagakarsa, RT.5/RW.1, Jakarta Selatan</p>
-                    <p>{{ \Carbon\Carbon::now()->format('d/m/Y H:i') }}</p>
+    $('#printReceiptButton').on('click', function () {
+        printReceipt();
+    });
+
+    // Function to print the receipt
+    function printReceipt() {
+        var logoUrl = '{{ url('assets/img/content/logo-receipt.png') }}' + '?t=' + new Date().getTime();
+
+        console.log("Logo URL:", logoUrl);
+        var printContents = document.getElementById('receipt-view').innerHTML;
+        var printWindow = window.open('', '_blank', 'width=800,height=600');
+        printWindow.document.write(`
+            <html>
+            <head>
+                <title>Print Receipt</title>
+                <style>
+                    .dashed-hr {
+                        border: none;
+                        border-top: 1px dashed #000;
+                        margin: 10px 0;
+                    }
+                    .receipt {
+                        max-width: 58mm;
+                        margin: auto;
+                        padding: 15px 10px;
+                        border: 1px solid #eee;
+                        border-radius: 5px;
+                        font-size: 10px;
+                        line-height: 1.4;
+                    }
+                    .receipt-header {
+                        text-align: center;
+                        margin-bottom: 10px;
+                    }
+                    .receipt-header img {
+                        max-width: 100px;
+                        margin-bottom: 5px;
+                    }
+                    .receipt-header h2 {
+                        font-size: 16px;
+                        margin: 0;
+                    }
+                    .receipt-header p {
+                        font-size: 10px;
+                        margin: 2px 0;
+                    }
+                    .receipt-details p {
+                        font-size: 10px;
+                        margin: 2px 0;
+                    }
+                    .receipt-items {
+                        width: 100%;
+                    }
+                    .receipt-items span {
+                        font-size: 10px;
+                        display: block;
+                    }
+                    .receipt-items .d-flex {
+                        display: flex;
+                        justify-content: space-between;
+                    }
+                    .receipt-total {
+                        margin-top: 10px;
+                    }
+                    .receipt-total .d-flex {
+                        display: flex;
+                        justify-content: space-between;
+                    }
+                    .receipt-footer {
+                        text-align: center;
+                        font-size: 10px;
+                        margin-top: 10px;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="receipt">
+                    ${printContents}
                 </div>
+            </body>
+            </html>
+        `);
 
-                <hr class="dashed-hr">
-
-                <div class="receipt-body">
-                    <h3>Items:</h3>
-                    <div>` + $('#selected-items').html() + `</div>
-                    <hr>
-                    <div class="d-flex justify-content-between">
-                        <p class="mb-2">Subtotal</p>
-                        <p class="mb-2">` + $('#subtotal').html() + `</p>
-                    </div>
-                    ` + $('#change').html() + `
-                </div>
-
-                <hr class="dashed-hr">
-
-                <div class="receipt-footer">
-                    <p>Powered by Dirty 2 Clean</p>
-                </div>
-            </div>
-        </body>
-        </html>
-            `;
-            printWindow.document.write(printContents);
-            printWindow.document.close();
-            printWindow.focus();
-            printWindow.print();
-            printWindow.close();
-        }
+        printWindow.document.getElementById('print-logo').onload = function() {
+        printWindow.focus(); // Ensure the window is focused
+        printWindow.print(); // Trigger the print dialog
+        printWindow.close(); // Close the window after printing
+    }; // Close the window after printing
+    }
 
   </script>
 
