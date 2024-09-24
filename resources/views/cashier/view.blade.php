@@ -844,7 +844,7 @@ function convertToUpper() {
 
     // Function to print the receipt
     function printReceipt() {
-        var logoUrl = '{{ url('assets/img/content/logo-receipt.png') }}' + '?t=' + new Date().getTime();
+        var logoUrl = '{{ asset('assets/img/content/logo-receipt.png') }}' + '?t=' + new Date().getTime();
 
         console.log("Logo URL:", logoUrl);
         var printContents = document.getElementById('receipt-view').innerHTML;
