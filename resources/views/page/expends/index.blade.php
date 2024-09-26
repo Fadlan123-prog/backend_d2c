@@ -101,7 +101,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <form method="POST" action="{{ route('ex', $expend->id) }}">
+                                                                <form method="POST" action="{{ route('expends.delete', $expend->id) }}">
                                                                     @csrf
                                                                     @method('DELETE')
                                                                     <button type="submit" class="btn btn-white">Ok, Got it</button>
