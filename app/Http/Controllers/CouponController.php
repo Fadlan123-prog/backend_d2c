@@ -66,8 +66,8 @@ class CouponController extends Controller
                     'coupon_id' => $coupon->id,
                     'item_id' => $item_id,
                     'size_id' => $validated['size_id'] ?? null,
-                    'original_price' => $validated['original_price'], // Added 'original_price'
-                    'final_price' => $validated['final_price'], // Fixing final_price assignment
+                    'original_price' => $validated['original_price'] ?? null, // Added 'original_price'
+                    'final_price' => $validated['final_price'] ?? null, // Fixing final_price assignment
                 ]);
             }
 
@@ -80,7 +80,7 @@ class CouponController extends Controller
         }
     }
 
-    public function getCoupon($coupon)
+    public function getCoupons($coupon)
 {
     // Find the coupon by its ID
     $coupon = Coupon::findOrFail($coupon);
@@ -91,6 +91,15 @@ class CouponController extends Controller
         'name' => $coupon->name,
         'discount_amount' => $coupon->discount_amount,
         'discount_percentage' => $coupon->discount_percentage,
+        'items' => $coupon->couponItems->map(function($couponItem) {
+            return [
+                'id' => $couponItem->item_id,  // Item ID from coupon items
+                'size_id' => $couponItem->size_id,  // Include size if necessary
+                'final_price' => $couponItem->final_price,
+                'original_price' => $couponItem->item->price ?? null, // Assuming item has a price
+                'item_name' => $couponItem->item->name ?? 'Unknown Item', // Assuming item has a name
+            ];
+        }),
     ]);
 }
 

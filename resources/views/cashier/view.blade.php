@@ -578,109 +578,115 @@
     $('#coupon-select').change(function() {
     var couponId = $(this).val();
 
+    // Get the current subtotal from the data attribute or default to 0
     var currentSubtotal = parseFloat($('#subtotal').data('subtotal')) || 0;
     var totalDiscount = 0;
 
     if (couponId) {
-    $.ajax({
-        url: `cashier/coupons/${couponId}`,
-        method: 'GET',
-        success: function(coupon) {
-            console.log('Coupon:', coupon);
+        $.ajax({
+            url: `cashier/coupons/${couponId}`,
+            method: 'GET',
+            success: function(coupon) {
+                console.log('Coupon:', coupon);
 
-            var totalDiscount = 0;
-            var currentSubtotal = 0;
-
-            $('#selected-items .item-row').each(function() {
-                var selectedItemId = $(this).find('.items-name').data('item-id');
-                var originalPrice = parseFloat($(this).find('.items-price').data('item-price'));
-                var quantity = parseInt($(this).find('.quantity-input').val());
-
-                console.log('Selected Item ID:', selectedItemId);
-                console.log('Original Price:', originalPrice);
-
-                if (isNaN(originalPrice)) {
-                    console.error('Original Price is NaN! Check the data-item-price attribute.');
+                // Check if coupon items are defined and are an array
+                var couponItems = coupon.items || [];
+                if (!Array.isArray(couponItems)) {
+                    console.error('Coupon items are not an array.');
                     return;
                 }
 
-                var discountedPrice = originalPrice;
+                totalDiscount = 0; // Reset totalDiscount
+                currentSubtotal = 0; // Reset currentSubtotal
 
-                // Check if the selectedItemId is in the coupon items
-                var couponItem = coupon.items.find(function(item) {
-                    return item.id === selectedItemId;
-                });
+                // Iterate over each selected item in the cart
+                $('#selected-items .item-row').each(function() {
+                    var selectedItemId = $(this).find('.items-name').data('item-id');
+                    var originalPrice = parseFloat($(this).find('.items-price').data('item-price'));
+                    var quantity = parseInt($(this).find('.quantity-input').val());
 
-                console.log('Coupon Item:', couponItem);
+                    console.log('Selected Item ID:', selectedItemId);
+                    console.log('Original Price:', originalPrice);
 
-                if (couponItem) {
-                    if (coupon.discount_amount) {
-                        discountedPrice -= parseFloat(coupon.discount_amount);
-                        totalDiscount += parseFloat(coupon.discount_amount) * quantity;
-                        console.log('Discount Amount:', coupon.discount_amount);
-                    } else if (coupon.discount_percentage) {
-                        var discount = originalPrice * (parseFloat(coupon.discount_percentage) / 100);
-                        discountedPrice -= discount;
-                        totalDiscount += discount * quantity;
-                        console.log('Discount Percentage:', coupon.discount_percentage);
-                    }
-
-                    discountedPrice = Math.round(discountedPrice);
-                    console.log('Discounted Price:', discountedPrice);
-
-                    if (isNaN(discountedPrice)) {
-                        console.error('Discounted Price is NaN! Something went wrong with the calculation.');
+                    if (isNaN(originalPrice)) {
+                        console.error('Original Price is NaN! Check the data-item-price attribute.');
                         return;
                     }
 
-                    // Update the price displayed in the item row (single item price, not quantity-adjusted)
-                    $(this).find('.items-price').html(formatRupiah(discountedPrice));
-                    $(this).find('.items-price').data('item-price', discountedPrice);
-                    $(this).find('.items-price').attr('data-item-price', discountedPrice);
-                } else {
-                    // If no match, show the original price
-                    $(this).find('.items-price').html(formatRupiah(originalPrice));
-                    $(this).find('.items-price').data('item-price', originalPrice);
-                    $(this).find('.items-price').attr('data-item-price', originalPrice);
-                }
+                    var discountedPrice = originalPrice; // Default to original price
 
-                // Update the subtotal, taking quantity into account
-                currentSubtotal += discountedPrice * quantity;
-            });
+                    // Find if this selected item matches any of the coupon items
+                    var couponItem = couponItems.find(function(item) {
+                        return item.id === selectedItemId;  // Match item ID
+                    });
 
-            // Update coupon total value
-            $('#coupons').data('coupons', Math.round(totalDiscount));
-            $('#coupons').text(formatRupiah(totalDiscount));
-            console.log('Total Discount:', totalDiscount);
+                    if (couponItem) {
+                        // Apply discount based on coupon (either amount or percentage)
+                        if (coupon.discount_amount) {
+                            discountedPrice -= parseFloat(coupon.discount_amount);
+                            totalDiscount += parseFloat(coupon.discount_amount) * quantity;
+                            console.log('Discount Amount:', coupon.discount_amount);
+                        } else if (coupon.discount_percentage) {
+                            var discount = originalPrice * (parseFloat(coupon.discount_percentage) / 100);
+                            discountedPrice -= discount;
+                            totalDiscount += discount * quantity;
+                            console.log('Discount Percentage:', coupon.discount_percentage);
+                        }
 
-            // Update subtotal with discounted prices
-            $('#subtotal').data('subtotal', currentSubtotal);
-            $('#subtotal').text(formatRupiah(currentSubtotal));
-            console.log('New Subtotal:', currentSubtotal);
-        }
-    });
-} else {
-    // If no coupon is selected, reset all prices to original
-    var currentSubtotal = 0;
+                        discountedPrice = Math.round(discountedPrice); // Round off
+                        console.log('Discounted Price:', discountedPrice);
 
-    $('#selected-items .item-row').each(function() {
-        var selectedItem = $(this);
-        var originalPrice = parseFloat(selectedItem.find('.items-price').data('item-price'));
-        var quantity = parseInt(selectedItem.find('.quantity-input').val());
+                        if (isNaN(discountedPrice)) {
+                            console.error('Discounted Price is NaN! Something went wrong with the calculation.');
+                            return;
+                        }
 
-        selectedItem.find('.items-price').html(formatRupiah(originalPrice));
+                    }
 
-        // Calculate the subtotal without discounts
-        currentSubtotal += originalPrice * quantity;
-    });
+                    // Update the subtotal based on the new prices and quantity
+                    currentSubtotal += discountedPrice * quantity;
+                });
 
-    // Reset subtotal and coupons
-    $('#subtotal').data('subtotal', currentSubtotal);
-    $('#subtotal').text(formatRupiah(currentSubtotal));
-    $('#coupons').data('coupons', 0);
-    $('#coupons').text(formatRupiah(0));
-}
+                // Update the total discount in the UI
+                $('#coupons').data('coupons', Math.round(totalDiscount));
+                $('#coupons').text(formatRupiah(totalDiscount));
+                console.log('Total Discount:', totalDiscount);
+
+                // Update the subtotal in the UI with discounted prices
+                $('#subtotal').data('subtotal', currentSubtotal);
+                $('#subtotal').text(formatRupiah(currentSubtotal));
+                console.log('New Subtotal:', currentSubtotal);
+            },
+            error: function(error, xhr) {
+                console.error('Error fetching coupon details:', error);
+            }
+        });
+    } else {
+        // If no coupon is selected, reset all prices to their original value
+        currentSubtotal = 0;
+
+        $('#selected-items .item-row').each(function() {
+            var selectedItem = $(this);
+            var originalPrice = parseFloat(selectedItem.find('.items-price').data('item-price'));
+            var quantity = parseInt(selectedItem.find('.quantity-input').val());
+
+            // Reset the price displayed to the original price
+            selectedItem.find('.items-price').html(formatRupiah(originalPrice));
+
+            // Update the subtotal without discounts
+            currentSubtotal += originalPrice * quantity;
+        });
+
+        // Reset subtotal and coupons
+        $('#subtotal').data('subtotal', currentSubtotal);
+        $('#subtotal').text(formatRupiah(currentSubtotal));
+        $('#coupons').data('coupons', 0);
+        $('#coupons').text(formatRupiah(0));
+
+        $('#receiptDiscount').text(formatRupiah(totalDiscount));
+    }
 });
+
 
 
 

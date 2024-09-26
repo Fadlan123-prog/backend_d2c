@@ -84,8 +84,11 @@ class ExpendsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(expends $expends)
+    public function destroy($id)
     {
-        //
+        $expends = Expends::findOrFail($id);
+        $expends->delete();
+
+        return redirect()->route('expends.index')->with('success', 'Expends deleted successfully.');
     }
 }
