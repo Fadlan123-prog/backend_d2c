@@ -94,6 +94,7 @@ Route::prefix('admin')->group(function () {
         Route::get('cashier/expends/add-expends', [ExpendsController::class, 'create'])->name('expends.create');
         Route::post('cashier/expends/add-expends', [ExpendsController::class, 'store'])->name('expends.store');
         Route::get('/cashier/expends/{expends}/edit', [ExpendsController::class, 'edit'])->name('expends.edit');
+        Route::delete('/cashier/expends/{id}',[ExpendsController::class, 'delete'])->name('expends.delete');
 
         Route::get('/cashier/coupons/{coupons}',[CouponController::class, 'getCoupons'])->name('coupons.get');
 

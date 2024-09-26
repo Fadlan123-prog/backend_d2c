@@ -40,4 +40,8 @@ class Sales extends Model
     public function items(){
         return $this->belongsTo(Item::class);
     }
+
+    public function coupons(){
+        return $this->belongsTo(Coupon::class);
+    }
 }
