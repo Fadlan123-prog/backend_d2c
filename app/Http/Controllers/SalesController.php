@@ -93,7 +93,7 @@ class SalesController extends Controller
             'cashier' => $sale->cashier_name,
             'items' => $salesItems,
             'subtotal' => $sale->subtotal,
-            'discount' => $sale->coupon->,
+            'discount' => $sale->discount ?? 0,
             'total' => $sale->total_price,
         ]);
     }
