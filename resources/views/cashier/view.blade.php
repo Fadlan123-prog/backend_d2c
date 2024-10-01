@@ -322,6 +322,19 @@
                             </div>
                         </div>
 
+                        <hr class="dashed-hr">
+
+                        <div class="receipt-total">
+                            <div class="d-flex justify-content-between">
+                                <span>Tunai</span>
+                                <span id="receiptTunai">Rp 0</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Kembalian:</span>
+                                <span id="receiptChange">Rp 0</span>
+                            </div>
+                        </div>
+
                         <!-- Footer -->
                         <hr class="dashed-hr">
                         <div class="receipt-footer">
@@ -377,6 +390,8 @@
             var newNominal = currentNominal + valueToAdd;
             $nominalInput.val(formatRupiah(newNominal));
             $('#payment_type_hidden').val('Cash');
+
+
         });
 
     // Handle category button click
@@ -529,6 +544,8 @@
             var nominalValue = parseFloat(value);
             var subtotal = parseFloat($('#subtotal').data('subtotal'));
 
+            $('#receiptTunai').text(formatRupiah(nominalValue));
+
             if (nominalValue >= 0) {
                 $('#payment_type_hidden').val('Cash'); // Set payment type to Cash if nominal is filled
             }
@@ -541,6 +558,8 @@
                         '<p class="mb-0">' + formatRupiah(change) + '</p>' +
                     '</div>'
                 ); // Display change
+
+                $('#receiptChange').text(formatRupiah(change));
             } else {
                 $('#change').text(''); // Clear change if nominal is less than subtotal
             }
