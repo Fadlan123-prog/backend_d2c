@@ -656,6 +656,9 @@
                 $('#subtotal').data('subtotal', currentSubtotal);
                 $('#subtotal').text(formatRupiah(currentSubtotal));
                 console.log('New Subtotal:', currentSubtotal);
+
+                $('#receiptSubtotal').text(formatRupiah(currentSubtotal))
+                $('#receiptDiscount').text(formatRupiah(totalDiscount));
             },
             error: function(error, xhr) {
                 console.error('Error fetching coupon details:', error);
@@ -683,7 +686,7 @@
         $('#coupons').data('coupons', 0);
         $('#coupons').text(formatRupiah(0));
 
-        $('#receiptDiscount').text(formatRupiah(totalDiscount));
+
     }
 });
 
@@ -813,8 +816,8 @@
         });
 
         // Subtotal, discount, and total
-        $('#receiptSubtotal').text(formatRupiah(data.subtotal));
-        $('#receiptDiscount').text(formatRupiah(data.discount));
+        // $('#receiptSubtotal').text(formatRupiah(data.subtotal));
+        // $('#receiptDiscount').data('coupon');
         $('#receiptTotal').text(formatRupiah(data.total));
     }
 
@@ -850,88 +853,75 @@ function convertToUpper() {
 
     // Function to print the receipt
     function printReceipt() {
-        var logoUrl = '{{ asset('assets/img/content/logo-receipt.png') }}' + '?t=' + new Date().getTime();
+        var printWindow = window.open('', '', 'height=600,width=800');
+        var receiptContent = document.getElementById('receipt-view').innerHTML;
 
-        console.log("Logo URL:", logoUrl);
-        var printContents = document.getElementById('receipt-view').innerHTML;
-        var printWindow = window.open('', '_blank', 'width=800,height=600');
-        printWindow.document.write(`
-            <html>
-            <head>
-                <title>Print Receipt</title>
-                <style>
-                    .dashed-hr {
-                        border: none;
-                        border-top: 1px dashed #000;
-                        margin: 10px 0;
-                    }
-                    .receipt {
-                        max-width: 58mm;
-                        margin: auto;
-                        padding: 15px 10px;
-                        border: 1px solid #eee;
-                        border-radius: 5px;
-                        font-size: 10px;
-                        line-height: 1.4;
-                    }
-                    .receipt-header {
-                        text-align: center;
-                        margin-bottom: 10px;
-                    }
-                    .receipt-header img {
-                        max-width: 100px;
-                        margin-bottom: 5px;
-                    }
-                    .receipt-header h2 {
-                        font-size: 16px;
-                        margin: 0;
-                    }
-                    .receipt-header p {
-                        font-size: 10px;
-                        margin: 2px 0;
-                    }
-                    .receipt-details p {
-                        font-size: 10px;
-                        margin: 2px 0;
-                    }
-                    .receipt-items {
-                        width: 100%;
-                    }
-                    .receipt-items span {
-                        font-size: 10px;
-                        display: block;
-                    }
-                    .receipt-items .d-flex {
-                        display: flex;
-                        justify-content: space-between;
-                    }
-                    .receipt-total {
-                        margin-top: 10px;
-                    }
-                    .receipt-total .d-flex {
-                        display: flex;
-                        justify-content: space-between;
-                    }
-                    .receipt-footer {
-                        text-align: center;
-                        font-size: 10px;
-                        margin-top: 10px;
-                    }
-                </style>
-            </head>
-            <body>
-                <div class="receipt">
-                    ${printContents}
-                </div>
-            </body>
-            </html>
-        `);
+        var cssStyles = `
+            .dashed-hr {
+                border: none;
+                border-top: 1px dashed #000;
+                margin: 20px 0;
+            }
+            .receipt {
+                max-width: 58mm;
+                margin: auto;
+                padding: 20px 10px;
+                border: 1px solid #eee;
+                border-radius: 10px;
+                font-size: 12px;
+            }
+            .receipt-header {
+                text-align: center;
+                margin-bottom: 10px;
+            }
+            .receipt-header img {
+                max-width: 100%;
+                width: 100px;
+            }
+            .receipt-header h2 {
+                font-size: 16px;
+            }
+            .receipt-header p {
+                font-size: 10px;
+            }
+            .receipt-details {
+                margin-bottom: 10px;
+            }
+            .receipt-details p {
+                margin-bottom: 0;
+                font-size: 10px;
+            }
+            .receipt-items span {
+                font-size: 10px;
+            }
+            .receipt-footer {
+                text-align: center;
+                margin-top: 20px;
+                font-size: 10px;
+            }
+            .receipt-total span {
+                font-size: 10px;
+            }
 
-        printWindow.document.getElementById('print-logo').onload = function() {
-        printWindow.focus(); // Ensure the window is focused
-        printWindow.print(); // Trigger the print dialog
-        printWindow.close(); // Close the window after printing
-    }; // Close the window after printing
+            .receipt-total .d-flex {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .table th, .table td {
+                vertical-align: middle;
+            }
+        `;
+
+        printWindow.document.write('<html><head><title>Receipt</title>');
+        printWindow.document.write('<style>' + cssStyles + '</style>');
+        printWindow.document.write('</head><body>');
+        printWindow.document.write(receiptContent);
+        printWindow.document.write('</body></html>');
+
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
     }
 
   </script>

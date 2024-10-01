@@ -111,6 +111,7 @@
                             <div class="mb-3">
                                 <label for="" class="form-label">Discount Item</label>
                                 <div id="discount-items"></div>
+                                <input type="hidden" name="original_price" id="originalPrice" value="{{ old('original_price')}}">
                             </div>
                         </div>
                     </div>
@@ -194,6 +195,13 @@ $(document).ready(function() {
         var originalPrice = parseFloat(item.harga_item) || 0;
         var sizePrice = 0;
         var selectedSizeName = '';
+
+        var setoriginalPrice = $("#originalPrice").val(originalPrice);
+
+        console.log(setoriginalPrice);
+
+
+
 
         // Check if the item has sizes and a specific size is selected
         if (item.sizes && item.sizes.length > 0 && sizeId) {

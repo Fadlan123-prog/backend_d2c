@@ -15,6 +15,7 @@ class CouponItems extends Model
         'coupon_id',  // Make sure this is included
         'item_id',
         'size_id',
+        'original_price',
         'final_price',
     ];
 
