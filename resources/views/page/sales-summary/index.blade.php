@@ -51,10 +51,15 @@
                                 <tr>
                                     <td class="text-xs font-weight-bold mb-0">{{ $sale->date }}</td>
                                     <td class="text-xs font-weight-bold mb-0">{{ $sale->customer ? $sale->customer->plate_number : 'N/A' }}</td>
-                                    <td class="text-xs font-weight-bold mb-0">{{ $sale->salesItems[0]->item->items_name }}</td>
-                                    <td class="text-xs font-weight-bold mb-0">{{ $sale->salesItems[0]->quantity }}</td>
-                                    <td class="text-xs font-weight-bold mb-0">{{ $sale->salesItems[0]->item->category->categories_name }}</td>
-                                </tr>
+                                    <td class="text-xs font-weight-bold mb-0">
+                                        {{ $sale->salesItems->isNotEmpty() ? $sale->salesItems[0]->item->items_name : 'N/A' }}
+                                    </td>
+                                    <td class="text-xs font-weight-bold mb-0">
+                                        {{ $sale->salesItems->isNotEmpty() ? $sale->salesItems[0]->quantity : 'N/A' }}
+                                    </td>
+                                    <td class="text-xs font-weight-bold mb-0">
+                                        {{ $sale->salesItems->isNotEmpty() ? $sale->salesItems[0]->item->category->categories_name : 'N/A' }}
+                                    </td>                                </tr>
 
                                 @foreach($sale->salesItems->slice(1) as $salesItem)
                                     <tr>
