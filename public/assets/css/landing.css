@@ -1,0 +1,1511 @@
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    background-color:black;
+    color:#fff;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:16px;
+    margin:0;
+    padding:0;
+}
+
+
+.container-fluid:nth-last-child(){
+    padding-top: 5rem;
+    overflow: hidden;
+}
+
+.glow-hero{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.hero-section{
+    position: relative;
+    overflow: hidden;
+}
+
+.img-fluid{
+    max-width: 75vw !important;
+    width: 75vw !important;
+    height: auto;
+    object-fit: cover;
+}
+
+.text-white span{
+    color:#38C0FF;
+    font-weight: 600;
+}
+
+.btn-outline-blue{
+    border-color:#38C0FF;
+    color: #fff;
+    border-radius: 8px;
+}
+
+.btn-outline-blue:hover{
+    background-color:#38C0FF;
+    color: #fff;
+}
+
+.quality__section {
+    background-color: transparent;
+    background-image: url('img/samuele-errico-piccarini-FMbWFDiVRPs-unsplash\ 1.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 90vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.quality__section h1{
+    font-weight: 600 !important;
+}
+
+.quality__section h1 span{
+    color: #38C0FF;
+}
+
+#car-issues {
+    background-color: #000; /* Black background */
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 15rem !important;
+    max-width: 100%;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: white;
+    text-align: start;
+    width: 90%;
+    margin: auto;
+}
+
+.issue-item {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 50px;
+    border: 2px solid #38C0FF;
+    color: white;
+    text-align: center;
+    box-shadow: 0 0 15px #38C0FF, 0 0 30px #38C0FF, 0 0 45px #38C0FF;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    min-width: 380px;
+    margin: 10px;
+}
+
+.issue-item:hover {
+    box-shadow: 0 0 20px #38C0FF, 0 0 40px #38C0FF, 0 0 60px #38C0FF;
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 768px) {
+    .issue-item {
+        font-size: 1rem;
+        padding: 0.8rem 1.5rem;
+        width: 180px;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+}
+
+.offset-top{
+    position: relative;
+    top: -50px;
+}
+
+.offset-bottom{
+    position: relative;
+    bottom: -50px;
+}
+
+.solution{
+    max-width: 100%;
+    height: auto;
+    overflow: hidden;
+}
+.solution .img-solution{
+    width: 90%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.solution .col-6 .img-logo-glow{
+    width: 55%;
+    height: auto;
+    object-fit: cover;
+}
+
+.solution .col-6 h1{
+    font-weight: 600;
+    font-size: 60px;
+    padding-left: 15px;
+}
+
+.solution .col-6 span{
+    color: #38C0FF;
+    font-weight: 600;;
+}
+
+.solution .col-6 p{
+    font-size: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.solution .col-6 button{
+    font-size: 32px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 15px;
+    border: 2px solid #38C0FF;
+    background-color: #38C0FF !important;
+    color: black;
+    text-align: center;
+    margin-left: 15px;
+}
+
+.solution .col-6 button span{
+    color: #FF0000;
+}
+
+.solution-2{
+    background-image: url('/img/bg-solution-2.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 68vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.solution-2 .container{
+    width: 70%;
+    text-align: center;
+    margin: auto;
+}
+
+.solution-2 .container h1{
+    font-weight: 600;
+
+}
+
+.about .card{
+    background-color: #121212 !important;
+}
+
+.about h1{
+    font-weight: 600 !important;
+}
+
+.about h1 span{
+    color: #38C0FF;
+}
+
+.about .h4{
+    font-weight: 600 !important;
+}
+
+.about img{
+    width: 25px;
+    height: auto;
+    position: relative;
+    top: -3px;
+    margin-right: 10px;
+}
+
+.about .card-title{
+    font-weight: 600 !important;
+
+}
+
+
+.about .card-text{
+    font-size: 14px !important;
+}
+
+.service h1{
+    font-weight: 600 !important;
+
+}
+
+.service h1 span{
+    color: #38C0FF;
+}
+
+.promo-card {
+    background: linear-gradient(180deg, rgba(11,11,11,1) 0%, rgba(0,0,0,1) 35%),
+                linear-gradient(0deg, transparent 0%, #fff 100%);
+    border: 3px solid; /* Border width */
+    border-image: linear-gradient(0deg, #000000 0%, #ffffff 100%);
+    border-image-slice: 1;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    margin: 10px;
+}
+.promo-card h3 {
+    position: relative;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    border-bottom: 3px solid transparent;
+    background: linear-gradient(90deg, rgba(56,192,255,0) 0%, rgba(56,192,255,1) 50%, rgba(56,192,255,0) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+.promo-card h3::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, rgba(56,192,255,0) 0%, rgba(56,192,255,1) 50%, rgba(56,192,255,0) 100%);
+}
+.promo-card .original-price {
+    text-decoration: line-through;
+    color: #aaa;
+}
+.promo-card .discount-price {
+    font-size: 24px;
+    color: #00bfff;
+}
+.promo-card .btn-promo {
+    background-color: transparent;
+    border: 1px solid #00bfff;
+    color: #00bfff;
+    margin-top: 15px;
+    width: 265px;
+    color: white;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-transform: uppercase;
+}
+.promo-card .btn-promo:hover {
+    background-color: #00bfff;
+    color: #111;
+    font-weight: 500;
+}
+.promo-card .feature-list {
+    list-style: none;
+    padding: 0;
+}
+.promo-card .feature-list li {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.promo-card .feature-list li::before {
+    content: '\2714';
+    color: #00bfff;
+    margin-right: 8px;
+}
+
+/* last css */
+
+.service-section {
+    position: relative; /* Memungkinkan elemen anak menggunakan positioning relatif ke div ini */
+    text-align: center;
+}
+
+.ellipse-img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Memusatkan gambar di tengah */
+    z-index: -1; /* Menempatkan gambar di belakang elemen lain */
+    width: 100%; /* Sesuaikan ukuran gambar */
+    max-width: 1000px; /* Sesuaikan lebar maksimum gambar jika diperlukan */
+}
+
+
+
+
+/* Background Image */
+
+/* Section 4 */
+/* Base styling */
+.shine-img {
+    text-decoration: none;
+    border: 1px solid rgb(255, 255, 255);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shine-img:hover {
+    box-shadow: 1px 1px 25px 10px rgba(146, 148, 248, 0.4);
+  }
+
+  .shine-img::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      120deg,
+      transparent,
+      rgba(146, 148, 248, 0.4),
+      transparent
+    );
+    transition: all 650ms;
+  }
+
+  .shine-img:hover::before {
+    left: 100%;
+  }
+
+
+.service-section {
+    position: relative; /* Memungkinkan elemen anak menggunakan positioning relatif ke div ini */
+    text-align: center;
+}
+
+.ellipse-img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Memusatkan gambar di tengah */
+    z-index: -1; /* Menempatkan gambar di belakang elemen lain */
+    width: 100%; /* Sesuaikan ukuran gambar */
+    max-width: 1000px; /* Sesuaikan lebar maksimum gambar jika diperlukan */
+}
+
+h1, p {
+    position: relative; /* Pastikan teks berada di atas gambar */
+    z-index: 1; /* Memastikan teks muncul di depan gambar */
+}
+
+.custom-margin-service {
+    margin-top: 120px;
+    /* Anda bisa sesuaikan nilai ini */
+}
+.card {
+    position: relative;
+    /* Agar pseudo-element dan gambar bisa diposisikan dengan baik */
+    overflow: hidden;
+    /* Menghindari elemen yang melampaui batas card */
+}
+
+.card-body {
+    position: relative;
+}
+
+.rectangle-img {
+    position: absolute;
+    bottom: 0;
+    /* Atur posisi gambar dari bawah card-body */
+    left: 0;
+    /* Atur posisi gambar dari kiri card-body */
+    width: 100%;
+    /* Sesuaikan lebar gambar dengan lebar card-body */
+    z-index: 1;
+    /* Pastikan gambar berada di atas gambar utama dan di bawah teks */
+}
+
+.vector-img {
+    position: absolute;
+    top: 10px;
+    /* Jarak dari atas card-body, sesuaikan sesuai kebutuhan */
+    left: 10px;
+    /* Jarak dari kiri card-body, sesuaikan sesuai kebutuhan */
+    z-index: 2;
+    /* Pastikan gambar vector berada di atas rectangle-img */
+}
+
+.card-img-top {
+    width: 100%;
+    /* Pastikan gambar utama memenuhi lebar card */
+    display: block;
+    /* Menghindari spasi ekstra di bawah gambar */
+}
+
+.bottom-left,
+.bottom-right {
+    position: relative;
+    /* Pastikan teks tetap berada di atas gambar */
+    z-index: 2;
+    /* Pastikan teks berada di atas gambar rectangle */
+}
+
+.de{
+    width: 400px;
+    font-size: 10px;
+    text-align: right;
+}
+
+/* Before After */
+
+.bottom-left-af {
+    position: absolute;
+    bottom: 8px;
+    left: 16px;
+}
+
+.rg-bf p{
+    float: right;
+}
+
+.image-comparison {
+    max-width: 100%;
+    margin: 20px auto;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .image-comparison img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: left;
+  }
+
+  .image-comparison .images-container {
+    position: relative;
+    display: flex;
+  }
+
+  .image-comparison .images-container .before-image {
+    position: absolute;
+    top: 0;
+    width: 50%;
+  }
+
+  .image-comparison .slider {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .image-comparison .slider-line {
+    position: absolute;
+    height: 100%;
+    width: 4px;
+    background: #fff;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .image-comparison .slider-icon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 60px;
+    height: 60px;
+    color: #fff;
+    transform: translate(-50%, -50%) rotateZ(90deg);
+  }
+
+
+/* Section 5 */
+.review-section {
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+.thumbnail {
+    position: relative;
+    border: 0 solid #f1f1f1;
+    /* Warna border */
+    padding: 0;
+    /* Menghapus padding tambahan jika ada */
+    background-color: #ffffff;
+    /* Warna background thumbnail */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Sedikit bayangan untuk efek depth */
+}
+
+.caption {
+    padding: 10px;
+    background-color: #212529;
+    /* Background semi-transparan untuk caption */
+    color: white;
+}
+
+.rating {
+    margin-bottom: 10px;
+}
+
+.star {
+    color: #38C0FF;
+    /* Warna bintang */
+    font-size: 30px;
+    /* Ukuran bintang */
+    margin-right: 5px;
+    /* Jarak antar bintang */
+}
+
+.description {
+    margin: 10px 0;
+    /* Jarak antara elemen deskripsi */
+}
+
+.email {
+    margin-top: 0;
+    font-size: 14px;
+    /* Ukuran font email */
+    color: #f1f1f1;
+    /* Warna font email */
+}
+
+.additional-info {
+    margin-top: 0;
+    /* Jarak atas untuk informasi tambahan */
+    font-size: 30px;
+    /* Ukuran font deskripsi tambahan */
+    color: #e1e1e1;
+    /* Warna font deskripsi tambahan */
+}
+
+/* Section 5 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animated {
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+.fadeInUp {
+    animation-name: fadeInUp;
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+}
+
+.delay-1s {
+    animation-delay: 1s;
+}
+
+.delay-2s {
+    animation-delay: 2s;
+}
+
+.review-section .thumbnail {
+    opacity: 0; /* Initial state before animation */
+}
+
+/* On scroll effect */
+@media (prefers-reduced-motion: no-preference) {
+    .thumbnail {
+        will-change: opacity, transform;
+    }
+}
+
+
+.custom-form {
+    background-color: #2c2c2c; /* Abu-abu gelap */
+    padding: 20px;
+    border-radius: 10px;
+    color: #ffffff; /* Teks putih */
+}
+
+.custom-form .form-label {
+    color: #ffffff; /* Warna label */
+}
+
+.custom-form .form-control {
+    background-color: #3c3c3c; /* Warna input abu-abu sedikit lebih terang */
+    border: 1px solid #555555; /* Border abu-abu */
+    color: #ffffff; /* Teks putih */
+}
+
+.custom-form .form-control::placeholder {
+    color: #bfbfbf; /* Warna placeholder abu-abu muda */
+}
+
+.custom-form .form-control:focus {
+    background-color: #4c4c4c; /* Warna saat input aktif */
+    border-color: #777777; /* Warna border saat input aktif */
+}
+
+.custom-form .btn-primary {
+    background-color: #007bff; /* Warna biru untuk tombol */
+    border-color: #007bff;
+}
+
+.custom-form .btn-primary:hover {
+    background-color: #0056b3; /* Warna biru lebih gelap saat hover */
+    border-color: #0056b3;
+}
+
+
+.rate {
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+.rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: left;
+}
+
+.rating > input {
+    display: none;
+}
+
+.rating > label {
+    position: relative;
+    width: 1em;
+    font-size: 30px;
+    font-weight: 300;
+    color: #FFD600;
+    cursor: pointer;
+}
+
+.rating > label::before {
+    content: "\2605";
+    position: absolute;
+    opacity: 0;
+}
+
+.rating > label:hover:before,
+.rating > label:hover~label:before {
+    opacity: 1 !important;
+}
+
+.rating > input:checked~label:before {
+    opacity: 1;
+}
+
+.rating:hover > input:checked~label:before {
+    opacity: 0.4;
+}
+
+.buttons {
+    top: 36px;
+    position: relative;
+}
+
+.rating-submit {
+    border-radius: 8px;
+    color: #fff;
+    height: auto;
+}
+
+.rating-submit:hover {
+    color: #fff;
+}
+
+/* Section 7 */
+.contact-section {
+    width: 100%;
+    bottom: 0;
+    position: relative;
+    height: 80vh;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.overlay-img {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    bottom: 0;
+    left: 0;
+    opacity: 0.5;
+    /* Adjust opacity to make text more readable */
+}
+
+.text-overlay {
+    position: absolute;
+    width: 80%;
+    z-index: 2;
+    color: #fff;
+}
+
+.contact-section h1 {
+    margin-bottom: 40px;
+    font-weight: bold;
+    color: #fff;
+    text-align: left;
+}
+
+.contact-section p {
+    padding: 10px 0;
+    border-radius: 10px;
+    color: #fff;
+
+    margin: 0;
+    font-size: 16px;
+    text-align: left;
+}
+
+.blurred-box {
+    border: 2px solid white; /* White border */
+    padding: 20px;
+    backdrop-filter: blur(10px); /* Applies the blur effect */
+    background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+    border-radius: 10px; /* Optional: adds rounded corners */
+}
+
+
+
+.scroll-counter {
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 15px;
+  color: white;
+  background-color: rgba(0,0,0,0.4);
+}
+
+.aos-all {
+  width: 1000px;
+  max-width: 98%;
+  margin: 50px auto;
+}
+
+.aos-item {
+  display: inline-block;
+  float: left;
+  width: 100%;
+  height: 300px;
+  padding: 20px;
+}
+
+.aos-item::before {
+  content: attr(data-id);
+  position: relative;
+  width: 100%;
+  height: 100%;
+  float: left;
+  background: #1da4e2;
+  line-height: 260px;
+  text-align: center;
+  color: #fff;
+}
+
+@media screen and (min-width: 420px) {
+  .aos-item {
+    width: 50%;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .aos-item {
+    width: 33%;
+  }
+}
+
+.aos-anchors__lines {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-top: 2px solid blue;
+  border-bottom: 2px solid red;
+}
+
+.aos-anchors__lines::before {
+  content: '';
+  width: 100%;
+  height: 2px;
+  position: absolute;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: green;
+}
+
+.aos-anchors__sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+.aos-anchors__sidebar > div {
+  padding: 5px 10px;
+  background: #f1f1f1;
+}
+
+.aos-anchors__content {
+  width: 400px;
+  margin: 50px auto;
+}
+
+.aos-anchors__content > div {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  margin-bottom: 50px;
+  background: #f1f1f1;
+  line-height: 300px;
+  text-align: center;
+  color: #333;
+}
+
+.aos-anchors__content > div::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+}
+
+.aos-anchors__content > div::after {
+  content: attr(data-anchor-id);
+  position: relative;
+  background-color: #f1f1f1;
+}
+
+.aos-anchors__content > div[data-placement$="-bottom"]::before {
+  background-color: red;
+}
+
+.aos-anchors__content > div[data-placement$="-center"]::before {
+  background-color: green;
+}
+
+.aos-anchors__content > div[data-placement$="-top"]::before {
+  background-color: blue;
+}
+
+.aos-anchors__content > div[data-placement^="top-"]::before {
+  top: 0;
+}
+
+.aos-anchors__content > div[data-placement^="center-"]::before {
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.aos-anchors__content > div[data-placement^="bottom-"]::before {
+  bottom: 0;
+}
+
+.fade-left {
+    opacity: 0;
+    transform: translateX(-50px);  /* Start 50px to the left */
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fade-left.show {
+    opacity: 1;
+    transform: translateX(0);  /* End position */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Global Styles for Tablet (up to 768px) */
+@media only screen and (max-width: 768px) {
+
+    /* Background image adjustments */
+    .background-image {
+        height: 300px;
+    }
+
+    /* Section text adjustments */
+    .header-text, .contact-section p {
+        font-size: 16px;
+        max-width: 100%;
+    }
+
+    .custom-margin, .custom-margin-text {
+        margin-top: 40px;
+    }
+
+    .text-content {
+        padding: 10px;
+    }
+
+    /* Image comparison adjustments */
+
+    /* Service Section adjustments */
+    .ellipse-img {
+        max-width: 80%;
+    }
+}
+
+
+
+
+
+/* Global Styles for Mobile (up to 576px) */
+@media only screen and (max-width: 576px) {
+     /* Add full black background for the menu */
+
+    .btn-exit {
+        color: white;
+        font-size: 2rem;
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        z-index: 1000;
+    }
+
+
+
+    body {
+        overflow-x: hidden; /* Prevent horizontal scrolling */
+    }
+
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+        max-width: 100%; /* Ensure container doesn't exceed viewport width */
+    }
+
+    .row {
+        margin-left: 0;
+        margin-right: 0;
+        width: 100%;
+    }
+
+    /* Pastikan elemen lain memiliki width 100% atau kurang */
+    .col-sm-9 {
+        width: 100%;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .main-banner, .header-text, .before-after-text, .text-overlay, .blurred-box {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    /* Lain-lain */
+    .background-image,
+    .background-image2,
+    .background-image3,
+    .background-image4 img,
+    .background-image5 img {
+        width: 100%; /* Set width to 100% to prevent overflow */
+        max-width: 100%; /* Ensure images scale correctly */
+        height: auto;
+    }
+
+    /* SECTION 1 */
+    @keyframes moveInFromRight {
+        from {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .img-animate {
+        animation: moveInFromRight 1s ease-out forwards;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .animated-box {
+        width: 100px;
+        height: 100px;
+        background-color: red;
+        animation: slideIn 1s ease-out forwards;
+    }
+
+
+    /* Optional: Ensure image is hidden off-screen initially */
+    .background-image3 {
+        overflow: hidden;
+    }
+
+    /* Background image adjustments */
+    .background-image {
+        height: 200px;
+    }
+
+    .background-image2, .background-image3 {
+        display: none; /* Menyembunyikan gambar pada tampilan ponsel */
+    }
+
+    .header-text h1 {
+        font-size: 1.25rem; /* Smaller font size */
+    }
+
+    .main-banner {
+        padding: 20px; /* Tambahkan padding agar teks tidak terlalu menempel tepi */
+        width: 500px;
+    }
+
+    .header-text h1 {
+        font-size: 2.5rem; /* Ukuran font yang lebih kecil untuk ponsel */
+    }
+
+    .header-text p {
+        font-size: 0.9rem; /* Ukuran font yang lebih kecil untuk ponsel */
+        width: 300px;
+    }
+
+    .btn-outline-primary {
+        font-size: 0.9rem; /* Ukuran font tombol lebih kecil */
+        padding: 8px 16px; /* Ukuran padding tombol lebih kecil */
+    }
+
+    .header-text p {
+        font-size: 0.85rem; /* Smaller font size */
+    }
+
+    .btn-outline-primary {
+        padding: 6px 12px; /* Adjust button padding */
+        font-size: 0.75rem; /* Smaller font size */
+    }
+    .custom-margin, .custom-margin-text {
+        margin-top: 20px;
+    }
+
+
+    /* SECTION 2 */
+    .hide-on-mobile {
+        display: none; /* Menyembunyikan elemen dengan kelas ini */
+    }
+
+    .card-title {
+        font-size: 1.5rem; /* Ukuran font judul lebih kecil */
+    }
+
+    .card-text {
+        font-size: 0.9rem; /* Ukuran font teks lebih kecil */
+    }
+
+    .btn-outline-primary {
+        font-size: 0.9rem; /* Ukuran font tombol lebih kecil */
+        padding: 8px 16px; /* Ukuran padding tombol lebih kecil */
+    }
+
+   .background-image4 img {
+        display: none;
+    }
+
+    /* Image comparison adjustments */
+    .image-comparison {
+        margin: 10px auto;
+    }
+
+    /* Service Section adjustments */
+    .ellipse-img {
+        max-width: 100%;
+    }
+
+    /* Contact Section adjustments */
+    .text-overlay {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .blurred-box {
+        padding: 15px;
+        border-radius: 5px;
+    }
+
+    /* Form adjustments */
+    .custom-form {
+        padding: 15px;
+    }
+
+
+    /* Section 3 */
+     /* Section 3 */
+     #section3 .card-title {
+        font-size: 22px; /* Slightly reduce the font size */
+        line-height: 1.4; /* Increase line height for readability */
+        text-align: center; /* Ensure text is centered */
+        margin-bottom: -100px; /* Add space below the title */
+    }
+
+    #section3 .card-body {
+        padding: 15px; /* Adjust padding for a balanced look */
+    }
+
+    #section3 .background-image5 img {
+        max-width: 80%; /* Scale image to fit mobile screens */
+        height: auto;
+        margin: 0 auto; /* Center the image */
+        display: block;
+        margin-top: 20px; /* Add some space above the image */
+    }
+
+    .custom-margin {
+        margin-top: 0px; /* Adjust top margin to reduce space */
+    }
+
+
+
+
+    /* Section 4  */
+     /* Adjust the "SERVICE" heading */
+     .service-section h1 {
+        font-size: 28px; /* Reduce the font size */
+    }
+
+    /* Adjust the description text */
+    .service-section p {
+        width: 100%;
+        font-size: 14px; /* Reduce the font size */
+        margin-bottom: 20px;
+        text-align: center; /* Center-align the text */
+    }
+
+    .deks {
+        width: 80%;
+    }
+    /* Card adjustments */
+    .card {
+        margin-bottom: 20px; /* Add some space between cards */
+    }
+
+    /* Card image adjustments */
+    .card img {
+        width: 100%;
+        height: auto; /* Ensure the image is responsive */
+    }
+
+
+    /* Adjust the text inside the cards */
+    .bottom-left {
+        font-size: 18px; /* Adjust the font size */
+        padding: 10px;
+        text-align: center; /* Center-align the text */
+    }
+
+    .bottom-right.de {
+        font-size: 12px; /* Adjust the font size */
+        padding: 10px;
+        line-height: 1.4; /* Adjust line height for readability */
+        text-align: center; /* Center-align the text */
+    }
+
+    .bottom-right.de p {
+        width: 320px;
+        padding-right: 40px;
+        line-height: 20px;
+    }
+
+
+
+    /* Before After */
+    .before-after-text {
+        text-align: center;
+        font-size: 20px;
+    }
+
+    .han {
+        display: none;
+    }
+
+    .description-text {
+        text-align: center;
+        font-size: 14px; /* Adjust font size as needed for mobile view */
+    }
+
+    .row {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .col-sm-9 {
+        justify-content: center;
+    }
+
+    /* FOOTER */
+
+    /* Center the overlay image */
+    .overlay-img {
+        display: block;
+        margin: 0 auto;
+        width: 100%;
+        height: auto;
+    }
+
+    /* Center the text overlay */
+    .text-overlay {
+        text-align: center;
+        padding: 20px;
+    }
+
+    /* Center the heading */
+    .text-overlay h1 {
+        font-size: 28px; /* Adjust font size for mobile */
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    /* Style the blurred box */
+    .blurred-box {
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        backdrop-filter: blur(10px);
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    /* Center-align the social media icons section */
+    .blurred-box .d-flex {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .blurred-box .d-flex .me-5 {
+        margin-bottom: 10px;
+    }
+
+    .blurred-box .d-flex a {
+        margin: 10px;
+        font-size: 18px;
+    }
+
+    /* Address section adjustments */
+    .text-md-start {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .text-md-start h6 {
+        font-size: 18px;
+        text-align: center;
+    }
+
+    .text-md-start p {
+        font-size: 14px;
+        text-align: center;
+    }
+
+    /* Copyright section */
+    .p-3 {
+        text-align: center;
+        font-size: 12px;
+    }
+
+    .contact-section {
+        background-size: cover; /* Ensure the background image scales properly */
+        padding: 20px;
+        text-align: center; /* Center all content */
+    }
+
+    .overlay img {
+        display: none;
+    }
+}
+
+hr{
+    opacity: 100% !important;
+}
+
+.text-blue {
+    color: #38C0FF;
+}
+
+.svg-icon {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px; /* Adjust the spacing between the title and the SVG */
+}
+
+.text-svg {
+    height: 20em; /* Make the SVG the same height as the text */
+    white-space: none; /* Prevent wrapping */
+    width: auto; /* Keep the aspect ratio */
+    vertical-align: middle;
+}
+
+
+@media (max-width: 576px) {
+    .quality__section{
+        margin-top: 150px !important;
+    }
+
+    .img-fluid{
+        display: none;
+    }
+
+    .issue-item{
+        width: 345px;
+    }
+
+    .section-title{
+        width: 100%;
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+
+    #car-issues{
+        margin-top: 150px;
+    }
+
+    .solution{
+        text-align: center;
+    }
+
+    .solution .img-solution{
+        width: 100%;
+    }
+
+    .solution .img-logo-glow{
+        width: 60%;
+    }
+
+    .solution-2 .container{
+        width: 100%;
+    }
+
+    .about{
+        text-align: center;
+    }
+
+    .card-title img{
+        width: 10%;
+    }
+
+}
+
+.bg-dark{
+    background-color: #121212 !important;
+}
+
+#car-issues span{
+    color: #38C0FF;
+}
+
+#car-issues .card{
+    background-color: #121212 !important;
+    width: 100%;
+    margin: auto;
+}
+
+.quality-carousel .card {
+    display: inline-block !important;    /* Card akan menyesuaikan ukuran konten */
+    text-align: center;       /* Memposisikan video di tengah */
+    margin: 0 10px;
+    background-color: transparent !important;       /* Menambah sedikit padding */
+}
+
+.quality-carousel video {
+              /* Menyesuaikan tinggi otomatis */
+    object-fit: cover;        /* Agar video tetap proporsional */
+}
+
+.text-section ul {
+    list-style: none;
+    padding: 0;
+    width: 90%;
+    margin: auto;
+  }
+
+  .text-section li {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 35px 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .text-section .icon {
+    background-color: #00ADEF;
+    color: #fff !important  ;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+
+  #car-issues img{
+    width: 100%;
+    height:70%;
+    object-fit: cover;
+
+  }
+
+@media only screen and (max-width: 576px) {
+    .section-title{
+        text-align: center !important;
+    }
+
+    .text-section .icon{
+        margin-right: 30px;
+    }
+
+    .text-section ul{
+        width: 100%;
+    }
+
+    #car-issues{
+        display: flex !important;
+        flex-direction: column-reverse !important;
+    }
+}

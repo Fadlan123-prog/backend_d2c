@@ -31,7 +31,7 @@ class SalesReceipt extends Component
 
         // Hitung subtotal, discount, dan total
         $this->items = $this->sale->salesItems;
-        $this->subtotal = $this->items->sum(function ($item) {
+        $this->subtotal = $this->item->sum(function ($item) {
             return $item->quantity * $item->harga_items;
         });
         $this->discount = $this->sale->coupon ? $this->sale->coupon->amount : 0;
