@@ -61,11 +61,18 @@ class DashboardController extends Controller
             ->selectRaw('SUM(sales_item.quantity) as total_quantity')
             ->first();
 
+        $thisMonthOmsetData = Sales::join('sales_item', 'sales.id', '=', 'sales_item.sales_id')
+            ->whereMonth('sales.date', Carbon::now()->month)
+            ->whereYear('sales.date', Carbon::now()->year)
+            ->selectRaw('SUM(sales_item.quantity * sales.total_price) as total_omset')
+            ->first();
+
         return response()->json([
             'chartSalesData' => $chartSalesData->all(),
             'dailySales' => $todaySalesData->total_quantity ?? 0,  // Menangani jika datanya kosong
-            'monthlySales' => $thisMonthSalesData->total_quantity ,
-            'yearlySales' => $thisYearSalesData->total_quantity,
+            'monthlySales' => $thisMonthSalesData->total_quantity ?? 0 ,
+            'yearlySales' => $thisYearSalesData->total_quantity ?? 0,
+            'monthlyOmset' => $thisMonthOmsetData->total_omset,
         ]);
     }
 
