@@ -9,6 +9,7 @@ use App\Exports\SalesSummaryExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Categories;
 use Carbon\Carbon;
+use App\Models\Expends;
 use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
@@ -64,7 +65,12 @@ class DashboardController extends Controller
         $thisMonthOmsetData = Sales::join('sales_item', 'sales.id', '=', 'sales_item.sales_id')
             ->whereMonth('sales.date', Carbon::now()->month)
             ->whereYear('sales.date', Carbon::now()->year)
-            ->selectRaw('SUM(sales_item.quantity * sales.total_price) as total_omset')
+            ->selectRaw('SUM(sales.total_price) as total_omset')
+            ->first();
+
+        $thisMonthExpendData = Expends::whereMonth('expends.date', Carbon::now()->month)
+            ->whereYear('expends.date', Carbon::now()->year)
+            ->selectRaw('SUM(expend_price) as total_expends')
             ->first();
 
         return response()->json([
@@ -72,7 +78,8 @@ class DashboardController extends Controller
             'dailySales' => $todaySalesData->total_quantity ?? 0,  // Menangani jika datanya kosong
             'monthlySales' => $thisMonthSalesData->total_quantity ?? 0 ,
             'yearlySales' => $thisYearSalesData->total_quantity ?? 0,
-            'monthlyOmset' => $thisMonthOmsetData->total_omset,
+            'monthlyOmset' => $thisMonthOmsetData->total_omset ?? 0,
+            'monthlyExpend' => $thisMonthExpendData->total_expends ?? 0,
         ]);
     }
 

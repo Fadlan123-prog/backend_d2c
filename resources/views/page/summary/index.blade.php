@@ -144,7 +144,7 @@
                                       <div class="numbers">
                                         <p class="text-sm mb-0 text-capitalize font-weight-bold">Total Pengeluaran</p>
                                         <h5 class="font-weight-bolder mb-0">
-                                            <span id="daily-sales"></span>
+                                            <span id="monthly-expend"></span>
                                         </h5>
                                       </div>
                                     </div>
@@ -221,14 +221,17 @@ function fetchSalesData() {
         const dailySalesTotal = Array.isArray(data.dailySales) ? data.dailySales.reduce((a, b) => a + b, 0) : data.dailySales;
         const monthlySalesTotal = Array.isArray(data.monthlySales) ? data.monthlySales.reduce((a, b) => a + b, 0) : data.monthlySales;
         const yearlySalesTotal = Array.isArray(data.yearlySales) ? data.yearlySales.reduce((a, b) => a + b, 0) : data.yearlySales;
-        const mothlyOmset = Array.isArray(data.mothlyOmset) ? data.mothlyOmset.reduce((a, b) => a + b, 0) : data.mothlyOmset;
+        const monthlyOmsetTotal = Array.isArray(data.monthlyOmset) ? data.monthlyOmset.reduce((a, b) => a + b, 0) : data.monthlyOmset;
+        const monthlyExpendTotal = Array.isArray(data.monthlyExpend) ? data.monthlyExpend.reduce((a, b) => a +  b, 0) : data.monthlyExpend;
 
-        console.log('omset:', data.mothlyOmset);  // Tambahkan ini untuk memeriksa apakah data diterima dengan benar
+        console.log('omset:', monthlyOmsetTotal);
+        console.log('expends:', monthlyExpendTotal);  // Tambahkan ini untuk memeriksa apakah data diterima dengan benar
 
         document.getElementById('daily-sales').textContent = dailySalesTotal;
         document.getElementById('monthly-sales').textContent = monthlySalesTotal;
         document.getElementById('yearly-sales').textContent = yearlySalesTotal;
-        document.getElementById('mothly-omset').textContent = mothlyOmset;
+        document.getElementById('monthly-omset').textContent = formatRupiah(monthlyOmsetTotal);
+        document.getElementById('monthly-expend').textContent  = formatRupiah(monthlyExpendTotal);
 
         const labels = generateDateRange(startDate, endDate);
 
@@ -260,6 +263,16 @@ function generateDateRange(startDate, endDate) {
     }
 
     return dateArray;
+}
+
+function formatRupiah(amount) {
+    if (!amount) return '';
+
+    // Round the amount to remove any decimals
+    amount = Math.round(amount);
+
+    // Convert to string and format as Rupiah
+    return 'Rp ' + amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
 function displayChart(labels, salesData) {

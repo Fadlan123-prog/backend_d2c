@@ -36,13 +36,13 @@
                 </ul>
                 <ul class="navbar-nav ms-auto d-none d-lg-inline-flex">
                   <li class="nav-item mx-2">
-                    <a class="nav-link text-dark h5" href="" target="blank"><i class="fab fa-google-plus-square"></i></a>
+                    <a class="nav-link text-dark h5" href="" target="blank"><i class="fab google-plus-square"></i></a>
                   </li>
                   <li class="nav-item mx-2">
-                    <a class="nav-link text-dark h5" href="" target="blank"><i class="fab fa-twitter"></i></a>
+                    <a class="nav-link text-dark h5" href="" target="blank"><i class=" twitter"></i></a>
                   </li>
                   <li class="nav-item mx-2">
-                    <a class="nav-link text-dark h5" href="" target="blank"><i class="fab fa-facebook-square"></i></a>
+                    <a class="nav-link text-dark h5" href="" target="blank"><i class=" facebook-square"></i></a>
                   </li>
                 </ul>
               </div>
@@ -54,13 +54,13 @@
             <div class="container-sm mt-5">
                 <div class="row">
                     <div class="col-md-5">
-                        <div class="text-white">
-                            <h1>Ingin Mobil Anda <br><span>Kinclong dan Bersinar</span>  Seperti Baru dengan Proteksi Extra ?</h1>
-                            <p>Kami bangga menjadi pilihan utama bagi pemilik mobil yang menginginkan perawatan mobil terbaik. Dengan jaminan kualitas dan kepuasan pelanggan, kami memastikan mobil anda selalu tampil mengkilap dan terawat</p>
-                            <button type="button" class="btn btn-outline-blue">Selengkapnya</button>
+                        <div class="text-white" >
+                            <h1 data-aos="fade-right">Ingin Mobil Anda <br><span>Kinclong dan Bersinar</span>  Seperti Baru dengan Proteksi Extra ?</h1>
+                            <p data-aos="fade-right">Kami bangga menjadi pilihan utama bagi pemilik mobil yang menginginkan perawatan mobil terbaik. Dengan jaminan kualitas dan kepuasan pelanggan, kami memastikan mobil anda selalu tampil mengkilap dan terawat</p>
+                            <button type="button" class="btn btn-outline-blue" data-aos="fade-right">Selengkapnya</button>
                         </div>
                     </div>
-                    <div class="col-md-7 align-self-end">
+                    <div class="col-md-7 align-self-end" data-aos="fade-left">
                         <img src="{{asset('assets/img/landing/cars-hero.png')}}" alt="" class="img-fluid">
                     </div>
 
@@ -72,12 +72,11 @@
 
     <section class="mt-5 quality__section">
       <div class="container-fluid">
-          <div class="container">
+          <div class="container" data-aos="fade-top">
               <h1 class="text-center"><span>KUALITAS</span> YANG TERJAMIN <img src="{{asset('assets/img/landing/shield-check.png')}}" alt=""></h1>
               <p class="text-center">Kepuasan pelanggan adalah hal yang paling diutamakan, testimoni dari</p>
-
               <!-- Slider -->
-              <div class="quality-carousel">
+              <div class="quality-carousel mt-5">
                   <div class="card">
                     <video src="{{asset('assets/video/vid-1.mp4')}}" width="200px" height="300px" autoplay loop muted></video>
                   </div>
@@ -92,16 +91,12 @@
                   </div>
                   <div class="card">
                     <video src="{{asset('assets/video/vid-5.mp4')}}" width="200px" height="300px" autoplay loop muted></video>
-                  </div>
-
-                  <!-- Tambahkan lebih banyak item sesuai kebutuhan -->
+                  </div>  <!-- Tambahkan lebih banyak item sesuai kebutuhan -->
               </div>
               <!-- End of Slider -->
           </div>
       </div>
   </section>
-
-
 
     <section id="car-issues" class="text-start py-5 d-flex flex-column justify-content-center align-items-center mb-5">
       <div class="container-fluid">
@@ -109,7 +104,7 @@
           <div class="col-12 col-md-6 text-section order-md-1 order-2">
             <h2 class="section-title">APAKAH <span>MASALAH</span> INI TERJADI DI MOBIL KALIAN?</h2>
 
-            <ul class="mt-4">
+            <ul class="mt-4" >
               <li><span class="icon">1</span>BERCAK KOTORAN MEMBANDEL</li>
               <li><span class="icon">2</span>WARNA CAT KUSAM</li>
               <li><span class="icon">3</span>GORESAN KASAR PADA BODY MOBIL</li>
@@ -119,7 +114,7 @@
             </ul>
           </div>
           <div class="col-12 col-md-6 order-md-2 order-1">
-            <img class="image-problem" src="{{asset('assets/img/landing/problem-section.png')}}" alt="">
+            <img class="image-problem" src="{{asset('assets/img/landing/problem-section.png')}}" alt="" >
           </div>
         </div>
 
@@ -143,10 +138,10 @@
 
   <section class="solution mt-5">
     <div class="row">
-      <div class="col-12 col-md-6">
+      <div class="col-12 col-md-6" >
         <img class="img-solution" src="{{asset('assets/img/landing/car-solution.png')}}" alt="">
       </div>
-      <div class="col-12 col-md-6">
+      <div class="col-12 col-md-6" >
         <img class="img-logo-glow" src="{{asset('assets/img/landing/logo-glow.png')}}" alt="">
         <h1>TEMUKAN SOLUSI <br> KALIAN <span>DISINI!!</span></h1>
         <p class="mt-4">Jadikan mobil anda bersinar kembali dengan layanan detailing dari Dirty2Clean! Kami percaya bahwa setiap mobil pantas mendapatkan perawatan terbaik. Dengan teknik dan produk premium, kami menjamin hasil coating yang tidak hanya memperindah tampilan, tetapi juga melindungi permukaan cat mobil Anda dari berbagai elemen.</p>
@@ -155,10 +150,10 @@
     </div>
   </section>
 
-  <section class="solution-2 mt-5">
+  <section class="solution-2 mt-5" id="about">
     <div class="container">
-      <h1>Dirty2Clean : Solusi Terbaik untuk Perlindungan Mobil Anda!</h1>
-      <p class="mt-5">Apakah mobil anda terliah lelah dan kotor? Saatnya memberikan perawatan terbaik dengan Dirty2Clean! Kami adalah pilihan terbaik untuk detailing mobil yang siap mengubah kendaraan anda menjadi bintang di jalan.</p>
+      <h1 >Dirty2Clean : Solusi Terbaik untuk Perlindungan Mobil Anda!</h1>
+      <p class="mt-5" >Apakah mobil anda terliah lelah dan kotor? Saatnya memberikan perawatan terbaik dengan Dirty2Clean! Kami adalah pilihan terbaik untuk detailing mobil yang siap mengubah kendaraan anda menjadi bintang di jalan.</p>
     </div>
   </section>
 
@@ -166,7 +161,7 @@
     <div class="container">
       <div class="row">
         <div class="col-12 col-md-5 d-flex align-items-center">
-          <h1>Kenapa harus memilih <span>Dirty2Clean?</span></h1>
+          <h1 >Kenapa harus memilih <span>Dirty2Clean?</span></h1>
         </div>
         <div class="col-12 col-md-7">
           <div class="row py-3">
@@ -178,7 +173,7 @@
             </div>
           </div>
           <div class="row py-3">
-            <div class="card">
+            <div class="card" >
               <div class="card-body">
                 <h4 class="card-title"><img src="{{asset('assets/img/landing/people.png')}}" alt=""> Staff Professional</h4>
                 <p class="card-text">Tim kami Berpengalaman dan telah berdedikasi dalam dunia coating lebih dari 15 tahun dan siap memberikan layanan terbaik kepada mobil Anda.</p>
@@ -198,7 +193,7 @@
     </div>
   </section>
 
-  <div class="container py-5 custom-margin-service" id="section4">
+  <div class="container py-5 custom-margin-service" id="product">
     <div class="service-section">
         <img src="{{asset('assets/img/landing/Ellipse 13.png')}}" alt="Background Ellipse" class="ellipse-img">
         <h1 class="text-center mb-4" style="font-weight: bold;">SERVICE</h1>
@@ -207,7 +202,7 @@
     </div>
 
     <div class="row g-4">
-        <div class="col-md-6" data-aos="fade-right">
+        <div class="col-md-6" >
             <div class="card bg-dark text-light border-0 shine-img">
                 <img src="{{asset('assets/img/landing/Group 24.png')}}" class="card-img-top " alt="Interior Care">
                 <div class="card-body">
@@ -232,7 +227,7 @@
             </div>
         </div>
 
-        <div class="col-md-6" data-aos="fade-left">
+        <div class="col-md-6" >
             <div class="card bg-dark text-light border-0 shine-img">
                 <img src="{{asset('assets/img/landing/Group 25.png')}}" class="card-img-top " alt="Interior Care">
                 <div class="card-body">
@@ -258,7 +253,7 @@
             </div>
         </div>
 
-        <div class="col-md-6" data-aos="fade-right">
+        <div class="col-md-6" >
             <div class="card bg-dark text-light border-0 shine-img">
                 <img src="{{asset('assets/img/landing/Group 26.png')}}" class="card-img-top " alt="Interior Care">
                 <div class="card-body">
@@ -282,7 +277,7 @@
             </div>
         </div>
 
-        <div class="col-md-6" data-aos="fade-left">
+        <div class="col-md-6" >
             <div class="card bg-dark text-light border-0 shine-img">
                 <img src="{{asset('assets/img/landing/Group 27.png')}}" class="card-img-top " alt="Interior Care">
                 <div class="card-body">
@@ -355,7 +350,7 @@
     <h1 class="text-center">DAPATKAN PELAYANAN <span>TERBAIK</span>  KAMI</h1>
     <div class="row justify-content-center mt-5">
       <div class="col-md-4">
-          <div class="promo-card">
+          <div class="promo-card" >
               <h3>EVO SILICA CERAMIC COATING</h3>
               <ul class="feature-list">
                   <li>Paint Correction</li>
@@ -368,11 +363,11 @@
               </ul>
               <p class="original-price">Rp 3.500.000</p>
               <p class="discount-price">Rp 2.200.000</p>
-              <button class="btn btn-promo">Ambil Promo</button>
+              <button class="btn btn-promo" onclick="sendWhatsApp('EVO SILICA CERAMIC COATING')">Ambil Promo</button>
           </div>
       </div>
       <div class="col-md-4">
-          <div class="promo-card">
+          <div class="promo-card" >
               <h3>CAR PRO CQUARTZ UK 3.0</h3>
               <ul class="feature-list">
                 <li>Paint Correction</li>
@@ -386,17 +381,17 @@
               </ul>
               <p class="original-price">Rp 8.500.000</p>
               <p class="discount-price">Rp 5.500.000</p>
-              <button class="btn btn-promo">Ambil Promo</button>
+              <button class="btn btn-promo" onclick="sendWhatsApp('CAR PRO CQUARTZ UK 3.0')">Ambil Promo</button>
           </div>
       </div>
   </div>
   </div>
 </section>
 
-<div class="container review-section" id="section5 review">
+<div class="container review-section" id="review">
   <h2 style="font-weight: bold;" class="mb-5">REVIEW</h2>
   <div class="row">
-      <div class="col-md-4" data-aos="fade-up">
+      <div class="col-md-3" >
           <div class="thumbnail animated fadeInUp">
               <img src="{{asset('assets/img/landing/Group 30.png')}}" alt="" style="width:100%">
               <div class="caption">
@@ -414,7 +409,7 @@
               </div>
           </div>
       </div>
-      <div class="col-md-4" data-aos="fade-up">
+      <div class="col-md-3" >
           <div class="thumbnail animated fadeInUp delay-1s">
               <img src="{{asset('assets/img/landing/Group 31.png')}}" alt="" style="width:100%">
               <div class="caption">
@@ -432,7 +427,7 @@
               </div>
           </div>
       </div>
-      <div class="col-md-4" data-aos="fade-up">
+      <div class="col-md-3" >
           <div class="thumbnail animated fadeInUp delay-2s">
               <img src="{{asset('assets/img/landing/Group 32.png')}}" alt="" style="width:100%">
               <div class="caption">
@@ -450,7 +445,7 @@
               </div>
           </div>
       </div>
-      <div class="col-md-4" data-aos="fade-up">
+      <div class="col-md-3" >
         <div class="thumbnail animated fadeInUp delay-2s">
             <img src="{{asset('assets/img/landing/Group 35.png')}}" alt="" style="width:100%">
             <div class="caption">
@@ -472,55 +467,29 @@
 </div>
 
 <!-- Section 6 -->
-<div class="container py-5" id="section6">
-  <h2 class="title">Add yours!</h2>
-  <div class="rating">
-      <input type="radio" name="rating" value="5" id="5">
-      <label for="5">☆</label>
-      <input type="radio" name="rating" value="4" id="4">
-      <label for="4">☆</label>
-      <input type="radio" name="rating" value="3" id="3">
-      <label for="3">☆</label>
-      <input type="radio" name="rating" value="2" id="2">
-      <label for="2">☆</label>
-      <input type="radio" name="rating" value="1" id="1">
-      <label for="1">☆</label>
-  </div>
-  <form action="/action_page.php" class="custom-form">
-      <div class="mb-3 mt-3">
-          <label for="name" class="form-label">Name :</label>
-          <input
-              type="text"
-              class="form-control"
-              id="name"
-              placeholder="Your Name"
-              name="name">
-      </div>
-      <div class="mb-3">
-          <label for="email" class="form-label">Email Address :</label>
-          <input
-              type="email"
-              class="form-control"
-              id="email"
-              placeholder="name@example.com"
-              name="email">
-      </div>
-      <div class="mb-3">
-          <label for="message" class="form-label">Message :</label>
-          <textarea
-              class="form-control"
-              id="message"
-              placeholder="Your message..."
-              rows="3"></textarea>
-      </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+<div class="container py-5" id="contact">
+  <h1 class="title">BOOKING</h1>
+  <form id="contactForm" class="custom-form" onsubmit="sendWhatsApp(); return false;">
+    <div class="mb-3 mt-3">
+        <label for="name" class="form-label">Name :</label>
+        <input type="text" class="form-control" id="name" placeholder="Your Name" name="name" required>
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">Email Address :</label>
+        <input type="email" class="form-control" id="email" placeholder="name@example.com" name="email" required>
+    </div>
+    <div class="mb-3">
+        <label for="message" class="form-label">Message :</label>
+        <textarea class="form-control" id="message" name="message" placeholder="Your message..." rows="3" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Book Now</button>
+</form>
 </div>
 
 <!-- Section 7 -->
 <section class="contact-section mt-5" id="footer contact">
   <div class="overlay">
-      <img src="{{asset('group')}}" alt="Overlay Image" class="overlay-img">
+      <img src="{{asset('assets/img/landing/Group 28.png')}}" alt="Overlay Image" class="overlay-img">
   </div>
 
   <div class="container h-100 d-flex align-items-center justify-content-center">
@@ -540,23 +509,14 @@
 
                       <!-- Right -->
                       <div>
-                          <a href="" class="text-white me-4 text-decoration-none">
-                              <i class="fa-brands fa-facebook-f"></i>
+                          <a href="https://wa.me/6285217310639" class="text-white me-4 text-decoration-none">
+                              <i class="fa-brands fa-whatsapp"></i>
                           </a>
-                          <a href="" class="text-white me-4 text-decoration-none">
-                              <i class="fab fa-twitter"></i>
+                          <a href="https://www.tiktok.com/@dirty2clean.indonesia" class="text-white me-4 text-decoration-none">
+                              <i class="fab fa-tiktok"></i>
                           </a>
-                          <a href="" class="text-white me-4 text-decoration-none">
-                              <i class="fab fa-google"></i>
-                          </a>
-                          <a href="" class="text-white me-4 text-decoration-none">
+                          <a href="https://www.instagram.com/dirty2clean.official?igsh=cTIyamJ4b3A2OXJj" class="text-white me-4 text-decoration-none">
                               <i class="fab fa-instagram"></i>
-                          </a>
-                          <a href="" class="text-white me-4 text-decoration-none">
-                              <i class="fab fa-linkedin"></i>
-                          </a>
-                          <a href="" class="text-white me-4 text-decoration-none">
-                              <i class="fab fa-github"></i>
                           </a>
                       </div>
                       <!-- Right -->
@@ -599,13 +559,6 @@
       </div>
   </div>
 </section>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="/index.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
-
 <script>
   // Function to remove or add class based on window width
   function checkScreenWidth() {

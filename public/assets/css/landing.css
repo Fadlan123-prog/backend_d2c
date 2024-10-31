@@ -11,6 +11,7 @@ body{
     font-size:16px;
     margin:0;
     padding:0;
+    overflow-x: hidden !important;
 }
 
 
@@ -82,7 +83,7 @@ body{
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin-bottom: 15rem !important;
+    margin-bottom: 2rem !important;
     max-width: 100%;
 }
 
@@ -136,7 +137,7 @@ body{
     position: relative;
     bottom: -50px;
 }
-
+/*
 .solution{
     max-width: 100%;
     height: auto;
@@ -161,7 +162,7 @@ body{
 }
 
 .solution .col-6 span{
-    color: #38C0FF;
+    color: #38C0FF !important;
     font-weight: 600;;
 }
 
@@ -185,7 +186,7 @@ body{
 
 .solution .col-6 button span{
     color: #FF0000;
-}
+} */
 
 .solution-2{
     background-image: url('/img/bg-solution-2.png');
@@ -207,7 +208,6 @@ body{
 
 .solution-2 .container h1{
     font-weight: 600;
-
 }
 
 .about .card{
@@ -236,12 +236,13 @@ body{
 
 .about .card-title{
     font-weight: 600 !important;
-
+    color: #fff;
 }
 
 
 .about .card-text{
     font-size: 14px !important;
+    color: #fff;
 }
 
 .service h1{
@@ -1242,11 +1243,16 @@ h1, p {
     }
 
     .bottom-right.de p {
-        width: 320px;
-        padding-right: 40px;
         line-height: 20px;
     }
 
+    .solution .col-md-6 h1{
+        font-size: 32px !important;
+    }
+
+    .solution .col-md-6 p{
+        font-size: 16px !important;
+    }
 
 
     /* Before After */
@@ -1425,6 +1431,10 @@ hr{
         width: 10%;
     }
 
+    .de{
+        width: 260px;
+    }
+
 }
 
 .bg-dark{
@@ -1508,4 +1518,71 @@ hr{
         display: flex !important;
         flex-direction: column-reverse !important;
     }
+}
+
+.solution{
+    max-width: 100%;
+    height: auto;
+    overflow: hidden;
+}
+.solution .img-solution{
+    width: 90%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.solution .col-md-6 .img-logo-glow{
+    width: 55%;
+    height: auto;
+    object-fit: cover;
+}
+
+.solution .col-md-6 h1{
+    font-weight: 600;
+    font-size: 60px;
+    padding-left: 15px;
+}
+
+.solution .col-md-6 span{
+    color: #38C0FF ;
+    font-weight: 600;;
+}
+
+.solution .col-md-6 p{
+    font-size: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.solution .col-md-6 button{
+    font-size: 32px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 15px;
+    border: 2px solid #38C0FF;
+    background-color: #38C0FF !important;
+    color: #ffffff;
+    text-align: center;
+    margin-left: 15px;
+}
+
+.solution .col-md-6 button:hover{
+    background-color: transparent !important;
+    color: #38C0FF;
+}
+
+.solution .col-md-6 button span{
+    color: #ffffff;
+}
+
+#section6 .title{
+    font-weight: 600;
+}
+
+#section6 button{
+    background-color: #38C0FF;
+}
+
+.quality-carousel video{
+    border-radius: 20px !important;
 }
