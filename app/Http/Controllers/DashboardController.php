@@ -28,8 +28,8 @@ class DashboardController extends Controller
 
     public function fetchData(Request $request)
     {
-        $startDate = $request->input('start_date');
-        $endDate = $request->input('end_date');
+        $startDate = $request->input('start_date') ?? Carbon::now()->startOfMonth();
+        $endDate = $request->input('end_date') ?? Carbon::now()->endOfMonth();
 
         // Logika untuk mengambil data sesuai rentang tanggal (untuk chart)
         $chartSalesData = Sales::join('sales_item', 'sales.id', '=', 'sales_item.sales_id')
@@ -49,8 +49,7 @@ class DashboardController extends Controller
 
         // Data Bulanan (untuk bulan ini)
         $thisMonthSalesData = Sales::join('sales_item', 'sales.id', '=', 'sales_item.sales_id')
-            ->whereMonth('sales.date', Carbon::now()->month)
-            ->whereYear('sales.date', Carbon::now()->year)
+            ->whereBetween('sales.date', [$startDate, $endDate])
             ->selectRaw('SUM(sales_item.quantity) as total_quantity')
             ->first();
 
@@ -63,13 +62,12 @@ class DashboardController extends Controller
             ->first();
 
         $thisMonthOmsetData = Sales::join('sales_item', 'sales.id', '=', 'sales_item.sales_id')
-            ->whereMonth('sales.date', Carbon::now()->month)
-            ->whereYear('sales.date', Carbon::now()->year)
-            ->selectRaw('SUM(sales.total_price) as total_omset')
-            ->first();
+        ->whereBetween('sales.date', [$startDate, $endDate])
+        ->selectRaw('SUM(sales.total_price) as total_omset')
+        ->first();
 
-        $thisMonthExpendData = Expends::whereMonth('expends.date', Carbon::now()->month)
-            ->whereYear('expends.date', Carbon::now()->year)
+        // Expend data for the requested date range
+        $thisMonthExpendData = Expends::whereBetween('expends.date', [$startDate, $endDate])
             ->selectRaw('SUM(expend_price) as total_expends')
             ->first();
 
