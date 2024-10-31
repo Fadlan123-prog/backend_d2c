@@ -24,6 +24,18 @@ $(document).ready(function(){
         arrows: false,             // Menghilangkan tombol navigasi
         responsive: [
             {
+                breakpoint: 1200,
+                settings: {
+                    slidesToShow: 4
+                }
+            },
+            {
+                breakpoint: 992,
+                settings: {
+                    slidesToShow: 3
+                }
+            },
+            {
                 breakpoint: 768,
                 settings: {
                     slidesToShow: 2

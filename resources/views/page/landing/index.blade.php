@@ -53,14 +53,14 @@
         <div class="container-fluid" id="home">
             <div class="container-sm mt-5">
                 <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-lg-6 col-md-5 col-12">
                         <div class="text-white" >
-                            <h1 data-aos="fade-right">Ingin Mobil Anda <br><span>Kinclong dan Bersinar</span>  Seperti Baru dengan Proteksi Extra ?</h1>
+                            <h1 data-aos="fade-right">Ingin Mobil Anda <br><span>Kinclong dan Bersinar</span>  Seperti Baru dengan Proteksi Extra?</h1>
                             <p data-aos="fade-right">Kami bangga menjadi pilihan utama bagi pemilik mobil yang menginginkan perawatan mobil terbaik. Dengan jaminan kualitas dan kepuasan pelanggan, kami memastikan mobil anda selalu tampil mengkilap dan terawat</p>
                             <button type="button" class="btn btn-outline-blue" data-aos="fade-right">Selengkapnya</button>
                         </div>
                     </div>
-                    <div class="col-md-7 align-self-end" data-aos="fade-left">
+                    <div class="col-lg-6 col-md-7 col-6 align-self-end" data-aos="fade-left">
                         <img src="{{asset('assets/img/landing/cars-hero.png')}}" alt="" class="img-fluid">
                     </div>
 
@@ -349,7 +349,7 @@
   <div class="container">
     <h1 class="text-center">DAPATKAN PELAYANAN <span>TERBAIK</span>  KAMI</h1>
     <div class="row justify-content-center mt-5">
-      <div class="col-md-4">
+      <div class="col-lg-6 col-md-6 col-12">
           <div class="promo-card" >
               <h3>EVO SILICA CERAMIC COATING</h3>
               <ul class="feature-list">
@@ -366,7 +366,7 @@
               <button class="btn btn-promo" onclick="sendWhatsApp('EVO SILICA CERAMIC COATING')">Ambil Promo</button>
           </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-lg-6 col-md-6 col-12">
           <div class="promo-card" >
               <h3>CAR PRO CQUARTZ UK 3.0</h3>
               <ul class="feature-list">
@@ -391,7 +391,7 @@
 <div class="container review-section" id="review">
   <h2 style="font-weight: bold;" class="mb-5">REVIEW</h2>
   <div class="row">
-      <div class="col-md-3" >
+      <div class="col-lg-3 col-md-4 col-12" >
           <div class="thumbnail animated fadeInUp">
               <img src="{{asset('assets/img/landing/Group 30.png')}}" alt="" style="width:100%">
               <div class="caption">
@@ -409,7 +409,7 @@
               </div>
           </div>
       </div>
-      <div class="col-md-3" >
+      <div class="col-lg-3 col-md-4 col-12" >
           <div class="thumbnail animated fadeInUp delay-1s">
               <img src="{{asset('assets/img/landing/Group 31.png')}}" alt="" style="width:100%">
               <div class="caption">
@@ -427,7 +427,7 @@
               </div>
           </div>
       </div>
-      <div class="col-md-3" >
+      <div class="col-lg-3 col-md-4 col-12" >
           <div class="thumbnail animated fadeInUp delay-2s">
               <img src="{{asset('assets/img/landing/Group 32.png')}}" alt="" style="width:100%">
               <div class="caption">
@@ -445,7 +445,7 @@
               </div>
           </div>
       </div>
-      <div class="col-md-3" >
+      <div class="col-lg-3 col-md-4 col-12" >
         <div class="thumbnail animated fadeInUp delay-2s">
             <img src="{{asset('assets/img/landing/Group 35.png')}}" alt="" style="width:100%">
             <div class="caption">
@@ -559,72 +559,4 @@
       </div>
   </div>
 </section>
-<script>
-  // Function to remove or add class based on window width
-  function checkScreenWidth() {
-      // Handling for offset-top
-      if ($(window).width() <= 578) {
-          console.log('Removing "offset-top" class'); // Debugging log
-          $('.offset-top').removeClass('offset-top');
-      } else {
-          console.log('Adding "offset-top" class back'); // Debugging log
-          $('#offset-top').addClass('offset-top');
-      }
-
-      // Handling for offset-bottom
-      if ($(window).width() <= 578) {
-          console.log('Removing "offset-bottom" class'); // Debugging log
-          $('.offset-bottom').removeClass('offset-bottom');
-      } else {
-          console.log('Adding "offset-bottom" class back'); // Debugging log
-          $('#offset-bottom').addClass('offset-bottom');
-      }
-
-      if ($(window).width() <= 578) {
-        $('.de').removeClass('de');
-      } else {
-        $('.de').addClass('de');
-      }
-
-  }
-
-  // Run function when the window is resized
-  $(window).resize(function() {
-      checkScreenWidth();
-  });
-
-  // Run function when the page is first loaded
-  $(document).ready(function() {
-      checkScreenWidth();
-  });
-</script>
-
-<script>
-  $(document).ready(function(){
-      $('.quality-carousel').slick({
-          infinite: true,
-          slidesToShow: 5,           // Jumlah card yang ditampilkan sekaligus
-          slidesToScroll: 1,
-          autoplay: true,
-          autoplaySpeed: 0,          // Menghilangkan jeda antar-slide
-          speed: 8000,               // Kecepatan pergerakan dalam milidetik
-          cssEase: 'linear',         // Mengatur pergerakan kontinu tanpa jeda
-          arrows: false,             // Menghilangkan tombol navigasi
-          responsive: [
-              {
-                  breakpoint: 768,
-                  settings: {
-                      slidesToShow: 2
-                  }
-              },
-              {
-                  breakpoint: 576,
-                  settings: {
-                      slidesToShow: 1
-                  }
-              }
-          ]
-      });
-  });
-</script>
 @endsection
