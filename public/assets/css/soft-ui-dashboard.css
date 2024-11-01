@@ -10688,7 +10688,7 @@ fieldset:disabled .btn {
 }
 
 .bg-body {
-  background-color: #fff !important;
+  background-color: #fff ;
 }
 
 .bg-transparent {
