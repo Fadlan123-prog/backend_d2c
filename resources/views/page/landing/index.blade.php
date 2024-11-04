@@ -52,8 +52,8 @@
 
         <div class="container-fluid" id="home">
             <div class="container-sm mt-5">
-                <div class="row">
-                    <div class="col-lg-6 col-md-5 col-12">
+                <div class="row justify-center">
+                    <div class="col-lg-6 col-md-5 col-12 align-self-center">
                         <div class="text-white" >
                             <h1 data-aos="fade-right">Ingin Mobil Anda <br><span>Kinclong dan Bersinar</span>  Seperti Baru dengan Proteksi Extra?</h1>
                             <p data-aos="fade-right">Kami bangga menjadi pilihan utama bagi pemilik mobil yang menginginkan perawatan mobil terbaik. Dengan jaminan kualitas dan kepuasan pelanggan, kami memastikan mobil anda selalu tampil mengkilap dan terawat</p>
