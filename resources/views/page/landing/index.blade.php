@@ -117,22 +117,6 @@
             <img class="image-problem" src="{{asset('assets/img/landing/problem-section.png')}}" alt="" >
           </div>
         </div>
-
-        <!-- <div class="row justify-content-center my-5">
-              <h2 class="section-title">APAKAH <span>MASALAH</span> INI TERJADI DI MOBIL KALIAN?</h2>
-          </div>
-
-          <div class="row justify-content-between mb-5">
-              <div class="col-auto issue-item">BERCAK KOTORAN MEMBANDEL</div>
-              <div id="" class="col-auto issue-item ">WARNA CAT KUSAM</div>
-              <div class="col-auto issue-item">GORESAN KASAR PADA BODY MOBIL</div>
-          </div>
-
-          <div class="row justify-content-between mt-5">
-              <div class="col-auto issue-item">MOBIL BERJAMUR</div>
-              <div id="" class="col-auto issue-item ">NODA ASPAL</div>
-              <div class="col-auto issue-item">TIDAK MENGKILAP</div>
-          </div> -->
       </div>
   </section>
 
@@ -457,9 +441,7 @@
                     <span class="star">&#9733;</span>
                 </div>
                 <h4 class="additional-info" style="font-weight: bold;">Adjie Pangestu</h4>
-                <p class="description">Layanannya luar biasa! Mobil saya terlihat seperti baru
-                    lagi setelah detailing. Semua sudut dibersihkan dengan teliti, dan coating-nya
-                    bikin cat mobil jadi kinclong terus.</p>
+                <p class="description">Pemasangan kaca film di mobil saya sangat memuaskan! Mobil jadi lebih sejuk, privasi meningkat, dan interior tetap terjaga dari sinar UV. Kualitas pemasangan rapi tanpa gelembung. Sangat rekomendasi!</p>
             </div>
         </div>
     </div>
