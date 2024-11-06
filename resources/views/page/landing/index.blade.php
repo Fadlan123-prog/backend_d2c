@@ -129,7 +129,7 @@
         <img class="img-logo-glow" src="{{asset('assets/img/landing/logo-glow.png')}}" alt="">
         <h1>TEMUKAN SOLUSI <br> KALIAN <span>DISINI!!</span></h1>
         <p class="mt-4">Jadikan mobil anda bersinar kembali dengan layanan detailing dari Dirty2Clean! Kami percaya bahwa setiap mobil pantas mendapatkan perawatan terbaik. Dengan teknik dan produk premium, kami menjamin hasil coating yang tidak hanya memperindah tampilan, tetapi juga melindungi permukaan cat mobil Anda dari berbagai elemen.</p>
-        <button class="btn btn-primary mt-4">AMBIL PROMO <span>!!</span> </button>
+        <button class="btn btn-primary mt-4" onclick="takePromo()">AMBIL PROMO <span>!!</span> </button>
       </div>
     </div>
   </section>
@@ -137,7 +137,7 @@
   <section class="solution-2 mt-5" id="about">
     <div class="container">
       <h1 >Dirty2Clean : Solusi Terbaik untuk Perlindungan Mobil Anda!</h1>
-      <p class="mt-5" >Apakah mobil anda terliah lelah dan kotor? Saatnya memberikan perawatan terbaik dengan Dirty2Clean! Kami adalah pilihan terbaik untuk detailing mobil yang siap mengubah kendaraan anda menjadi bintang di jalan.</p>
+      <p class="mt-5" >Apakah mobil anda terlihat lelah dan kotor? Saatnya memberikan perawatan terbaik dengan Dirty2Clean! Kami adalah pilihan terbaik untuk detailing mobil yang siap mengubah kendaraan anda menjadi bintang di jalan.</p>
     </div>
   </section>
 
@@ -192,16 +192,14 @@
                 <div class="card-body">
                     <div class="container">
                         <div class="row">
-                            <div class="col py-2">
+                            <div class="col col-md-5 ">
                                 <div class="bottom-left">INTERIOR CARE</div>
                             </div>
-                            <div class="col">
+                            <div class="col col-md-7">
                                 <div class="bottom-right de">
-                                    <p>Dengan perhatian pada setiap detail, kami bikin interior mobil lo
-                                        <br class="han">
-                                        bersih, nyaman, dan terawat. Dari jok, karpet, sampai dashbor, dan
-                                        <br class="han">
-                                        interior lainnya Dirty2Clean siap membuat mobil lo tampil maksimal!
+                                    <p>Dengan perhatian pada setiap detail, kami bikin interior mobil anda
+                                        bersih, nyaman, dan terawat. Dari jok, karpet, sampai dashboard, dan
+                                        interior lainnya Dirty2Clean siap membuat mobil anda tampil maksimal!
                                     </p>
                                 </div>
                             </div>
@@ -217,17 +215,15 @@
                 <div class="card-body">
                     <div class="container">
                         <div class="row">
-                            <div class="col py-2">
+                            <div class="col col-md-5">
                                 <div class="bottom-left">CAR WASH</div>
                             </div>
-                            <div class="col">
+                            <div class="col col-md-7">
                                 <div class="bottom-right de">
                                     <p>
                                         Di Dirty2Clean, kami menawarkan cuci mobil yang super profesional
-                                        <br class="han">
                                         dengan detail yang lengkap. Dari cuci, poles, hingga perlindungan cat, kami
-                                        <br class="han">
-                                        pastikan kendaraan lo kembali bersinar dan terlindungi dengan maksimal!
+                                        pastikan kendaraan anda kembali bersinar dan terlindungi dengan maksimal!
                                     </p>
                                 </div>
                             </div>
@@ -243,15 +239,14 @@
                 <div class="card-body">
                     <div class="container">
                         <div class="row">
-                            <div class="col py-2">
+                            <div class="col col-md-5">
                                 <div class="bottom-left">CAR COATING</div>
                             </div>
-                            <div class="col">
+                            <div class="col col-md-7">
                                 <div class="bottom-right de">
-                                    <p>Upgrade perlindungan mobilmu ke level dewa! Dengan Evo Nano Ceramic<br class="han">
+                                    <p>Upgrade perlindungan mobilmu ke level dewa! Dengan Evo Nano Ceramic
                                         Coating, dapatkan perlindungan maksimal dari goresan dan cuaca, serta
-                                        <br class="han">
-                                        kilauan tahan lama yang bikin kendaraan lo tampil menawan!
+                                        kilauan tahan lama yang bikin kendaraan Anda tampil menawan!
                                     </p>
                                 </div>
                             </div>
@@ -267,14 +262,14 @@
                 <div class="card-body">
                     <div class="container">
                         <div class="row">
-                            <div class="col py-2">
+                            <div class="col col-md-5">
                                 <div class="bottom-left">CAR DETAILING</div>
                             </div>
-                            <div class="col">
+                            <div class="col col-md-7">
                                 <div class="bottom-right de">
-                                    <p>Rasakan transformasi total dengan detailing mobil pada kami! Mobil<br class="han">
-                                        tampak seperti baru, cat terlindungi, dan interior jadi super nyaman.<br class="han">
-                                        Upgrade mobil lo sekarang dengan layanan kami.
+                                    <p>Rasakan transformasi total dengan detailing mobil pada kami! Mobil
+                                        tampak seperti baru, cat terlindungi, dan interior jadi super nyaman.
+                                        Upgrade mobil anda sekarang dengan layanan kami.
                                     </p>
                                 </div>
                             </div>

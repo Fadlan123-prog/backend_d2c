@@ -71,6 +71,12 @@
             window.open(url, '_blank');
         }
 
+        function takePromo(){
+            const phoneNumber = '6285217310639';
+            const message = `Halo Dirty2clean, saya ingin mengambil Promo`;
+            const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
 
     </script>
 </body>

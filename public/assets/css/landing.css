@@ -456,7 +456,7 @@ h1, p {
 }
 
 .de{
-    width: 400px;
+    width: auto;
     font-size: 10px;
     text-align: right;
 }
@@ -1433,7 +1433,7 @@ hr{
     }
 
     .de{
-        width: 260px;
+        width: auto;
     }
 
 }
