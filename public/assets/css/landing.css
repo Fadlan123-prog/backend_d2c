@@ -664,6 +664,10 @@ h1, p {
     border-color: #0056b3;
 }
 
+.quality__section .quality-carousel video{
+    pointer-events: none;
+}
+
 
 .rate {
     border-bottom-right-radius: 12px;
