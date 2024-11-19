@@ -436,7 +436,7 @@
                     <span class="star">&#9733;</span>
                 </div>
                 <h4 class="additional-info" style="font-weight: bold;">Adjie Pangestu</h4>
-                <p class="description">Pemasangan kaca film di mobil saya sangat memuaskan! Mobil jadi lebih sejuk, privasi meningkat, dan interior tetap terjaga dari sinar UV. Kualitas pemasangan rapi tanpa gelembung. Sangat rekomendasi!</p>
+                <p class="description">Mobil saya setelah detailing dan coating terlihat kinclong banget, seperti baru keluar dari showroom. Selain hasilnya yang luar biasa, mereka benar-benar fokus pada detail kecil yang sering terlewat di tempat lain.</p>
             </div>
         </div>
     </div>

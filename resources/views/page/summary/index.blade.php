@@ -147,6 +147,11 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <button class="btn btn-primary mt-4" id="omset-btn">
+                                Export Omset
+                            </button>
+                        </div>
 
                     </div>
                     <div class="col-lg-7">
@@ -192,6 +197,11 @@
         $('#export-btn').on('click', function(e) {
             e.preventDefault();
             exportToExcel();
+        });
+
+        $('#omset-btn').on('click', function(e) {
+            e.preventDefault();
+            omsetExport();
         });
 
         let salesChartInstance = null;
@@ -418,6 +428,33 @@ function displayChart(labels, salesData) {
         // Load initial data
         fetchSalesData();
     });
+
+    function omsetExport(){
+        const dateRange = $('#date-range').val();
+        const [startDate, endDate] = dateRange.split(' - ');
+
+        fetch('{{ route("export.report") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                start_date: startDate,
+                end_date: endDate
+            })
+        })
+        .then(response => response.blob())
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'omset_data.xlsx';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        });
+    }
 </script>
 
 @endsection

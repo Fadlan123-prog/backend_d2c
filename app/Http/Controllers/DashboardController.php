@@ -144,24 +144,6 @@ class DashboardController extends Controller
         return view('page.sales-summary.index', compact('salesData', 'startDate', 'endDate', 'categoryId', 'categories'));
     }
 
-    // public function getCategories(Request $request)
-    // {
-    //     $startDate = $request->input('start_date');
-    //     $endDate = $request->input('end_date');
-    //     $categoryId = $request->input('category_id', null);
-
-    //     // Query data penjualan berdasarkan date range dan kategori (jika ada)
-    //     $salesData = Sales::with(['salesItems.item.category', 'customer'])
-    //         ->whereBetween('date', [$startDate, $endDate])
-    //         ->when($categoryId, function ($query) use ($categoryId) {
-    //             $query->whereHas('salesItems.item.category', function ($query) use ($categoryId) {
-    //                 $query->where('id', $categoryId);
-    //             });
-    //         })
-    //         ->get();
-
-    //     return response()->json($salesData);
-    // }
 
     public function exportSalesToExcel(Request $request)
 {

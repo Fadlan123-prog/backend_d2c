@@ -15,10 +15,8 @@ use App\Http\Controllers\ExpendsController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\SalesReceiptController;
-use App\Http\Livewire\SalesReceipt;
-use App\Http\Controllers\SalesSummaryController;
-use App\Exports\TransactionsExport;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\OmsetController;
+
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -66,6 +64,9 @@ Route::prefix('admin')->group(function () {
         Route::get('/coupons/{coupons}/edit', [CouponController::class, 'edit'])->name('coupons.edit');
         Route::post('/coupons/{coupons}/update', [CouponController::class, 'update'])->name('coupons.update');
         Route::delete('/coupons/{coupons}', [CouponController::class, 'destroy'])->name('coupons.destroy');
+
+        Route::get('/export-report', [OmsetController::class, 'export'])->name('export.report');
+
 
     });
 
