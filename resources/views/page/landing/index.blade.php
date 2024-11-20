@@ -354,7 +354,7 @@
                 <li>Interior Care</li>
                 <li>Engine Cleaning</li>
                 <li>Window Care & Cout</li>
-                <li>Car Pro Cquartz UK 3.0 1 layer</li>
+                <li>Car Pro Cquartz UK 3.0 2 layer</li>
                 <li>Reload Coating Protection</li>
 
               </ul>
