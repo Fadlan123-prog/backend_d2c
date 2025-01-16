@@ -15,7 +15,7 @@ use App\Http\Controllers\ExpendsController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\SalesReceiptController;
-use App\Http\Controllers\OmsetController;
+use App\Http\Controllers\OmsetController;   
 
 
 // Route::get('/', function () {
